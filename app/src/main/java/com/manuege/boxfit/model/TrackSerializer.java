@@ -3,6 +3,7 @@ package com.manuege.boxfit.model;
 import com.manuege.boxfit.library.serializers.AbstractSerializer;
 import com.manuege.boxfit.library.utils.SafeJSON;
 
+import io.objectbox.Box;
 import io.objectbox.BoxStore;
 
 /**
@@ -12,7 +13,12 @@ import io.objectbox.BoxStore;
 public class TrackSerializer extends AbstractSerializer<Track> {
 
     public TrackSerializer(BoxStore boxStore) {
-        super(Track.class, boxStore);
+        super(boxStore);
+    }
+
+    @Override
+    protected Box<Track> getBox() {
+        return boxStore.boxFor(Track.class);
     }
 
     @Override

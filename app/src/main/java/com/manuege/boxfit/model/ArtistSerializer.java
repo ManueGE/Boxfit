@@ -3,6 +3,7 @@ package com.manuege.boxfit.model;
 import com.manuege.boxfit.library.serializers.AbstractSerializer;
 import com.manuege.boxfit.library.utils.SafeJSON;
 
+import io.objectbox.Box;
 import io.objectbox.BoxStore;
 
 /**
@@ -12,7 +13,12 @@ import io.objectbox.BoxStore;
 public class ArtistSerializer extends AbstractSerializer<Artist> {
 
     public ArtistSerializer(BoxStore boxStore) {
-        super(Artist.class, boxStore);
+        super(boxStore);
+    }
+
+    @Override
+    protected Box<Artist> getBox() {
+        return boxStore.boxFor(Artist.class);
     }
 
     @Override

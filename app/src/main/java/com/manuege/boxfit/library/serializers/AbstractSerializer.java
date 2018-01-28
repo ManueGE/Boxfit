@@ -20,23 +20,31 @@ import io.objectbox.BoxStore;
  */
 public abstract class AbstractSerializer<T> {
     protected BoxStore boxStore;
-    private Class<T> clazz;
 
-    public AbstractSerializer(Class<T> clazz, BoxStore boxStore) {
-        this.clazz = clazz;
+    public AbstractSerializer(BoxStore boxStore) {
         this.boxStore = boxStore;
     }
 
     public T serialize(JSONObject jsonObject) {
         SafeJSON safeJson = new SafeJSON(jsonObject);
         Long id = getId(safeJson);
-        T object = getBox().get(id);
-        if (object == null) {
-            object = freshObject(id);
+
+        T object;
+        if (getBox() != null) {
+            object = getBox().get(id);
+            if (object == null) {
+                object = freshObject(id);
+                getBox().put(object);
+            }
+        } else {
+            object = freshObject(null);
+        }
+
+        merge(safeJson, object);
+        if (getBox() != null) {
             getBox().put(object);
         }
-        merge(safeJson, object);
-        getBox().put(object);
+
         return object;
     }
 
@@ -59,15 +67,17 @@ public abstract class AbstractSerializer<T> {
         }
 
         // Store objects by its id
-        List<T> existingObjects = getBox().get(ids);
         HashMap<Long, T> existingObjectsById = new HashMap<>();
-        for (T existingObject: existingObjects) {
-            existingObjectsById.put(getId(existingObject), existingObject);
+        if (getBox() != null) {
+            List<T> existingObjects = getBox().get(ids);
+            for (T existingObject : existingObjects) {
+                existingObjectsById.put(getId(existingObject), existingObject);
+            }
         }
 
         // Convert objects
         List<T> objects = new ArrayList<>();
-        for (SafeJSON safeJSON: safeJSONs) {
+        for (SafeJSON safeJSON : safeJSONs) {
             Long id = getId(safeJSON);
             T object = existingObjectsById.get(id);
             if (object == null) {
@@ -76,14 +86,15 @@ public abstract class AbstractSerializer<T> {
             merge(safeJSON, object);
             objects.add(object);
         }
-        getBox().put(objects);
+
+        if (getBox() != null) {
+            getBox().put(objects);
+        }
+
         return objects;
     }
 
-    private Box<T> getBox() {
-        return boxStore.boxFor(clazz);
-    }
-
+    abstract protected Box<T> getBox();
     abstract protected void merge(SafeJSON safeJson, T object);
     abstract protected T freshObject(Long id);
     abstract protected Long getId(SafeJSON safeJSON);

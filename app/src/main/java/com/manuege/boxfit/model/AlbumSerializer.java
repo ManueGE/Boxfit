@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import java.util.List;
 
+import io.objectbox.Box;
 import io.objectbox.BoxStore;
 
 /**
@@ -17,7 +18,12 @@ import io.objectbox.BoxStore;
 public class AlbumSerializer extends AbstractSerializer<Album> {
 
     public AlbumSerializer(BoxStore boxStore) {
-        super(Album.class, boxStore);
+        super(boxStore);
+    }
+
+    @Override
+    protected Box<Album> getBox() {
+        return boxStore.boxFor(Album.class);
     }
 
     @Override

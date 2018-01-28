@@ -11,4 +11,20 @@ public class PaginatedResponse<T> {
     int next;
     int previous;
     List<T> results;
+
+    public int getCount() {
+        return count;
+    }
+
+    public int getNext() {
+        return next;
+    }
+
+    public int getPrevious() {
+        return previous;
+    }
+
+    public List<T> getResults() {
+        return results;
+    }
 }
