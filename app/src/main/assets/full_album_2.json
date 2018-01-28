@@ -1,0 +1,19 @@
+{
+  "id": 1,
+  "name": "Honestidad Brutal",
+  "artist": {
+    "id": 1,
+    "name": "Andrés Calamaro"
+  },
+  "year": 1998,
+  "genre": {
+    "id": 9,
+    "name": "Pop"
+  },
+  "tracks": [
+    {
+      "id": 1,
+      "name": "El día de la mujer mundial"
+    }
+  ]
+}

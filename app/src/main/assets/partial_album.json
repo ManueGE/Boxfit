@@ -1,0 +1,12 @@
+{
+  "id": 1,
+  "name": "Alta Suciedad",
+  "artist": {
+    "id": 1,
+    "name": "El viejo Andrés"
+  },
+  "genre": {
+    "id": 9,
+    "name": "Pop"
+  }
+}

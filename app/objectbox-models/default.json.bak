@@ -1,0 +1,117 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:5841657996494216683",
+      "lastPropertyId": "3:3266622168953443924",
+      "name": "Track",
+      "properties": [
+        {
+          "id": "1:5518486904712024320",
+          "name": "id"
+        },
+        {
+          "id": "2:7391230826987100195",
+          "name": "name"
+        },
+        {
+          "id": "3:3266622168953443924",
+          "indexId": "1:8190425640415613181",
+          "name": "albumId"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "2:1668316046269345894",
+      "lastPropertyId": "7:2830832730734048619",
+      "name": "Album",
+      "properties": [
+        {
+          "id": "1:3596646045901864192",
+          "name": "id"
+        },
+        {
+          "id": "2:3209783058717569701",
+          "name": "name"
+        },
+        {
+          "id": "3:4477555323651835706",
+          "name": "year"
+        },
+        {
+          "id": "4:1029382557262451387",
+          "name": "featured"
+        },
+        {
+          "id": "5:3751698008955592456",
+          "indexId": "2:3702264438250296767",
+          "name": "artistId"
+        },
+        {
+          "id": "7:2830832730734048619",
+          "indexId": "4:8049288946852273781",
+          "name": "genreId"
+        }
+      ],
+      "relations": [
+        {
+          "id": "3:7071660507328235032",
+          "name": "tracks"
+        }
+      ]
+    },
+    {
+      "id": "3:15497024806815410",
+      "lastPropertyId": "2:3698357034547581648",
+      "name": "Artist",
+      "properties": [
+        {
+          "id": "1:70124782165683960",
+          "name": "id"
+        },
+        {
+          "id": "2:3698357034547581648",
+          "name": "name"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "4:8115265302674283461",
+      "lastPropertyId": "2:3708688849669385561",
+      "name": "Genre",
+      "properties": [
+        {
+          "id": "1:3717570202103824649",
+          "name": "id"
+        },
+        {
+          "id": "2:3708688849669385561",
+          "name": "name"
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "4:8115265302674283461",
+  "lastIndexId": "4:8049288946852273781",
+  "lastRelationId": "3:7071660507328235032",
+  "lastSequenceId": "0:0",
+  "modelVersion": 4,
+  "modelVersionParserMinimum": 4,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [
+    6493214582027386933
+  ],
+  "retiredPropertyUids": [
+    4194429157066103034
+  ],
+  "retiredRelationUids": [
+    3944922486557142317,
+    6901943520848822979
+  ],
+  "version": 1
+}

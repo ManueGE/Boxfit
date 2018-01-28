@@ -1,0 +1,35 @@
+{
+  "id": 1,
+  "name": "Honestidad Brutal",
+  "artist": {
+    "id": 1,
+    "name": "Andrés Calamaro"
+  },
+  "year": 1999,
+  "genre": {
+    "id": 10,
+    "name": "Rock"
+  },
+  "tracks": [
+    {
+      "id": 1,
+      "name": "El día de la mujer mundial"
+    },
+    {
+      "id": 2,
+      "name": "Te quiero igual"
+    },
+    {
+      "id": 3,
+      "name": "La parte de adelante"
+    },
+    {
+      "id": 5,
+      "name": "Los aviones"
+    },
+    {
+      "id": 6,
+      "name": "Más duele"
+    }
+  ]
+}

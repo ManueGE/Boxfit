@@ -1,0 +1,31 @@
+{
+  "count": 10,
+  "previous": 0,
+  "next": 2,
+  "results": [
+    {
+      "id": 1,
+      "name": "Honestidad Brutal",
+      "artist": {
+        "id": 1,
+        "name": "Andrés Calamaro"
+      }
+    },
+    {
+      "id": 2,
+      "name": "Desaparezca Aquí",
+      "artist": {
+        "id": 2,
+        "name": "Nacho Vegas"
+      }
+    },
+    {
+      "id": 3,
+      "name": "Cajas de música difíciles de parar",
+      "artist": {
+        "id": 2,
+        "name": "Nacho Vegas"
+      }
+    }
+  ]
+}
