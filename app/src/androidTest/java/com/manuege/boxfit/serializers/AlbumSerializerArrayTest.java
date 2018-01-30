@@ -2,10 +2,10 @@ package com.manuege.boxfit.serializers;
 
 import com.manuege.boxfit.AbstractObjectBoxTest;
 import com.manuege.boxfit.library.serializers.MainSerializer;
-import com.manuege.boxfit.library.utils.SafeJSON;
+import com.manuege.boxfit.library.utils.Json;
 import com.manuege.boxfit.model.Album;
 import com.manuege.boxfit.model.Artist;
-import com.manuege.boxfit.utils.Json;
+import com.manuege.boxfit.utils.JsonProvider;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -22,8 +22,8 @@ import static org.junit.Assert.assertEquals;
 public class AlbumSerializerArrayTest extends AbstractObjectBoxTest {
     @Test
     public void albumSerializer_serializeArray() {
-        JSONObject object = Json.getJSONObject("album_paginated_response.json");
-        JSONArray array = new SafeJSON(object).getJSONArray("results");
+        JSONObject object = JsonProvider.getJSONObject("album_paginated_response.json");
+        JSONArray array = new Json(object).getJSONArray("results");
         MainSerializer serializer = new MainSerializer(boxStore);
         List<Album> objects = serializer.serialize(Album.class, array);
 

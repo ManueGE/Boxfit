@@ -5,7 +5,7 @@ import com.manuege.boxfit.model.Album;
 import com.manuege.boxfit.model.Artist;
 import com.manuege.boxfit.model.Genre;
 import com.manuege.boxfit.model.Track;
-import com.manuege.boxfit.utils.Json;
+import com.manuege.boxfit.utils.JsonProvider;
 
 import org.json.JSONObject;
 import org.junit.Test;
@@ -13,6 +13,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * Created by Manu on 28/1/18.
@@ -21,7 +22,7 @@ import static org.junit.Assert.assertEquals;
 public class AlbumSerializeSingleObjectTest extends AbstractObjectBoxTest {
     @Test
     public void albumSerializer_serializeNewObject() throws Exception {
-        JSONObject object = Json.getJSONObject("full_album.json");
+        JSONObject object = JsonProvider.getJSONObject("full_album.json");
         MainSerializer mainSerializer = new MainSerializer(boxStore);
         Album album = mainSerializer.serialize(Album.class, object);
 
@@ -53,10 +54,10 @@ public class AlbumSerializeSingleObjectTest extends AbstractObjectBoxTest {
     @Test
     public void albumSerializer_serializeExistingObject() throws Exception {
         MainSerializer serializer = new MainSerializer(boxStore);
-        JSONObject first_json = Json.getJSONObject("full_album.json");
+        JSONObject first_json = JsonProvider.getJSONObject("full_album.json");
         serializer.serialize(Album.class, first_json);
 
-        JSONObject second_json = Json.getJSONObject("full_album_2.json");
+        JSONObject second_json = JsonProvider.getJSONObject("full_album_2.json");
         serializer.serialize(Album.class, second_json);
 
         Album album = serializer.serialize(Album.class, second_json);
@@ -89,10 +90,10 @@ public class AlbumSerializeSingleObjectTest extends AbstractObjectBoxTest {
     @Test
     public void albumSerializer_partialUpdateObjects() throws Exception {
         MainSerializer serializer = new MainSerializer(boxStore);
-        JSONObject first_json = Json.getJSONObject("full_album.json");
+        JSONObject first_json = JsonProvider.getJSONObject("full_album.json");
         serializer.serialize(Album.class, first_json);
 
-        JSONObject second_json = Json.getJSONObject("partial_album.json");
+        JSONObject second_json = JsonProvider.getJSONObject("partial_album.json");
         serializer.serialize(Album.class, second_json);
 
         Album album = serializer.serialize(Album.class, second_json);
@@ -120,5 +121,43 @@ public class AlbumSerializeSingleObjectTest extends AbstractObjectBoxTest {
         Track track = tracks.get(0);
         assertEquals(1, track.getId());
         assertEquals("El día de la mujer mundial", track.getName());
+    }
+
+    @Test
+    public void albumSerializer_toOneWithIds() throws Exception {
+        MainSerializer serializer = new MainSerializer(boxStore);
+        JSONObject json = JsonProvider.getJSONObject("album_with_properties_with_id.json");
+        Album album = serializer.serialize(Album.class, json);
+        assertEquals(3, album.getArtist().getTarget().getId());
+        assertNull(album.getArtist().getTarget().getName());
+
+        assertEquals(3, album.getTracks().size());
+        assertEquals(1, album.getTracks().get(0).getId());
+        assertNull(album.getTracks().get(0).getName());
+    }
+
+    @Test
+    public void albumSerializer_toOneWithIdsAndExistingObject() throws Exception {
+        Artist artist = new Artist();
+        artist.setId(3);
+        artist.setName("Los Planetas");
+        boxStore.boxFor(Artist.class).put(artist);
+
+        Track track = new Track();
+        track.setId(1);
+        track.setName("Segundo Premio");
+        boxStore.boxFor(Track.class).put(track);
+
+        MainSerializer serializer = new MainSerializer(boxStore);
+        JSONObject json = JsonProvider.getJSONObject("album_with_properties_with_id.json");
+        Album album = serializer.serialize(Album.class, json);
+
+        assertEquals(3, album.getArtist().getTarget().getId());
+        assertEquals("Los Planetas", album.getArtist().getTarget().getName());
+        assertEquals(1, artist.getAlbums().size());
+
+        assertEquals(3, album.getTracks().size());
+        assertEquals(1, album.getTracks().get(0).getId());
+        assertEquals("Segundo Premio", album.getTracks().get(0).getName());
     }
 }

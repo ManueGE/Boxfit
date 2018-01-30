@@ -14,7 +14,7 @@ import java.io.InputStream;
  * Created by Manu on 28/1/18.
  */
 
-public class Json {
+public class JsonProvider {
     public static JSONObject getJSONObject(String filename) {
         try {
             // https://medium.com/@yair.kukielka/android-unit-tests-explained-part-2-a0f1e1413569
@@ -30,7 +30,7 @@ public class Json {
     }
 
     public static JSONArray getJSONArray(String filename) {
-        InputStream inputStream = Json.class.getClassLoader().getResourceAsStream(filename);
+        InputStream inputStream = JsonProvider.class.getClassLoader().getResourceAsStream(filename);
         String s = readTextStream(inputStream);
         try {
             return new JSONArray(s);

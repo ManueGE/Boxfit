@@ -1,7 +1,10 @@
 package com.manuege.boxfit.model;
 
 import com.manuege.boxfit.library.serializers.AbstractSerializer;
-import com.manuege.boxfit.library.utils.SafeJSON;
+import com.manuege.boxfit.library.utils.Json;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import io.objectbox.Box;
 import io.objectbox.BoxStore;
@@ -22,9 +25,9 @@ public class TrackSerializer extends AbstractSerializer<Track> {
     }
 
     @Override
-    protected void merge(SafeJSON safeJson, Track object) {
-        if (safeJson.has("name")) {
-            object.name = safeJson.getString("name");
+    protected void merge(Json json, Track object) {
+        if (json.has("name")) {
+            object.name = json.getString("name");
         }
     }
 
@@ -36,12 +39,23 @@ public class TrackSerializer extends AbstractSerializer<Track> {
     }
 
     @Override
-    protected Long getId(SafeJSON safeJSON) {
-        return safeJSON.getLong("id");
+    protected Long getId(Json json) {
+        return json.getLong("id");
     }
 
     @Override
     protected Long getId(Track object) {
         return object.id;
+    }
+
+    @Override
+    protected JSONObject getJSONObject(Long id) {
+        try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("id", id);
+            return jsonObject;
+        } catch (JSONException e) {
+            return null;
+        }
     }
 }

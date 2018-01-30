@@ -8,10 +8,10 @@ import org.json.JSONObject;
  * Created by Manu on 28/1/18.
  */
 
-public class SafeJSON {
+public class Json {
     private JSONObject jsonObject;
 
-    public SafeJSON(JSONObject jsonObject) {
+    public Json(JSONObject jsonObject) {
         this.jsonObject = jsonObject;
     }
 
@@ -108,6 +108,19 @@ public class SafeJSON {
 
     public JSONArray getJSONArray(String key) {
         return getJSONArray(key, null);
+    }
+
+    // Generic
+    public Object get(String key, Object defaultValue) {
+        try {
+            return jsonObject.get(key);
+        } catch (JSONException e) {
+            return defaultValue;
+        }
+    }
+
+    public Object get(String key) {
+        return get(key, null);
     }
 }
 

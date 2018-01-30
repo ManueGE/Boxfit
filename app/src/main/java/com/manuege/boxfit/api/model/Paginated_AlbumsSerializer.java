@@ -2,8 +2,10 @@ package com.manuege.boxfit.api.model;
 
 import com.manuege.boxfit.library.serializers.AbstractSerializer;
 import com.manuege.boxfit.library.serializers.MainSerializer;
-import com.manuege.boxfit.library.utils.SafeJSON;
+import com.manuege.boxfit.library.utils.Json;
 import com.manuege.boxfit.model.Album;
+
+import org.json.JSONObject;
 
 import io.objectbox.Box;
 import io.objectbox.BoxStore;
@@ -23,19 +25,19 @@ public class Paginated_AlbumsSerializer extends AbstractSerializer<Paginated.Alb
     }
 
     @Override
-    protected void merge(SafeJSON safeJson, Paginated.Albums object) {
-        if (safeJson.has("count")) {
-            object.count = safeJson.getInt("count");
+    protected void merge(Json json, Paginated.Albums object) {
+        if (json.has("count")) {
+            object.count = json.getInt("count");
         }
-        if (safeJson.has("previous")) {
-            object.previous = safeJson.getInt("previous");
+        if (json.has("previous")) {
+            object.previous = json.getInt("previous");
         }
-        if (safeJson.has("next")) {
-            object.next = safeJson.getInt("next");
+        if (json.has("next")) {
+            object.next = json.getInt("next");
         }
-        if (safeJson.has("results")) {
+        if (json.has("results")) {
             MainSerializer serializer = new MainSerializer(boxStore);
-            object.results = new MainSerializer(boxStore).serialize(Album.class, safeJson.getJSONArray("results"));
+            object.results = new MainSerializer(boxStore).serialize(Album.class, json.getJSONArray("results"));
         }
     }
 
@@ -45,12 +47,17 @@ public class Paginated_AlbumsSerializer extends AbstractSerializer<Paginated.Alb
     }
 
     @Override
-    protected Long getId(SafeJSON safeJSON) {
+    protected Long getId(Json json) {
         return null;
     }
 
     @Override
     protected Long getId(Paginated.Albums object) {
         return null;
+    }
+
+    @Override
+    protected JSONObject getJSONObject(Long id) {
+        return new JSONObject();
     }
 }

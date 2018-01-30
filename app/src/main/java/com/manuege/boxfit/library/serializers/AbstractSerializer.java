@@ -1,9 +1,9 @@
 package com.manuege.boxfit.library.serializers;
 
-import com.manuege.boxfit.library.utils.SafeJSON;
+import com.manuege.boxfit.library.utils.Json;
+import com.manuege.boxfit.library.utils.JsonArray;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -25,9 +25,14 @@ public abstract class AbstractSerializer<T> {
         this.boxStore = boxStore;
     }
 
+    public T serialize(Long id) {
+        JSONObject jsonObject = getJSONObject(id);
+        return serialize(jsonObject);
+    }
+
     public T serialize(JSONObject jsonObject) {
-        SafeJSON safeJson = new SafeJSON(jsonObject);
-        Long id = getId(safeJson);
+        Json json = new Json(jsonObject);
+        Long id = getId(json);
 
         T object;
         if (getBox() != null) {
@@ -40,7 +45,7 @@ public abstract class AbstractSerializer<T> {
             object = freshObject(null);
         }
 
-        merge(safeJson, object);
+        merge(json, object);
         if (getBox() != null) {
             getBox().put(object);
         }
@@ -48,21 +53,34 @@ public abstract class AbstractSerializer<T> {
         return object;
     }
 
-    public List<T> serialize(JSONArray jsonArray) {
+    public List<T> serialize(JSONArray array) {
+        JsonArray jsonArray = new JsonArray(array);
 
         // Get ids
-        ArrayList<SafeJSON> safeJSONs = new ArrayList<>();
+        ArrayList<Json> jsons = new ArrayList<>();
         List<Long> ids = new ArrayList<>();
         for (int i = 0; i < jsonArray.length(); i++) {
-            try {
-                JSONObject object = jsonArray.getJSONObject(i);
-                SafeJSON safeJson = new SafeJSON(object);
-                safeJSONs.add(safeJson);
-                Long id = getId(safeJson);
-                if (id != null) {
-                    ids.add(id);
-                }
-            } catch (JSONException ignore) {
+            Long id ;
+            Json json;
+            JSONObject jsonObject;
+
+            Object object = jsonArray.get(i);
+            if (object == null) {
+                continue;
+            }
+            if ((jsonObject = jsonArray.getJSONObject(i)) != null) {
+                json = new Json(jsonObject);
+                id = getId(json);
+            } else if ((id = jsonArray.getLong(i)) != null) {
+                jsonObject = getJSONObject(id);
+                json = new Json(jsonObject);
+            } else {
+                continue;
+            }
+
+            jsons.add(json);
+            if (id != null) {
+                ids.add(id);
             }
         }
 
@@ -77,13 +95,13 @@ public abstract class AbstractSerializer<T> {
 
         // Convert objects
         List<T> objects = new ArrayList<>();
-        for (SafeJSON safeJSON : safeJSONs) {
-            Long id = getId(safeJSON);
+        for (Json json : jsons) {
+            Long id = getId(json);
             T object = existingObjectsById.get(id);
             if (object == null) {
                 object = freshObject(id);
             }
-            merge(safeJSON, object);
+            merge(json, object);
             objects.add(object);
         }
 
@@ -95,8 +113,9 @@ public abstract class AbstractSerializer<T> {
     }
 
     abstract protected Box<T> getBox();
-    abstract protected void merge(SafeJSON safeJson, T object);
+    abstract protected void merge(Json json, T object);
     abstract protected T freshObject(Long id);
-    abstract protected Long getId(SafeJSON safeJSON);
+    abstract protected Long getId(Json json);
     abstract protected Long getId(T object);
+    abstract protected JSONObject getJSONObject(Long id);
 }

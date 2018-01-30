@@ -6,7 +6,7 @@ import com.manuege.boxfit.api.model.PaginatedResponse;
 import com.manuege.boxfit.library.serializers.MainSerializer;
 import com.manuege.boxfit.model.Album;
 import com.manuege.boxfit.model.Artist;
-import com.manuege.boxfit.utils.Json;
+import com.manuege.boxfit.utils.JsonProvider;
 
 import org.json.JSONObject;
 import org.junit.Test;
@@ -20,7 +20,7 @@ import static org.junit.Assert.assertEquals;
 public class PaginatedResponseSerializerTest extends AbstractObjectBoxTest {
     @Test
     public void paginatedResponseSerializer_canSerialize() {
-        JSONObject jsonObject = Json.getJSONObject("album_paginated_response.json");
+        JSONObject jsonObject = JsonProvider.getJSONObject("album_paginated_response.json");
         MainSerializer serializer = new MainSerializer(boxStore);
         PaginatedResponse<Album> object = serializer.serialize(Paginated.Albums.class, jsonObject);
 
