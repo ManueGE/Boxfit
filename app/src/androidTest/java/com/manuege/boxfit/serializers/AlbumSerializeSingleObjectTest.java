@@ -1,4 +1,5 @@
 package com.manuege.boxfit.serializers;
+
 import com.manuege.boxfit.AbstractObjectBoxTest;
 import com.manuege.boxfit.library.serializers.MainSerializer;
 import com.manuege.boxfit.model.Album;
@@ -38,6 +39,9 @@ public class AlbumSerializeSingleObjectTest extends AbstractObjectBoxTest {
         Artist artist = album.getArtist().getTarget();
         assertEquals(1, artist.getId());
         assertEquals("Andrés Calamaro", artist.getName());
+        assertEquals(61, artist.getBirthDate().getYear());
+        assertEquals(7, artist.getBirthDate().getMonth());
+        assertEquals(22, artist.getBirthDate().getDate());
 
         Genre genre = album.getGenre().getTarget();
         assertEquals(10, genre.getId());
@@ -74,6 +78,9 @@ public class AlbumSerializeSingleObjectTest extends AbstractObjectBoxTest {
         Artist artist = album.getArtist().getTarget();
         assertEquals(1, artist.getId());
         assertEquals("Andrés Calamaro", artist.getName());
+        assertEquals(61, artist.getBirthDate().getYear());
+        assertEquals(7, artist.getBirthDate().getMonth());
+        assertEquals(22, artist.getBirthDate().getDate());
 
         Genre genre = album.getGenre().getTarget();
         assertEquals(9, genre.getId());

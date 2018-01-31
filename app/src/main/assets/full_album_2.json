@@ -3,7 +3,8 @@
   "name": "Honestidad Brutal",
   "artist": {
     "id": 1,
-    "name": "Andrés Calamaro"
+    "name": "Andrés Calamaro",
+    "birth": "1961-08-22"
   },
   "year": 1998,
   "genre": {

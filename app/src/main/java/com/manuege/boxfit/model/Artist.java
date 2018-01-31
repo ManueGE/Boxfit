@@ -1,5 +1,7 @@
 package com.manuege.boxfit.model;
 
+import java.util.Date;
+
 import io.objectbox.annotation.Backlink;
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
@@ -14,6 +16,7 @@ public class Artist {
     @Id(assignable = true)
     long id;
     String name;
+    Date birthDate;
     @Backlink
     ToMany<Album> albums;
 
@@ -31,6 +34,14 @@ public class Artist {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Date getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
     }
 
     public ToMany<Album> getAlbums() {

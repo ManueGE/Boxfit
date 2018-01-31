@@ -3,7 +3,8 @@
   "name": "Alta Suciedad",
   "artist": {
     "id": 1,
-    "name": "El viejo Andrés"
+    "name": "El viejo Andrés",
+    "birth": "1961-08-22"
   },
   "genre": {
     "id": 9,

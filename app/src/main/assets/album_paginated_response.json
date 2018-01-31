@@ -8,7 +8,8 @@
       "name": "Honestidad Brutal",
       "artist": {
         "id": 1,
-        "name": "Andrés Calamaro"
+        "name": "Andrés Calamaro",
+        "birth": "1961-08-22"
       }
     },
     {
@@ -16,7 +17,8 @@
       "name": "Desaparezca Aquí",
       "artist": {
         "id": 2,
-        "name": "Nacho Vegas"
+        "name": "Nacho Vegas",
+        "birth": "1974-12-09"
       }
     },
     {
@@ -24,7 +26,8 @@
       "name": "Cajas de música difíciles de parar",
       "artist": {
         "id": 2,
-        "name": "Nacho Vegas"
+        "name": "Nacho Vegas",
+        "birth": "1974-12-09"
       }
     }
   ]
