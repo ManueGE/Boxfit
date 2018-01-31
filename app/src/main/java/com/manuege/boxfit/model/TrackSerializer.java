@@ -2,9 +2,12 @@ package com.manuege.boxfit.model;
 
 import com.manuege.boxfit.library.serializers.AbstractSerializer;
 import com.manuege.boxfit.library.utils.Json;
+import com.manuege.boxfit.library.utils.JsonArray;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 import io.objectbox.Box;
 import io.objectbox.BoxStore;
@@ -13,7 +16,7 @@ import io.objectbox.BoxStore;
  * Created by Manu on 28/1/18.
  */
 
-public class TrackSerializer extends AbstractSerializer<Track> {
+public class TrackSerializer extends AbstractSerializer<Track, Long> {
 
     public TrackSerializer(BoxStore boxStore) {
         super(boxStore);
@@ -32,7 +35,7 @@ public class TrackSerializer extends AbstractSerializer<Track> {
     }
 
     @Override
-    protected Track freshObject(Long id) {
+    protected Track createFreshObject(Long id) {
         Track object = new Track();
         object.id = id;
         return object;
@@ -57,5 +60,20 @@ public class TrackSerializer extends AbstractSerializer<Track> {
         } catch (JSONException e) {
             return null;
         }
+    }
+
+    @Override
+    protected Long getId(JsonArray array, int index) {
+        return array.getLong(index);
+    }
+
+    @Override
+    protected Track getExistingObject(Long aLong) {
+        return getBox().get(aLong);
+    }
+
+    @Override
+    protected List<Track> getExistingObjects(List<Long> longs) {
+        return getBox().get(longs);
     }
 }

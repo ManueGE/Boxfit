@@ -2,6 +2,7 @@ package com.manuege.boxfit.model;
 
 import com.manuege.boxfit.library.serializers.AbstractSerializer;
 import com.manuege.boxfit.library.utils.Json;
+import com.manuege.boxfit.library.utils.JsonArray;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,7 +17,7 @@ import io.objectbox.BoxStore;
  * Created by Manu on 28/1/18.
  */
 
-public class AlbumSerializer extends AbstractSerializer<Album> {
+public class AlbumSerializer extends AbstractSerializer<Album, Long> {
 
     public AlbumSerializer(BoxStore boxStore) {
         super(boxStore);
@@ -83,7 +84,7 @@ public class AlbumSerializer extends AbstractSerializer<Album> {
     }
 
     @Override
-    protected Album freshObject(Long id) {
+    protected Album createFreshObject(Long id) {
         Album object = new Album();
         object.id = id;
         return object;
@@ -110,4 +111,18 @@ public class AlbumSerializer extends AbstractSerializer<Album> {
         }
     }
 
+    @Override
+    protected Long getId(JsonArray array, int index) {
+        return array.getLong(index);
+    }
+
+    @Override
+    protected Album getExistingObject(Long aLong) {
+        return getBox().get(aLong);
+    }
+
+    @Override
+    protected List<Album> getExistingObjects(List<Long> longs) {
+        return getBox().get(longs);
+    }
 }
