@@ -1,42 +1,80 @@
 package com.manuege.boxfit.model;
 
 import com.manuege.boxfit.library.serializers.AbstractSerializer;
-import com.manuege.boxfit.library.utils.SafeJSON;
+import com.manuege.boxfit.library.utils.Json;
+import com.manuege.boxfit.library.utils.JsonArray;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.List;
+
+import io.objectbox.Box;
 import io.objectbox.BoxStore;
 
 /**
  * Created by Manu on 28/1/18.
  */
 
-public class ArtistSerializer extends AbstractSerializer<Artist> {
+public class ArtistSerializer extends AbstractSerializer<Artist, Long> {
 
     public ArtistSerializer(BoxStore boxStore) {
-        super(Artist.class, boxStore);
+        super(boxStore);
     }
 
     @Override
-    protected void merge(SafeJSON safeJson, Artist object) {
-        if (safeJson.has("name")) {
-            object.name = safeJson.getString("name");
+    protected Box<Artist> getBox() {
+        return boxStore.boxFor(Artist.class);
+    }
+
+    @Override
+    protected void merge(Json json, Artist object) {
+        if (json.has("name")) {
+            object.name = json.getString("name");
         }
     }
 
     @Override
-    protected Artist freshObject(Long id) {
+    protected Artist createFreshObject(Long id) {
         Artist object = new Artist();
         object.id = id;
         return object;
     }
 
     @Override
-    protected Long getId(SafeJSON safeJSON) {
-        return safeJSON.getLong("id");
+    protected Long getId(Json json) {
+        return json.getLong("id");
     }
 
     @Override
     protected Long getId(Artist object) {
         return object.id;
+    }
+
+    @Override
+    protected JSONObject getJSONObject(Long id) {
+        try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("id", id);
+            return jsonObject;
+        } catch (JSONException e) {
+            return null;
+        }
+    }
+
+    @Override
+    protected Long getId(JsonArray array, int index) {
+        return array.getLong(index);
+    }
+
+    @Override
+    protected Artist getExistingObject(Long aLong) {
+        return getBox().get(aLong);
+    }
+
+    @Override
+    protected List<Artist> getExistingObjects(List<Long> longs) {
+        return getBox().get(longs);
     }
 
 }

@@ -1,9 +1,9 @@
 package com.manuege.boxfit.library.serializers;
 
-import com.manuege.boxfit.library.utils.SafeJSON;
+import com.manuege.boxfit.library.utils.Json;
+import com.manuege.boxfit.library.utils.JsonArray;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -16,76 +16,110 @@ import io.objectbox.BoxStore;
 /**
  * Abstract class used as base to create objects serializers.
  * It takes a JSONObject or a JSONArray and insert them in the given `BoxStore`.
- * @param <T> The class of the objects that will be serialized.
+ * @param <Entity> The class of the objects that will be serialized.
+ * @param <Id> The class of the primary key of the objects that will be serialized.
  */
-public abstract class AbstractSerializer<T> {
+public abstract class AbstractSerializer<Entity, Id> {
     protected BoxStore boxStore;
-    private Class<T> clazz;
 
-    public AbstractSerializer(Class<T> clazz, BoxStore boxStore) {
-        this.clazz = clazz;
+    public AbstractSerializer(BoxStore boxStore) {
         this.boxStore = boxStore;
     }
 
-    public T serialize(JSONObject jsonObject) {
-        SafeJSON safeJson = new SafeJSON(jsonObject);
-        Long id = getId(safeJson);
-        T object = getBox().get(id);
-        if (object == null) {
-            object = freshObject(id);
+    public Entity serialize(Id id) {
+        JSONObject jsonObject = getJSONObject(id);
+        return serialize(jsonObject);
+    }
+
+    public Entity serialize(JSONObject jsonObject) {
+        Json json = new Json(jsonObject);
+        Id id = getId(json);
+
+        Entity object;
+        if (getBox() != null) {
+            object = getExistingObject(id);
+            if (object == null) {
+                object = createFreshObject(id);
+                getBox().put(object);
+            }
+        } else {
+            object = createFreshObject(null);
+        }
+
+        merge(json, object);
+        if (getBox() != null) {
             getBox().put(object);
         }
-        merge(safeJson, object);
-        getBox().put(object);
+
         return object;
     }
 
-    public List<T> serialize(JSONArray jsonArray) {
+    public List<Entity> serialize(JSONArray array) {
+        JsonArray jsonArray = new JsonArray(array);
 
         // Get ids
-        ArrayList<SafeJSON> safeJSONs = new ArrayList<>();
-        List<Long> ids = new ArrayList<>();
+        ArrayList<Json> jsons = new ArrayList<>();
+        List<Id> ids = new ArrayList<>();
         for (int i = 0; i < jsonArray.length(); i++) {
-            try {
-                JSONObject object = jsonArray.getJSONObject(i);
-                SafeJSON safeJson = new SafeJSON(object);
-                safeJSONs.add(safeJson);
-                Long id = getId(safeJson);
-                if (id != null) {
-                    ids.add(id);
-                }
-            } catch (JSONException ignore) {
+            Id id ;
+            Json json;
+            JSONObject jsonObject;
+
+            Object object = jsonArray.get(i);
+            if (object == null) {
+                continue;
+            }
+            if ((jsonObject = jsonArray.getJSONObject(i)) != null) {
+                json = new Json(jsonObject);
+                id = getId(json);
+            } else if ((id = getId(jsonArray, i)) != null) {
+                jsonObject = getJSONObject(id);
+                json = new Json(jsonObject);
+            } else {
+                continue;
+            }
+
+            jsons.add(json);
+            if (id != null) {
+                ids.add(id);
             }
         }
 
         // Store objects by its id
-        List<T> existingObjects = getBox().get(ids);
-        HashMap<Long, T> existingObjectsById = new HashMap<>();
-        for (T existingObject: existingObjects) {
-            existingObjectsById.put(getId(existingObject), existingObject);
+        HashMap<Id, Entity> existingObjectsById = new HashMap<>();
+        if (getBox() != null) {
+            List<Entity> existingObjects = getExistingObjects(ids);
+            for (Entity existingObject : existingObjects) {
+                existingObjectsById.put(getId(existingObject), existingObject);
+            }
         }
 
         // Convert objects
-        List<T> objects = new ArrayList<>();
-        for (SafeJSON safeJSON: safeJSONs) {
-            Long id = getId(safeJSON);
-            T object = existingObjectsById.get(id);
+        List<Entity> objects = new ArrayList<>();
+        for (Json json : jsons) {
+            Id id = getId(json);
+            Entity object = existingObjectsById.get(id);
             if (object == null) {
-                object = freshObject(id);
+                object = createFreshObject(id);
             }
-            merge(safeJSON, object);
+            merge(json, object);
             objects.add(object);
         }
-        getBox().put(objects);
+
+        if (getBox() != null) {
+            getBox().put(objects);
+        }
+
         return objects;
     }
 
-    private Box<T> getBox() {
-        return boxStore.boxFor(clazz);
-    }
-
-    abstract protected void merge(SafeJSON safeJson, T object);
-    abstract protected T freshObject(Long id);
-    abstract protected Long getId(SafeJSON safeJSON);
-    abstract protected Long getId(T object);
+    abstract protected void merge(Json json, Entity object);
+    abstract protected Box<Entity> getBox();
+    abstract protected Entity createFreshObject(Id id);
+    abstract protected Id getId(Json json);
+    abstract protected Id getId(JsonArray array, int index);
+    abstract protected Id getId(Entity object);
+    abstract protected JSONObject getJSONObject(Id id);
+    abstract protected Entity getExistingObject(Id id);
+    abstract protected List<Entity> getExistingObjects(List<Id> ids);
 }
