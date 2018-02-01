@@ -44,6 +44,7 @@ public class AlbumSerializeSingleObjectTest extends AbstractObjectBoxTest {
         assertEquals(61, artist.getBirthDate().getYear());
         assertEquals(7, artist.getBirthDate().getMonth());
         assertEquals(22, artist.getBirthDate().getDate());
+        assertEquals(Artist.Type.SINGER, artist.getType());
 
         Genre genre = album.getGenre().getTarget();
         assertEquals(10, genre.getId());
@@ -84,6 +85,7 @@ public class AlbumSerializeSingleObjectTest extends AbstractObjectBoxTest {
         assertEquals(61, artist.getBirthDate().getYear());
         assertEquals(7, artist.getBirthDate().getMonth());
         assertEquals(22, artist.getBirthDate().getDate());
+        assertEquals(Artist.Type.SINGER, artist.getType());
 
         Genre genre = album.getGenre().getTarget();
         assertEquals(9, genre.getId());

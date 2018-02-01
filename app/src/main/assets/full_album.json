@@ -5,7 +5,8 @@
   "artist": {
     "id": 1,
     "name": "Andrés Calamaro",
-    "birth": "1961-08-22"
+    "birth": "1961-08-22",
+    "type": "singer"
   },
   "year": 1999,
   "genre": {
