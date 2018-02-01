@@ -16,11 +16,17 @@ public class JsonArray {
     }
 
     public int length() {
+        if (jsonArray == null) {
+            return 0;
+        }
         return jsonArray.length();
     }
 
     // String
     public String getString(int index, String defaultValue) {
+        if (jsonArray.isNull(index)) {
+            return defaultValue;
+        }
         try {
             return jsonArray.getString(index);
         } catch (JSONException e) {
@@ -34,6 +40,9 @@ public class JsonArray {
 
     // Integer
     public Integer getInt(int index, Integer defaultValue) {
+        if (jsonArray.isNull(index)) {
+            return defaultValue;
+        }
         try {
             return jsonArray.getInt(index);
         } catch (JSONException e) {
@@ -47,6 +56,9 @@ public class JsonArray {
 
     // Bool
     public Boolean getBoolean(int index, Boolean defaultValue) {
+        if (jsonArray.isNull(index)) {
+            return defaultValue;
+        }
         try {
             return jsonArray.getBoolean(index);
         } catch (JSONException e) {
@@ -60,6 +72,9 @@ public class JsonArray {
 
     // Double
     public Double getDouble(int index, Double defaultValue) {
+        if (jsonArray.isNull(index)) {
+            return defaultValue;
+        }
         try {
             return jsonArray.getDouble(index);
         } catch (JSONException e) {
@@ -73,6 +88,9 @@ public class JsonArray {
 
     // Long
     public Long getLong(int index, Long defaultValue) {
+        if (jsonArray.isNull(index)) {
+            return defaultValue;
+        }
         try {
             return jsonArray.getLong(index);
         } catch (JSONException e) {
@@ -86,6 +104,9 @@ public class JsonArray {
 
     // JSONObject
     public JSONObject getJSONObject(int index, JSONObject defaultValue) {
+        if (jsonArray.isNull(index)) {
+            return defaultValue;
+        }
         try {
             return jsonArray.getJSONObject(index);
         } catch (JSONException e) {
@@ -99,6 +120,9 @@ public class JsonArray {
 
     // JSONArray
     public JSONArray getJSONArray(int index, JSONArray defaultValue) {
+        if (jsonArray.isNull(index)) {
+            return defaultValue;
+        }
         try {
             return jsonArray.getJSONArray(index);
         } catch (JSONException e) {
@@ -112,6 +136,9 @@ public class JsonArray {
 
     // Generic
     public Object get(int index, Object defaultValue) {
+        if (jsonArray.isNull(index)) {
+            return defaultValue;
+        }
         try {
             return jsonArray.get(index);
         } catch (JSONException e) {

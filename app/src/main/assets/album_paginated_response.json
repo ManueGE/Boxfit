@@ -6,6 +6,7 @@
     {
       "id": 1,
       "name": "Honestidad Brutal",
+      "rate": 5,
       "artist": {
         "id": 1,
         "name": "Andrés Calamaro",
@@ -15,6 +16,7 @@
     {
       "id": 2,
       "name": "Desaparezca Aquí",
+      "rate": 5,
       "artist": {
         "id": 2,
         "name": "Nacho Vegas",
@@ -24,6 +26,7 @@
     {
       "id": 3,
       "name": "Cajas de música difíciles de parar",
+      "rate": 5,
       "artist": {
         "id": 2,
         "name": "Nacho Vegas",

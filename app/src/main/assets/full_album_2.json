@@ -1,6 +1,7 @@
 {
   "id": 1,
   "name": "Honestidad Brutal",
+  "rate": 4,
   "artist": {
     "id": 1,
     "name": "Andrés Calamaro",
