@@ -4,7 +4,7 @@ apply plugin: 'io.objectbox'
 android {
     compileSdkVersion 26
     defaultConfig {
-        applicationId "com.manuege.boxfit"
+        applicationId "com.manuege.boxfitapp"
         minSdkVersion 16
         targetSdkVersion 26
         versionCode 1
@@ -29,4 +29,8 @@ dependencies {
 
     // Retrofit
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
+
+    // Boxfit
+    compile project(':boxfit')
+    annotationProcessor project(':boxfit-processor')
 }
