@@ -10,4 +10,3 @@
 - Test objects without primary key (or not-assignable PK)
 - Test arrays of "wrappers"
 - Test to many with List<> and ToMany<>
-- Test autoconvert string to numbers and viceversa *(seems to work, but write a test for it)*
