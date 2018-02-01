@@ -21,6 +21,9 @@ public class Json {
 
     // String
     public String getString(String key, String defaultValue) {
+        if (jsonObject.isNull(key)) {
+            return defaultValue;
+        }
         try {
             return jsonObject.getString(key);
         } catch (JSONException e) {
@@ -34,6 +37,9 @@ public class Json {
 
     // Integer
     public Integer getInt(String key, Integer defaultValue) {
+        if (jsonObject.isNull(key)) {
+            return defaultValue;
+        }
         try {
             return jsonObject.getInt(key);
         } catch (JSONException e) {
@@ -47,6 +53,9 @@ public class Json {
 
     // Bool
     public Boolean getBoolean(String key, Boolean defaultValue) {
+        if (jsonObject.isNull(key)) {
+            return defaultValue;
+        }
         try {
             return jsonObject.getBoolean(key);
         } catch (JSONException e) {
@@ -60,6 +69,9 @@ public class Json {
 
     // Double
     public Double getDouble(String key, Double defaultValue) {
+        if (jsonObject.isNull(key)) {
+            return defaultValue;
+        }
         try {
             return jsonObject.getDouble(key);
         } catch (JSONException e) {
@@ -73,6 +85,9 @@ public class Json {
 
     // Long
     public Long getLong(String key, Long defaultValue) {
+        if (jsonObject.isNull(key)) {
+            return defaultValue;
+        }
         try {
             return jsonObject.getLong(key);
         } catch (JSONException e) {
@@ -86,6 +101,9 @@ public class Json {
     
     // JSONObject
     public JSONObject getJSONObject(String key, JSONObject defaultValue) {
+        if (jsonObject.isNull(key)) {
+            return defaultValue;
+        }
         try {
             return jsonObject.getJSONObject(key);
         } catch (JSONException e) {
@@ -99,6 +117,9 @@ public class Json {
 
     // JSONArray
     public JSONArray getJSONArray(String key, JSONArray defaultValue) {
+        if (jsonObject.isNull(key)) {
+            return defaultValue;
+        }
         try {
             return jsonObject.getJSONArray(key);
         } catch (JSONException e) {
@@ -112,6 +133,9 @@ public class Json {
 
     // Generic
     public Object get(String key, Object defaultValue) {
+        if (jsonObject.isNull(key)) {
+            return defaultValue;
+        }
         try {
             return jsonObject.get(key);
         } catch (JSONException e) {

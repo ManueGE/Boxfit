@@ -1,0 +1,10 @@
+{
+  "id": 4,
+  "name": 4,
+  "year": "2003",
+  "rate": 5,
+  "artist": {
+    "id": 5,
+    "name": "La habitación roja"
+  }
+}

@@ -3,6 +3,7 @@ package com.manuege.boxfit.model;
 import com.manuege.boxfit.library.serializers.AbstractSerializer;
 import com.manuege.boxfit.library.utils.Json;
 import com.manuege.boxfit.library.utils.JsonArray;
+import com.manuege.boxfit.transformers.AlbumJSONTransformer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,7 +36,11 @@ public class AlbumSerializer extends AbstractSerializer<Album, Long> {
         }
 
         if (json.has("year")) {
-            object.year = json.getInt("year");
+            object.year = json.getInt("year", 0);
+        }
+
+        if (json.has("rate")) {
+            object.rate = json.getInt("rate");
         }
 
         if (json.has("artist")) {
@@ -76,10 +81,12 @@ public class AlbumSerializer extends AbstractSerializer<Album, Long> {
 
         if (json.has("tracks")) {
             JSONArray jsonArray = json.getJSONArray("tracks");
-            TrackSerializer serializer = new TrackSerializer(boxStore);
-            List<Track> property = serializer.serialize(jsonArray);
             object.tracks.clear();
-            object.tracks.addAll(property);
+            if (jsonArray != null) {
+                TrackSerializer serializer = new TrackSerializer(boxStore);
+                List<Track> property = serializer.serialize(jsonArray);
+                object.tracks.addAll(property);
+            }
         }
     }
 
@@ -124,5 +131,11 @@ public class AlbumSerializer extends AbstractSerializer<Album, Long> {
     @Override
     protected List<Album> getExistingObjects(List<Long> longs) {
         return getBox().get(longs);
+    }
+
+    @Override
+    protected JSONObject convertedJSONObject(JSONObject object) {
+        AlbumJSONTransformer transformer = new AlbumJSONTransformer();
+        return transformer.transform(object);
     }
 }
