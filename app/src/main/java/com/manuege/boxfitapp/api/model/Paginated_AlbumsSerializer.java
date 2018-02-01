@@ -2,8 +2,8 @@ package com.manuege.boxfitapp.api.model;
 
 import com.manuege.boxfitapp.library.serializers.AbstractSerializer;
 import com.manuege.boxfitapp.library.serializers.MainJsonSerializer;
-import com.manuege.boxfitapp.library.utils.Json;
-import com.manuege.boxfitapp.library.utils.JsonArray;
+import com.manuege.boxfit.utils.Json;
+import com.manuege.boxfit.utils.JsonArray;
 import com.manuege.boxfitapp.model.Album;
 
 import org.json.JSONObject;

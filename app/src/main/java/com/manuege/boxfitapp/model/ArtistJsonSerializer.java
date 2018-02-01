@@ -1,8 +1,8 @@
 package com.manuege.boxfitapp.model;
 
 import com.manuege.boxfitapp.library.serializers.AbstractSerializer;
-import com.manuege.boxfitapp.library.utils.Json;
-import com.manuege.boxfitapp.library.utils.JsonArray;
+import com.manuege.boxfit.utils.Json;
+import com.manuege.boxfit.utils.JsonArray;
 import com.manuege.boxfitapp.transformers.ArtistTypeTransformer;
 import com.manuege.boxfitapp.transformers.StringToDateTransformer;
 
