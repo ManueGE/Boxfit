@@ -1,6 +1,6 @@
-package com.manuege.boxfit.model;
+package com.manuege.boxfitapp.model;
 
-import com.manuege.boxfit.transformers.ArtistTypeTransformer;
+import com.manuege.boxfitapp.transformers.ArtistTypeTransformer;
 
 import java.util.Date;
 

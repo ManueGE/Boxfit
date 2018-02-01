@@ -1,6 +1,6 @@
-package com.manuege.boxfit.api.model;
+package com.manuege.boxfitapp.api.model;
 
-import com.manuege.boxfit.model.Album;
+import com.manuege.boxfitapp.model.Album;
 
 /**
  * Created by Manu on 28/1/18.

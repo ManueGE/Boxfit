@@ -1,7 +1,7 @@
 package com.manuege.boxfitapp.serializers;
 
 import com.manuege.boxfitapp.AbstractObjectBoxTest;
-import com.manuege.boxfitapp.library.serializers.MainSerializer;
+import com.manuege.boxfitapp.library.serializers.MainJsonSerializer;
 import com.manuege.boxfitapp.model.Album;
 import com.manuege.boxfitapp.model.Artist;
 import com.manuege.boxfitapp.model.Genre;
@@ -25,7 +25,7 @@ public class AlbumSerializeSingleObjectTest extends AbstractObjectBoxTest {
     @Test
     public void albumSerializer_serializeNewObject() throws Exception {
         JSONObject object = JsonProvider.getJSONObject("full_album.json");
-        MainSerializer mainSerializer = new MainSerializer(boxStore);
+        MainJsonSerializer mainSerializer = new MainJsonSerializer(boxStore);
         Album album = mainSerializer.serialize(Album.class, object);
 
         assertEquals(1, boxStore.boxFor(Album.class).getAll().size());
@@ -60,7 +60,7 @@ public class AlbumSerializeSingleObjectTest extends AbstractObjectBoxTest {
 
     @Test
     public void albumSerializer_serializeExistingObject() throws Exception {
-        MainSerializer serializer = new MainSerializer(boxStore);
+        MainJsonSerializer serializer = new MainJsonSerializer(boxStore);
         JSONObject first_json = JsonProvider.getJSONObject("full_album.json");
         serializer.serialize(Album.class, first_json);
 
@@ -101,7 +101,7 @@ public class AlbumSerializeSingleObjectTest extends AbstractObjectBoxTest {
 
     @Test
     public void albumSerializer_partialUpdateObjects() throws Exception {
-        MainSerializer serializer = new MainSerializer(boxStore);
+        MainJsonSerializer serializer = new MainJsonSerializer(boxStore);
         JSONObject first_json = JsonProvider.getJSONObject("full_album.json");
         serializer.serialize(Album.class, first_json);
 
@@ -138,7 +138,7 @@ public class AlbumSerializeSingleObjectTest extends AbstractObjectBoxTest {
 
     @Test
     public void albumSerializer_relationsWithIds() throws Exception {
-        MainSerializer serializer = new MainSerializer(boxStore);
+        MainJsonSerializer serializer = new MainJsonSerializer(boxStore);
         JSONObject json = JsonProvider.getJSONObject("album_with_properties_with_id.json");
         Album album = serializer.serialize(Album.class, json);
         assertEquals(3, album.getArtist().getTarget().getId());
@@ -161,7 +161,7 @@ public class AlbumSerializeSingleObjectTest extends AbstractObjectBoxTest {
         track.setName("Segundo Premio");
         boxStore.boxFor(Track.class).put(track);
 
-        MainSerializer serializer = new MainSerializer(boxStore);
+        MainJsonSerializer serializer = new MainJsonSerializer(boxStore);
         JSONObject json = JsonProvider.getJSONObject("album_with_properties_with_id.json");
         Album album = serializer.serialize(Album.class, json);
 
@@ -176,7 +176,7 @@ public class AlbumSerializeSingleObjectTest extends AbstractObjectBoxTest {
 
     @Test
     public void albumSerializer_canAutoConvertStringInNumbersAndViceVersa() throws Exception {
-        MainSerializer serializer = new MainSerializer(boxStore);
+        MainJsonSerializer serializer = new MainJsonSerializer(boxStore);
         JSONObject json = JsonProvider.getJSONObject("album_wrong_property_types.json");
         Album album = serializer.serialize(Album.class, json);
 
@@ -207,7 +207,7 @@ public class AlbumSerializeSingleObjectTest extends AbstractObjectBoxTest {
         boxStore.boxFor(Album.class).put(album);
 
 
-        MainSerializer serializer = new MainSerializer(boxStore);
+        MainJsonSerializer serializer = new MainJsonSerializer(boxStore);
         JSONObject json = JsonProvider.getJSONObject("album_with_nil_properties.json");
         album = serializer.serialize(Album.class, json);
 
@@ -220,7 +220,7 @@ public class AlbumSerializeSingleObjectTest extends AbstractObjectBoxTest {
 
     @Test
     public void albumSerializer_serializeAlbumThatNeedsConversion() throws Exception {
-        MainSerializer serializer = new MainSerializer(boxStore);
+        MainJsonSerializer serializer = new MainJsonSerializer(boxStore);
         JSONObject json = JsonProvider.getJSONObject("album_that_needs_conversion.json");
         Album album = serializer.serialize(Album.class, json);
         assertEquals(1, album.getId());

@@ -1,4 +1,6 @@
-package com.manuege.boxfit.model;
+package com.manuege.boxfitapp.model;
+
+import com.manuege.boxfit.annotations.JsonSerializable;
 
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
@@ -9,6 +11,7 @@ import io.objectbox.relation.ToOne;
  * Created by Manu on 28/1/18.
  */
 
+@JsonSerializable
 @Entity
 public class Album {
     @Id(assignable = true)

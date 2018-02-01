@@ -1,8 +1,8 @@
-package com.manuege.boxfit.model;
+package com.manuege.boxfitapp.model;
 
-import com.manuege.boxfit.library.serializers.AbstractSerializer;
-import com.manuege.boxfit.library.utils.Json;
-import com.manuege.boxfit.library.utils.JsonArray;
+import com.manuege.boxfitapp.library.serializers.AbstractSerializer;
+import com.manuege.boxfitapp.library.utils.Json;
+import com.manuege.boxfitapp.library.utils.JsonArray;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,9 +16,9 @@ import io.objectbox.BoxStore;
  * Created by Manu on 28/1/18.
  */
 
-public class GenreSerializer extends AbstractSerializer<Genre, Long> {
+public class GenreJsonSerializer extends AbstractSerializer<Genre, Long> {
 
-    public GenreSerializer(BoxStore boxStore) {
+    public GenreJsonSerializer(BoxStore boxStore) {
         super(boxStore);
     }
 

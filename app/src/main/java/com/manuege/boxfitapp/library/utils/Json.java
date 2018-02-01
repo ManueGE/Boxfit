@@ -1,4 +1,4 @@
-package com.manuege.boxfit.library.utils;
+package com.manuege.boxfitapp.library.utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;

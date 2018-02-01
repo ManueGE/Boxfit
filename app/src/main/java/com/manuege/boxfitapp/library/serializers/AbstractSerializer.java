@@ -1,7 +1,7 @@
-package com.manuege.boxfit.library.serializers;
+package com.manuege.boxfitapp.library.serializers;
 
-import com.manuege.boxfit.library.utils.Json;
-import com.manuege.boxfit.library.utils.JsonArray;
+import com.manuege.boxfitapp.library.utils.Json;
+import com.manuege.boxfitapp.library.utils.JsonArray;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

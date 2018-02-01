@@ -1,10 +1,10 @@
-package com.manuege.boxfit.model;
+package com.manuege.boxfitapp.model;
 
-import com.manuege.boxfit.library.serializers.AbstractSerializer;
-import com.manuege.boxfit.library.utils.Json;
-import com.manuege.boxfit.library.utils.JsonArray;
-import com.manuege.boxfit.transformers.ArtistTypeTransformer;
-import com.manuege.boxfit.transformers.StringToDateTransformer;
+import com.manuege.boxfitapp.library.serializers.AbstractSerializer;
+import com.manuege.boxfitapp.library.utils.Json;
+import com.manuege.boxfitapp.library.utils.JsonArray;
+import com.manuege.boxfitapp.transformers.ArtistTypeTransformer;
+import com.manuege.boxfitapp.transformers.StringToDateTransformer;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,9 +18,9 @@ import io.objectbox.BoxStore;
  * Created by Manu on 28/1/18.
  */
 
-public class ArtistSerializer extends AbstractSerializer<Artist, Long> {
+public class ArtistJsonSerializer extends AbstractSerializer<Artist, Long> {
 
-    public ArtistSerializer(BoxStore boxStore) {
+    public ArtistJsonSerializer(BoxStore boxStore) {
         super(boxStore);
     }
 

@@ -1,10 +1,10 @@
-package com.manuege.boxfit.api.model;
+package com.manuege.boxfitapp.api.model;
 
-import com.manuege.boxfit.library.serializers.AbstractSerializer;
-import com.manuege.boxfit.library.serializers.MainSerializer;
-import com.manuege.boxfit.library.utils.Json;
-import com.manuege.boxfit.library.utils.JsonArray;
-import com.manuege.boxfit.model.Album;
+import com.manuege.boxfitapp.library.serializers.AbstractSerializer;
+import com.manuege.boxfitapp.library.serializers.MainJsonSerializer;
+import com.manuege.boxfitapp.library.utils.Json;
+import com.manuege.boxfitapp.library.utils.JsonArray;
+import com.manuege.boxfitapp.model.Album;
 
 import org.json.JSONObject;
 
@@ -39,7 +39,7 @@ public class Paginated_AlbumsSerializer extends AbstractSerializer<Paginated.Alb
             object.next = json.getInt("next");
         }
         if (json.has("results")) {
-            MainSerializer serializer = new MainSerializer(boxStore);
+            MainJsonSerializer serializer = new MainJsonSerializer(boxStore);
             object.results = serializer.serialize(Album.class, json.getJSONArray("results"));
         }
     }

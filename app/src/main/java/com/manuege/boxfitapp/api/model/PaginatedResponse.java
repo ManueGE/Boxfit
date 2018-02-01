@@ -1,4 +1,4 @@
-package com.manuege.boxfit.api.model;
+package com.manuege.boxfitapp.api.model;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.manuege.boxfit.model;
+package com.manuege.boxfitapp.model;
 
 import io.objectbox.annotation.Backlink;
 import io.objectbox.annotation.Entity;

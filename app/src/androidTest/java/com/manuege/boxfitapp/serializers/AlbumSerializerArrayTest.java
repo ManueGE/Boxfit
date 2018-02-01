@@ -1,12 +1,12 @@
-package com.manuege.boxfit.serializers;
+package com.manuege.boxfitapp.serializers;
 
-import com.manuege.boxfit.AbstractObjectBoxTest;
-import com.manuege.boxfit.api.model.Paginated;
-import com.manuege.boxfit.library.serializers.MainSerializer;
-import com.manuege.boxfit.library.utils.Json;
-import com.manuege.boxfit.model.Album;
-import com.manuege.boxfit.model.Artist;
-import com.manuege.boxfit.utils.JsonProvider;
+import com.manuege.boxfitapp.AbstractObjectBoxTest;
+import com.manuege.boxfitapp.api.model.Paginated;
+import com.manuege.boxfitapp.library.serializers.MainJsonSerializer;
+import com.manuege.boxfitapp.library.utils.Json;
+import com.manuege.boxfitapp.model.Album;
+import com.manuege.boxfitapp.model.Artist;
+import com.manuege.boxfitapp.utils.JsonProvider;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -25,7 +25,7 @@ public class AlbumSerializerArrayTest extends AbstractObjectBoxTest {
     public void albumSerializer_serializeArray() {
         JSONObject object = JsonProvider.getJSONObject("album_paginated_response.json");
         JSONArray array = new Json(object).getJSONArray("results");
-        MainSerializer serializer = new MainSerializer(boxStore);
+        MainJsonSerializer serializer = new MainJsonSerializer(boxStore);
         List<Album> objects = serializer.serialize(Album.class, array);
 
         assertEquals(3, boxStore.boxFor(Album.class).count());
@@ -38,7 +38,7 @@ public class AlbumSerializerArrayTest extends AbstractObjectBoxTest {
     @Test
     public void albumSerializer_serializeArrayOfNoEntities() {
         JSONArray array = JsonProvider.getJSONArray("array_of_paginated_response.json");
-        MainSerializer serializer = new MainSerializer(boxStore);
+        MainJsonSerializer serializer = new MainJsonSerializer(boxStore);
         List<Paginated.Albums> objects = serializer.serialize(Paginated.Albums.class, array);
 
         assertEquals(2, objects.size());
