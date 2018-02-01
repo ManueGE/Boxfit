@@ -9,5 +9,4 @@
 ## Pending tests
 - Maybe write a test to check all the types
 - Test objects without primary key (or not-assignable PK)
-- Test arrays of "wrappers"
 - Test to many with List<> and ToMany<>

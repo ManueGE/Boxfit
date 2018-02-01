@@ -30,11 +30,14 @@ public class JsonProvider {
     }
 
     public static JSONArray getJSONArray(String filename) {
-        InputStream inputStream = JsonProvider.class.getClassLoader().getResourceAsStream(filename);
-        String s = readTextStream(inputStream);
         try {
+            Context context = InstrumentationRegistry.getTargetContext();
+            InputStream inputStream = context.getResources().getAssets().open(filename);
+            String s = readTextStream(inputStream);
             return new JSONArray(s);
         } catch (JSONException e) {
+            return null;
+        } catch (IOException e) {
             return null;
         }
     }
