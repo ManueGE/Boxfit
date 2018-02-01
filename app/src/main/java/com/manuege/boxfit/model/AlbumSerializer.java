@@ -3,6 +3,7 @@ package com.manuege.boxfit.model;
 import com.manuege.boxfit.library.serializers.AbstractSerializer;
 import com.manuege.boxfit.library.utils.Json;
 import com.manuege.boxfit.library.utils.JsonArray;
+import com.manuege.boxfit.transformers.AlbumJSONTransformer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -130,5 +131,11 @@ public class AlbumSerializer extends AbstractSerializer<Album, Long> {
     @Override
     protected List<Album> getExistingObjects(List<Long> longs) {
         return getBox().get(longs);
+    }
+
+    @Override
+    protected JSONObject convertedJSONObject(JSONObject object) {
+        AlbumJSONTransformer transformer = new AlbumJSONTransformer();
+        return transformer.transform(object);
     }
 }

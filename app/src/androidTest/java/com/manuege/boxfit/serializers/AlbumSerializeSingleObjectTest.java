@@ -214,6 +214,14 @@ public class AlbumSerializeSingleObjectTest extends AbstractObjectBoxTest {
         assertNull(album.getRate());
         assertNull(album.getArtist().getTarget());
         assertEquals(0, album.getTracks().size());
+    }
 
+    @Test
+    public void albumSerializer_serializeAlbumThatNeedsConversion() throws Exception {
+        MainSerializer serializer = new MainSerializer(boxStore);
+        JSONObject json = JsonProvider.getJSONObject("album_that_needs_conversion.json");
+        Album album = serializer.serialize(Album.class, json);
+        assertEquals(1, album.getId());
+        assertEquals("Alta Suciedad", album.getName());
     }
 }
