@@ -1,10 +1,10 @@
 package com.manuege.boxfitapp.api.model;
 
-import com.manuege.boxfitapp.library.serializers.AbstractSerializer;
-import com.manuege.boxfitapp.library.serializers.MainJsonSerializer;
+import com.manuege.boxfit.serializers.AbstractSerializer;
 import com.manuege.boxfit.utils.Json;
 import com.manuege.boxfit.utils.JsonArray;
 import com.manuege.boxfitapp.model.Album;
+import com.manuege.boxfitapp.serializers.MainJsonSerializer;
 
 import org.json.JSONObject;
 

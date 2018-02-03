@@ -2,7 +2,6 @@ package com.manuege.boxfit_processor.processor;
 
 import com.manuege.boxfit.annotations.JsonSerializable;
 import com.manuege.boxfit_processor.errors.Error;
-import com.manuege.boxfit_processor.generators.ClassJsonSerializerGenerator;
 import com.manuege.boxfit_processor.generators.MainJsonSerializerGenerator;
 import com.manuege.boxfit_processor.info.ClassInfo;
 
@@ -48,8 +47,8 @@ public class BoxfitProcessor extends AbstractProcessor {
 
         if (valid) {
             for (ClassInfo classInfo : classesInfo) {
-                ClassJsonSerializerGenerator generator = new ClassJsonSerializerGenerator(processingEnv, classInfo);
-                generator.generateFile();
+                //ClassJsonSerializerGenerator generator = new ClassJsonSerializerGenerator(processingEnv, classInfo);
+                //generator.generateFile();
             }
 
             MainJsonSerializerGenerator generator = new MainJsonSerializerGenerator(processingEnv, classesInfo);

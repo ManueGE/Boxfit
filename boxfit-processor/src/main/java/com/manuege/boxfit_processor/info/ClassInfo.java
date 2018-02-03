@@ -12,6 +12,7 @@ import javax.lang.model.element.TypeElement;
  */
 
 public class ClassInfo {
+    private TypeElement typeElement;
     private String qualifiedClassName;
     private String className;
     private FieldInfo primaryKey;
@@ -20,6 +21,7 @@ public class ClassInfo {
     public static ClassInfo newInstance(TypeElement element) {
         boolean valid = true;
         ClassInfo classInfo = new ClassInfo();
+        classInfo.typeElement = element;
         classInfo.qualifiedClassName = element.getQualifiedName().toString();
         classInfo.className = element.getSimpleName().toString();
 
@@ -50,6 +52,10 @@ public class ClassInfo {
 
     boolean hasPrimaryKey() {
         return primaryKey != null;
+    }
+
+    public TypeElement getTypeElement() {
+        return typeElement;
     }
 
     String getQualifiedClassName() {

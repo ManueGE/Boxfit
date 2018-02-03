@@ -1,4 +1,4 @@
-package com.manuege.boxfitapp.library.serializers;
+package com.manuege.boxfitapp.serializers;
 
 import com.manuege.boxfitapp.api.model.Paginated;
 import com.manuege.boxfitapp.api.model.Paginated_AlbumsSerializer;

@@ -5,5 +5,7 @@ dependencies {
     compile group: 'org.json', name: 'json', version: '20171018'
 }
 
+apply plugin: 'io.objectbox'
+
 sourceCompatibility = "1.7"
 targetCompatibility = "1.7"

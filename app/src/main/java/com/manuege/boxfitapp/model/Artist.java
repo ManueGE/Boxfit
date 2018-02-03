@@ -1,5 +1,6 @@
 package com.manuege.boxfitapp.model;
 
+import com.manuege.boxfit.annotations.JsonSerializable;
 import com.manuege.boxfitapp.transformers.ArtistTypeTransformer;
 
 import java.util.Date;
@@ -14,6 +15,7 @@ import io.objectbox.relation.ToMany;
  * Created by Manu on 28/1/18.
  */
 
+@JsonSerializable
 @Entity
 public class Artist {
 

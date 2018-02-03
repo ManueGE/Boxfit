@@ -3,7 +3,6 @@ package com.manuege.boxfitapp.serializers;
 import com.manuege.boxfitapp.AbstractObjectBoxTest;
 import com.manuege.boxfitapp.api.model.Paginated;
 import com.manuege.boxfitapp.api.model.PaginatedResponse;
-import com.manuege.boxfitapp.library.serializers.MainJsonSerializer;
 import com.manuege.boxfitapp.model.Album;
 import com.manuege.boxfitapp.model.Artist;
 import com.manuege.boxfitapp.utils.JsonProvider;

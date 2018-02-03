@@ -1,6 +1,6 @@
 package com.manuege.boxfitapp.model;
 
-import com.manuege.boxfitapp.library.serializers.AbstractSerializer;
+import com.manuege.boxfit.serializers.AbstractSerializer;
 import com.manuege.boxfit.utils.Json;
 import com.manuege.boxfit.utils.JsonArray;
 import com.manuege.boxfitapp.transformers.ArtistTypeTransformer;

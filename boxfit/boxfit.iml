@@ -27,6 +27,11 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="objectbox-java-1.4.1" level="project" />
     <orderEntry type="library" exported="" scope="PROVIDED" name="json-20171018" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="objectbox-java-api-1.4.1" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="essentials-3.0.0-RC1" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="flatbuffers-java-1.7.2" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="jsr305-3.0.2" level="project" />
   </component>
 </module>

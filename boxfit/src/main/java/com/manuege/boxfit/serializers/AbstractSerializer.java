@@ -1,4 +1,4 @@
-package com.manuege.boxfitapp.library.serializers;
+package com.manuege.boxfit.serializers;
 
 
 import com.manuege.boxfit.utils.Json;

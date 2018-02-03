@@ -1,5 +1,6 @@
 package com.manuege.boxfitapp.api.model;
 
+import com.manuege.boxfit.annotations.JsonSerializable;
 import com.manuege.boxfitapp.model.Album;
 
 /**
@@ -7,5 +8,6 @@ import com.manuege.boxfitapp.model.Album;
  */
 
 public class Paginated {
+    @JsonSerializable
     public static class Albums extends PaginatedResponse<Album> {}
 }
