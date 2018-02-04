@@ -2,6 +2,7 @@ package com.manuege.boxfitapp.api.model;
 
 import com.manuege.boxfit.annotations.JsonSerializableField;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,8 +19,11 @@ public class PaginatedResponse<T> {
     @JsonSerializableField
     int previous;
 
+    // TODO: Fix
+    /*
     @JsonSerializableField
     List<T> results;
+    */
 
     public int getCount() {
         return count;
@@ -34,6 +38,6 @@ public class PaginatedResponse<T> {
     }
 
     public List<T> getResults() {
-        return results;
+        return new ArrayList<>();
     }
 }

@@ -61,6 +61,11 @@ public class ArtistJsonSerializer extends AbstractSerializer<Artist, Long> {
     }
 
     @Override
+    protected Long getId(Json json, String key) {
+        return json.getLong(key);
+    }
+
+    @Override
     protected Long getId(Artist object) {
         return object.id;
     }

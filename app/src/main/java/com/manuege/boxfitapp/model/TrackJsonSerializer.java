@@ -63,6 +63,11 @@ public class TrackJsonSerializer extends AbstractSerializer<Track, Long> {
     }
 
     @Override
+    protected Long getId(Json json, String key) {
+        return json.getLong(key);
+    }
+
+    @Override
     protected Long getId(JsonArray array, int index) {
         return array.getLong(index);
     }

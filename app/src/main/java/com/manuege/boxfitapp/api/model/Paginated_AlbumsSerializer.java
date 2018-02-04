@@ -4,7 +4,6 @@ import com.manuege.boxfit.MainJsonSerializer;
 import com.manuege.boxfit.serializers.AbstractSerializer;
 import com.manuege.boxfit.utils.Json;
 import com.manuege.boxfit.utils.JsonArray;
-import com.manuege.boxfitapp.model.Album;
 
 import org.json.JSONObject;
 
@@ -40,7 +39,7 @@ public class Paginated_AlbumsSerializer extends AbstractSerializer<Paginated.Alb
         }
         if (json.has("results")) {
             MainJsonSerializer serializer = new MainJsonSerializer(boxStore);
-            object.results = serializer.serialize(Album.class, json.getJSONArray("results"));
+            // object.results = serializer.serialize(Album.class, json.getJSONArray("results"));
         }
     }
 
@@ -62,6 +61,11 @@ public class Paginated_AlbumsSerializer extends AbstractSerializer<Paginated.Alb
     @Override
     protected JSONObject getJSONObject(Void id) {
         return new JSONObject();
+    }
+
+    @Override
+    protected Void getId(Json json, String key) {
+        return null;
     }
 
     @Override

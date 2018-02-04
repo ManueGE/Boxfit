@@ -4,13 +4,9 @@ import com.manuege.boxfit.annotations.IdentityTransformer;
 import com.manuege.boxfit.annotations.JsonSerializableField;
 import com.manuege.boxfit.constants.Constants;
 import com.manuege.boxfit.transformers.Transformer;
-import com.manuege.boxfit_processor.errors.Error;
 import com.manuege.boxfit_processor.errors.InvalidElementException;
 import com.manuege.boxfit_processor.processor.Enviroment;
 import com.squareup.javapoet.TypeName;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,22 +20,42 @@ import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Types;
 
 import io.objectbox.annotation.Id;
+import io.objectbox.relation.ToMany;
+import io.objectbox.relation.ToOne;
 
 /**
  * Created by Manu on 1/2/18.
  */
 
 public class FieldInfo {
-    private TypeMirror type;
-    private TypeName typeName;
+
+    public enum Kind {
+        NORMAL,
+        TRANSFORMED,
+        TO_ONE,
+        TO_MANY
+    }
+
     private boolean isPrimaryKey;
     private String name;
     private String serializedName;
+    private Kind kind;
+
+    private TypeMirror typeMirror;
+    private TypeName typeName;
+
     private TypeMirror transformerMirror;
-    private TypeName transformer;
+    private TypeName transformerName;
+
+    private TypeMirror relationshipFieldMirror;
+    private TypeName relationshipFieldName;
+    private TypeElement relationshipFieldElement;
+
     private TypeName jsonFieldTypeName;
 
     public static FieldInfo newInstance(Element element) throws InvalidElementException {
+
+        Types typeUtil = Enviroment.getEnvironment().getTypeUtils();
 
         // Check if serializable
         List<? extends AnnotationMirror> annotations = element.getAnnotationMirrors();
@@ -60,14 +76,15 @@ public class FieldInfo {
         // Basic info
         FieldInfo fieldInfo = new FieldInfo();
 
-        fieldInfo.type = element.asType();
-        if (fieldInfo.type.getKind().isPrimitive()) {
-            fieldInfo.typeName = TypeName.get(fieldInfo.type).box();
+        fieldInfo.typeMirror = element.asType();
+        if (fieldInfo.typeMirror.getKind().isPrimitive()) {
+            fieldInfo.typeName = TypeName.get(fieldInfo.typeMirror).box();
         } else {
-            fieldInfo.typeName = TypeName.get(fieldInfo.type);
+            fieldInfo.typeName = TypeName.get(fieldInfo.typeMirror);
         }
 
-        fieldInfo.type = element.asType();
+        fieldInfo.kind = Kind.NORMAL;
+        fieldInfo.typeMirror = element.asType();
         fieldInfo.name = element.getSimpleName().toString();
 
         // Primary key
@@ -86,13 +103,13 @@ public class FieldInfo {
             jsonSerializableField.transformer().getName(); // Never should come here, just done to call the catch
         } catch (MirroredTypeException e) {
 
-            TypeMirror typeMirror = e.getTypeMirror();
-            TypeName typeName = TypeName.get(typeMirror);
-            Types typeUtil = Enviroment.getEnvironment().getTypeUtils();
+            TypeMirror transformerMirror = e.getTypeMirror();
+            TypeName transformerName = TypeName.get(transformerMirror);
 
-            if (!typeName.equals(TypeName.get(IdentityTransformer.class))) {
-                fieldInfo.transformer = typeName;
-                TypeElement typeElement = (TypeElement) typeUtil.asElement(typeMirror);
+            if (!transformerName.equals(TypeName.get(IdentityTransformer.class))) {
+                fieldInfo.kind = Kind.TRANSFORMED;
+                fieldInfo.transformerName = transformerName;
+                TypeElement typeElement = (TypeElement) typeUtil.asElement(transformerMirror);
 
                 // We need the place where the interface is declared, in order to get their generic params
                 for (TypeMirror interfaceMirror: typeElement.getInterfaces()) {
@@ -101,6 +118,27 @@ public class FieldInfo {
                         break;
                     }
                 }
+            }
+        }
+
+        // To One Relationship
+        Element fieldTypeElement = typeUtil.asElement(fieldInfo.typeMirror);
+        if (fieldTypeElement instanceof TypeElement) {
+            if (((TypeElement) fieldTypeElement).getQualifiedName().toString().startsWith(TypeName.get(ToOne.class).toString())) {
+                fieldInfo.kind = Kind.TO_ONE;
+            } else if (((TypeElement) fieldTypeElement).getQualifiedName().toString().startsWith(TypeName.get(ToMany.class).toString())) {
+                fieldInfo.kind = Kind.TO_MANY;
+            }
+            // TODO:
+            /*else if (((TypeElement) fieldTypeElement).getQualifiedName().toString().startsWith(TypeName.get(List.class).toString())) {
+                fieldInfo.kind = Kind.TO_MANY;
+            }*/
+
+
+            if (fieldInfo.kind.equals(Kind.TO_MANY) || fieldInfo.kind.equals(Kind.TO_ONE)) {
+                fieldInfo.relationshipFieldMirror = Utils.getGenericType(fieldInfo.typeMirror, 0);
+                fieldInfo.relationshipFieldElement = (TypeElement) typeUtil.asElement(fieldInfo.relationshipFieldMirror);
+                fieldInfo.relationshipFieldName = TypeName.get(fieldInfo.relationshipFieldMirror);
             }
         }
 
@@ -120,24 +158,35 @@ public class FieldInfo {
         return name;
     }
 
-    public TypeMirror getType() {
-        return type;
+    public TypeMirror getTypeMirror() {
+        return typeMirror;
     }
 
     public TypeName getTypeName() {
         return typeName;
     }
 
-    public TypeName getTransformer() {
-        return transformer;
+    public TypeName getTransformerName() {
+        return transformerName;
+    }
+
+    public Kind getKind() {
+        return kind;
+    }
+
+    public TypeElement getRelationshipFieldElement() {
+        return relationshipFieldElement;
+    }
+
+    public TypeName getRelationshipFieldName() {
+        return relationshipFieldName;
     }
 
     public TypeName getJsonFieldTypeName() {
         if (jsonFieldTypeName == null) {
-            if (transformer == null) {
+            if (transformerName == null) {
                 jsonFieldTypeName = getTypeName();
             } else {
-                Error.putWarning(transformerMirror.toString(), null);
                 TypeMirror genericType = Utils.getGenericType(transformerMirror, 0);
                 jsonFieldTypeName = TypeName.get(genericType);
             }
@@ -147,23 +196,6 @@ public class FieldInfo {
 
     private static HashMap<Class, String> classesAndMethods;
     public String getJsonGetterMethodName() {
-        if (classesAndMethods == null) {
-            classesAndMethods = new HashMap<>();
-            classesAndMethods.put(String.class, "getString");
-            classesAndMethods.put(Integer.class, "getInt");
-            classesAndMethods.put(Boolean.class, "getBoolean");
-            classesAndMethods.put(Long.class, "getLong");
-            classesAndMethods.put(Double.class, "getDouble");
-            classesAndMethods.put(JSONObject.class, "getJSONObject");
-            classesAndMethods.put(JSONArray.class, "getJSONArray");
-        }
-
-        for (Class clazz: classesAndMethods.keySet()) {
-            if (TypeName.get(clazz).equals(getJsonFieldTypeName())) {
-                return classesAndMethods.get(clazz);
-            }
-        }
-
-        return "get";
+        return Utils.getJsonGetterMethodName(getJsonFieldTypeName());
     }
 }

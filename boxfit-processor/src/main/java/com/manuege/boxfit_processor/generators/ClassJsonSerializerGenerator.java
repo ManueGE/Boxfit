@@ -12,6 +12,7 @@ import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -43,12 +44,9 @@ public class ClassJsonSerializerGenerator extends AbstractFileGenerator {
 
         // Class definition
         TypeSpec.Builder serializerClass = TypeSpec
-                .classBuilder(Utils.getSerializer(environment, classInfo.getTypeElement()))
+                .classBuilder(Utils.getSerializer(classInfo.getTypeElement()))
                 .superclass(superclass)
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
-
-        // Box store field
-        serializerClass.addField(BoxStore.class, "boxStore", Modifier.PRIVATE);
 
         // Methods
         serializerClass.addMethod(getConstructor())
@@ -56,6 +54,7 @@ public class ClassJsonSerializerGenerator extends AbstractFileGenerator {
                 .addMethod(getBoxMethod())
                 .addMethod(getCreateFreshObject())
                 .addMethod(getIdFromJsonMethod())
+                .addMethod(getIdFromJsonAndKeyMethod())
                 .addMethod(getIdFromArrayMethod())
                 .addMethod(getIdFromObjectMethod())
                 .addMethod(getJsonObjectFromIdMethod())
@@ -93,10 +92,19 @@ public class ClassJsonSerializerGenerator extends AbstractFileGenerator {
     private void addFieldSerializationForMergeMethod(MethodSpec.Builder builder, FieldInfo fieldInfo) {
         builder.beginControlFlow("if (json.has($S))", fieldInfo.getSerializedName());
 
-        if (fieldInfo.getTransformer() == null) {
-            addNormalFieldSerializer(builder, fieldInfo);
-        } else {
-            addTransformedFieldSerializer(builder, fieldInfo);
+        switch (fieldInfo.getKind()) {
+            case NORMAL:
+                addNormalFieldSerializer(builder, fieldInfo);
+                break;
+            case TRANSFORMED:
+                addTransformedFieldSerializer(builder, fieldInfo);
+                break;
+            case TO_ONE:
+                addToOneFieldSerializer(builder, fieldInfo);
+                break;
+            case TO_MANY:
+                addToManyFieldSerializer(builder, fieldInfo);
+                break;
         }
 
         builder.endControlFlow();
@@ -108,16 +116,25 @@ public class ClassJsonSerializerGenerator extends AbstractFileGenerator {
 
     private void addTransformedFieldSerializer(MethodSpec.Builder builder, FieldInfo fieldInfo) {
         builder.addStatement("$T originalValue = json.$N($S)", fieldInfo.getJsonFieldTypeName(), fieldInfo.getJsonGetterMethodName(), fieldInfo.getSerializedName());
-        builder.addStatement("$T transformer = new $T()", fieldInfo.getTransformer(), fieldInfo.getTransformer());
+        builder.addStatement("$T transformer = new $T()", fieldInfo.getTransformerName(), fieldInfo.getTransformerName());
         builder.addStatement("object.$N = transformer.transform(originalValue)", fieldInfo.getName());
     }
 
     private void addToOneFieldSerializer(MethodSpec.Builder builder, FieldInfo fieldInfo) {
-
+        ClassName serializer = Utils.getSerializer(fieldInfo.getRelationshipFieldElement());
+        builder.addStatement("$T serializer = new $T(boxStore)", serializer, serializer);
+        builder.addStatement("object.$N.setTarget(serializer.serializeRelationship(json, $S))", fieldInfo.getName(), fieldInfo.getSerializedName());
     }
 
     private void addToManyFieldSerializer(MethodSpec.Builder builder, FieldInfo fieldInfo) {
-
+        builder.addStatement("$T jsonArray = json.getJSONArray($S)", JSONArray.class, fieldInfo.getSerializedName());
+        builder.addStatement("object.$N.clear()", fieldInfo.getName());
+        builder.beginControlFlow("if (jsonArray != null)");
+        ClassName serializer = Utils.getSerializer(fieldInfo.getRelationshipFieldElement());
+        builder.addStatement("$T serializer = new $T(boxStore)", serializer, serializer);
+        builder.addStatement("$T<$T> property = serializer.serialize(jsonArray)", List.class, fieldInfo.getRelationshipFieldElement());
+        builder.addStatement("object.$N.addAll(property)", fieldInfo.getName());
+        builder.endControlFlow();
     }
 
     private MethodSpec getBoxMethod() {
@@ -153,6 +170,23 @@ public class ClassJsonSerializerGenerator extends AbstractFileGenerator {
         if (classInfo.hasPrimaryKey()) {
             FieldInfo primaryKey = classInfo.getPrimaryKey();
             builder.addStatement("return json.$N($S)", primaryKey.getJsonGetterMethodName(), primaryKey.getSerializedName());
+        } else {
+            builder.addStatement("return null");
+        }
+
+        return builder.build();
+    }
+
+    private MethodSpec getIdFromJsonAndKeyMethod() {
+        MethodSpec.Builder builder = MethodSpec.methodBuilder("getId")
+                .addModifiers(Modifier.PROTECTED)
+                .addParameter(Json.class, "json")
+                .addParameter(String.class, "key")
+                .returns(getPrimaryKeyTypeName());
+
+        if (classInfo.hasPrimaryKey()) {
+            FieldInfo primaryKey = classInfo.getPrimaryKey();
+            builder.addStatement("return json.$N(key)", primaryKey.getJsonGetterMethodName());
         } else {
             builder.addStatement("return null");
         }

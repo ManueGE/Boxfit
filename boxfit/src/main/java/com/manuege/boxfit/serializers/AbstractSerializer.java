@@ -27,6 +27,21 @@ public abstract class AbstractSerializer<Entity, Id> {
         this.boxStore = boxStore;
     }
 
+    public Entity serializeRelationship(Json json, String key) {
+        Object value = json.get(key);
+        JSONObject jsonObject;
+        Id id;
+        if (value == null) {
+            return null;
+        }
+        else if ((jsonObject = json.getJSONObject(key)) != null) {
+            return serialize(jsonObject);
+        } else if ((id = getId(json, key)) != null) {
+            return serialize(id);
+        }
+        return null;
+    }
+
     public Entity serialize(Id id) {
         JSONObject jsonObject = getJSONObject(id);
         return serialize(jsonObject);
@@ -119,6 +134,7 @@ public abstract class AbstractSerializer<Entity, Id> {
     abstract protected Box<Entity> getBox();
     abstract protected Entity createFreshObject(Id id);
     abstract protected Id getId(Json json);
+    abstract protected Id getId(Json json, String key);
     abstract protected Id getId(JsonArray array, int index);
     abstract protected Id getId(Entity object);
     abstract protected JSONObject getJSONObject(Id id);

@@ -25,7 +25,7 @@ public class Album {
     String name;
 
     @JsonSerializableField
-    int year;
+    Integer year;
 
     @JsonSerializableField
     Integer rate;
@@ -55,11 +55,11 @@ public class Album {
         this.name = name;
     }
 
-    public int getYear() {
+    public Integer getYear() {
         return year;
     }
 
-    public void setYear(int year) {
+    public void setYear(Integer year) {
         this.year = year;
     }
 

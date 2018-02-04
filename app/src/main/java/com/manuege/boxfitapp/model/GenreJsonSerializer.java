@@ -47,6 +47,11 @@ public class GenreJsonSerializer extends AbstractSerializer<Genre, Long> {
     }
 
     @Override
+    protected Long getId(Json json, String key) {
+        return json.getLong(key);
+    }
+
+    @Override
     protected Long getId(Genre object) {
         return object.id;
     }

@@ -2,10 +2,14 @@ package com.manuege.boxfit_processor.info;
 
 import com.manuege.boxfit_processor.processor.Enviroment;
 import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.TypeName;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.HashMap;
 import java.util.List;
 
-import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.ArrayType;
 import javax.lang.model.type.DeclaredType;
@@ -20,11 +24,11 @@ import javax.lang.model.util.SimpleTypeVisitor6;
  */
 
 public class Utils {
-    public static ClassName getSerializer(ProcessingEnvironment environment, TypeElement element) {
-        return ClassName.get(environment.getElementUtils().getPackageOf(element).toString(),  getSerializer(element));
+    public static ClassName getSerializer(TypeElement element) {
+        return ClassName.get(Enviroment.getEnvironment().getElementUtils().getPackageOf(element).toString(),  getSerializerName(element));
     }
 
-    private static String getSerializer(TypeElement element) {
+    private static String getSerializerName(TypeElement element) {
         String fullName = element.getQualifiedName().toString();
         String pack = Enviroment.getEnvironment().getElementUtils().getPackageOf(element).toString();
         String elementName = fullName.substring(pack.length() + 1).replace(".", "$");
@@ -66,5 +70,27 @@ public class Utils {
         }, null);
 
         return result[index];
+    }
+
+    private static HashMap<Class, String> classesAndMethods;
+    public static String getJsonGetterMethodName(TypeName className) {
+        if (classesAndMethods == null) {
+            classesAndMethods = new HashMap<>();
+            classesAndMethods.put(String.class, "getString");
+            classesAndMethods.put(Integer.class, "getInt");
+            classesAndMethods.put(Boolean.class, "getBoolean");
+            classesAndMethods.put(Long.class, "getLong");
+            classesAndMethods.put(Double.class, "getDouble");
+            classesAndMethods.put(JSONObject.class, "getJSONObject");
+            classesAndMethods.put(JSONArray.class, "getJSONArray");
+        }
+
+        for (Class clazz: classesAndMethods.keySet()) {
+            if (TypeName.get(clazz).equals(className)) {
+                return classesAndMethods.get(clazz);
+            }
+        }
+
+        return "get";
     }
 }

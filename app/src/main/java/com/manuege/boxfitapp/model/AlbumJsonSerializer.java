@@ -44,39 +44,13 @@ public class AlbumJsonSerializer extends AbstractSerializer<Album, Long> {
         }
 
         if (json.has("artist")) {
-            Object value = json.get("artist");
-            JSONObject jsonObject;
-            Long id;
-            if (value == null) {
-                object.artist.setTarget(null);
-            }
-            else if ((jsonObject = json.getJSONObject("artist")) != null) {
-                ArtistJsonSerializer serializer = new ArtistJsonSerializer(boxStore);
-                Artist property = serializer.serialize(jsonObject);
-                object.artist.setTarget(property);
-            } else if ((id = json.getLong("artist")) != null) {
-                ArtistJsonSerializer serializer = new ArtistJsonSerializer(boxStore);
-                Artist property = serializer.serialize(id);
-                object.artist.setTarget(property);
-            }
+            ArtistJsonSerializer serializer = new ArtistJsonSerializer(boxStore);
+            object.artist.setTarget(serializer.serializeRelationship(json, "artist"));
         }
 
         if (json.has("genre")) {
-            Object value = json.get("genre");
-            JSONObject jsonObject;
-            Long id;
-            if (value == null) {
-                object.genre.setTarget(null);
-            }
-            else if ((jsonObject = json.getJSONObject("genre")) != null) {
-                GenreJsonSerializer serializer = new GenreJsonSerializer(boxStore);
-                Genre property = serializer.serialize(jsonObject);
-                object.genre.setTarget(property);
-            } else if ((id = json.getLong("genre")) != null) {
-                GenreJsonSerializer serializer = new GenreJsonSerializer(boxStore);
-                Genre property = serializer.serialize(id);
-                object.genre.setTarget(property);
-            }
+            GenreJsonSerializer serializer = new GenreJsonSerializer(boxStore);
+            object.genre.setTarget(serializer.serializeRelationship(json, "genre"));
         }
 
         if (json.has("tracks")) {
@@ -116,6 +90,11 @@ public class AlbumJsonSerializer extends AbstractSerializer<Album, Long> {
         } catch (JSONException e) {
             return null;
         }
+    }
+
+    @Override
+    protected Long getId(Json json, String key) {
+        return json.getLong(key);
     }
 
     @Override

@@ -35,7 +35,7 @@ public class AlbumSerializeSingleObjectTest extends AbstractObjectBoxTest {
 
         assertEquals(1, album.getId());
         assertEquals("Honestidad Brutal", album.getName());
-        assertEquals(1999, album.getYear());
+        assertTrue(1999 == album.getYear());
         assertTrue(5 == album.getRate());
 
         Artist artist = album.getArtist().getTarget();
@@ -76,7 +76,7 @@ public class AlbumSerializeSingleObjectTest extends AbstractObjectBoxTest {
 
         assertEquals(1, album.getId());
         assertEquals("Honestidad Brutal", album.getName());
-        assertEquals(1998, album.getYear());
+        assertTrue(1998 == album.getYear());
         assertTrue(4 == album.getRate());
 
         Artist artist = album.getArtist().getTarget();
@@ -117,7 +117,7 @@ public class AlbumSerializeSingleObjectTest extends AbstractObjectBoxTest {
 
         assertEquals(1, album.getId());
         assertEquals("Alta Suciedad", album.getName());
-        assertEquals(1999, album.getYear());
+        assertTrue(1999 == album.getYear());
         assertTrue(5 == album.getRate());
 
         Artist artist = album.getArtist().getTarget();
@@ -181,7 +181,7 @@ public class AlbumSerializeSingleObjectTest extends AbstractObjectBoxTest {
         Album album = serializer.serialize(Album.class, json);
 
         assertEquals("4", album.getName());
-        assertEquals(2003, album.getYear());
+        assertTrue(2003 == album.getYear());
     }
 
     @Test
@@ -212,7 +212,7 @@ public class AlbumSerializeSingleObjectTest extends AbstractObjectBoxTest {
         album = serializer.serialize(Album.class, json);
 
         assertNull(album.getName());
-        assertEquals(0, album.getYear());
+        assertNull(album.getYear());
         assertNull(album.getRate());
         assertNull(album.getArtist().getTarget());
         assertEquals(0, album.getTracks().size());

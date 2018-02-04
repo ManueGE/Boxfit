@@ -75,7 +75,7 @@ public class MainJsonSerializerGenerator extends AbstractFileGenerator {
 
         for (ClassInfo classInfo: classes) {
             TypeElement element = classInfo.getTypeElement();
-            ClassName serializer = Utils.getSerializer(environment, classInfo.getTypeElement());
+            ClassName serializer = Utils.getSerializer(classInfo.getTypeElement());
 
             serializeMethod.beginControlFlow("if ($T.class.isAssignableFrom(clazz))", element);
             serializeMethod.addStatement("return (T) new $T(boxStore).serialize(jsonObject)", serializer);

@@ -3,7 +3,6 @@ package com.manuege.boxfitapp.serializers;
 import com.manuege.boxfit.MainJsonSerializer;
 import com.manuege.boxfit.utils.Json;
 import com.manuege.boxfitapp.AbstractObjectBoxTest;
-import com.manuege.boxfitapp.api.model.Paginated;
 import com.manuege.boxfitapp.model.Album;
 import com.manuege.boxfitapp.model.Artist;
 import com.manuege.boxfitapp.utils.JsonProvider;
@@ -33,19 +32,5 @@ public class AlbumSerializerArrayTest extends AbstractObjectBoxTest {
 
         Album album = objects.get(0);
         assertEquals("Honestidad Brutal", album.getName());
-    }
-
-    @Test
-    public void albumSerializer_serializeArrayOfNoEntities() {
-        JSONArray array = JsonProvider.getJSONArray("array_of_paginated_response.json");
-        MainJsonSerializer serializer = new MainJsonSerializer(boxStore);
-        List<Paginated.Albums> objects = serializer.serialize(Paginated.Albums.class, array);
-
-        assertEquals(2, objects.size());
-        assertEquals(2, boxStore.boxFor(Album.class).count());
-        assertEquals(2, boxStore.boxFor(Artist.class).count());
-
-        Paginated.Albums object = objects.get(0);
-        assertEquals(10, object.getCount());
     }
 }
