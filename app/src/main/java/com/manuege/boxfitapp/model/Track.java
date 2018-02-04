@@ -1,6 +1,7 @@
 package com.manuege.boxfitapp.model;
 
 import com.manuege.boxfit.annotations.JsonSerializable;
+import com.manuege.boxfit.annotations.JsonSerializableField;
 
 import io.objectbox.annotation.Backlink;
 import io.objectbox.annotation.Entity;
@@ -14,9 +15,14 @@ import io.objectbox.relation.ToOne;
 @JsonSerializable
 @Entity
 public class Track {
+    @JsonSerializableField
     @Id(assignable = true)
     long id;
+
+    @JsonSerializableField
     String name;
+
+    @JsonSerializableField
     @Backlink
     ToOne<Album> album;
 

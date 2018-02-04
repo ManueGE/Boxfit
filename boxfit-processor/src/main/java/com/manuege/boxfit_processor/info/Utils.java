@@ -3,13 +3,17 @@ package com.manuege.boxfit_processor.info;
 import com.manuege.boxfit_processor.processor.Enviroment;
 import com.squareup.javapoet.ClassName;
 
-import java.util.HashMap;
+import java.util.List;
 
 import javax.annotation.processing.ProcessingEnvironment;
-import javax.lang.model.element.AnnotationMirror;
-import javax.lang.model.element.AnnotationValue;
-import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.ArrayType;
+import javax.lang.model.type.DeclaredType;
+import javax.lang.model.type.ErrorType;
+import javax.lang.model.type.PrimitiveType;
+import javax.lang.model.type.TypeMirror;
+import javax.lang.model.type.TypeVariable;
+import javax.lang.model.util.SimpleTypeVisitor6;
 
 /**
  * Created by Manu on 3/2/18.
@@ -27,25 +31,40 @@ public class Utils {
         return elementName + "Serializer";
     }
 
-    public static AnnotationValue getAnnotationValue(AnnotationMirror annotation, String fieldName) {
-        for (ExecutableElement executable : annotation.getElementValues().keySet()) {
-            if (fieldName.equals(executable.getSimpleName().toString())) {
-                return annotation.getElementValues().get(executable);
-            }
-        }
-        return null;
-    }
+    public static TypeMirror getGenericType(final TypeMirror type, int index) {
+        final TypeMirror[] result = { null };
 
-    public static Class getClassFromPrimitive(String primitive) {
-        HashMap<String, Class> primitivesAndWrapperClasses = new HashMap<>();
-        primitivesAndWrapperClasses.put("byte", Byte.class);
-        primitivesAndWrapperClasses.put("short", Short.class);
-        primitivesAndWrapperClasses.put("int", Integer.class);
-        primitivesAndWrapperClasses.put("long", Long.class);
-        primitivesAndWrapperClasses.put("float", Float.class);
-        primitivesAndWrapperClasses.put("double", Double.class);
-        primitivesAndWrapperClasses.put("boolean", Boolean.class);
-        primitivesAndWrapperClasses.put("char", Character.class);
-        return primitivesAndWrapperClasses.get(primitive);
+        type.accept(new SimpleTypeVisitor6<Void, Void>() {
+            @Override
+            public Void visitDeclared(DeclaredType declaredType, Void v) {
+                List<? extends TypeMirror> typeArguments = declaredType.getTypeArguments();
+                if (!typeArguments.isEmpty()) {
+                    result[0] = typeArguments.get(0);
+                }
+                return null;
+            }
+            @Override
+            public Void visitPrimitive(PrimitiveType primitiveType, Void v) {
+                return null;
+            }
+            @Override
+            public Void visitArray(ArrayType arrayType, Void v) {
+                return null;
+            }
+            @Override
+            public Void visitTypeVariable(TypeVariable typeVariable, Void v) {
+                return null;
+            }
+            @Override
+            public Void visitError(ErrorType errorType, Void v) {
+                return null;
+            }
+            @Override
+            protected Void defaultAction(TypeMirror typeMirror, Void v) {
+                throw new UnsupportedOperationException();
+            }
+        }, null);
+
+        return result[index];
     }
 }

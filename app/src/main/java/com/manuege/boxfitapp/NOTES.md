@@ -5,6 +5,7 @@
 - Transformers must have empty initializer
 - Transformer can be added just to properties, no relationships
 - Make distinction between primary types (must have a default value) and classes (don't need it)
+- Just strings and longs valid as PK
 
 ## Pending tests
 - Maybe write a test to check all the types

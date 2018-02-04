@@ -1,6 +1,8 @@
 package com.manuege.boxfitapp.model;
 
 import com.manuege.boxfit.annotations.JsonSerializable;
+import com.manuege.boxfit.annotations.JsonSerializableField;
+import com.manuege.boxfitapp.transformers.AlbumJSONTransformer;
 
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
@@ -11,16 +13,30 @@ import io.objectbox.relation.ToOne;
  * Created by Manu on 28/1/18.
  */
 
-@JsonSerializable
+@JsonSerializable(transformer = AlbumJSONTransformer.class)
 @Entity
 public class Album {
+
+    @JsonSerializableField
     @Id(assignable = true)
     long id;
+
+    @JsonSerializableField
     String name;
+
+    @JsonSerializableField
     int year;
+
+    @JsonSerializableField
     Integer rate;
+
+    @JsonSerializableField
     ToOne<Artist> artist;
+
+    @JsonSerializableField
     ToOne<Genre> genre;
+
+    @JsonSerializableField
     ToMany<Track> tracks;
 
     public long getId() {

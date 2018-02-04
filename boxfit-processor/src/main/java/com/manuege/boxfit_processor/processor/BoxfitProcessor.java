@@ -2,6 +2,7 @@ package com.manuege.boxfit_processor.processor;
 
 import com.manuege.boxfit.annotations.JsonSerializable;
 import com.manuege.boxfit_processor.errors.Error;
+import com.manuege.boxfit_processor.errors.InvalidElementException;
 import com.manuege.boxfit_processor.generators.ClassJsonSerializerGenerator;
 import com.manuege.boxfit_processor.generators.MainJsonSerializerGenerator;
 import com.manuege.boxfit_processor.info.ClassInfo;
@@ -29,32 +30,30 @@ public class BoxfitProcessor extends AbstractProcessor {
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
 
         Enviroment.setEnvironment(processingEnv);
-        boolean valid = true;
+
         ArrayList<ClassInfo> classesInfo = new ArrayList<>();
         for (Element element : roundEnvironment.getElementsAnnotatedWith(JsonSerializable.class)) {
             if (element.getKind() != ElementKind.CLASS || !(element instanceof TypeElement)) {
                 Error.putError("JsonSerializer must be applied to classes", element);
-                valid = false;
                 continue;
             }
 
-            ClassInfo classInfo = ClassInfo.newInstance((TypeElement) element);
-            if (classInfo == null) {
-                valid = false;
-            } else {
+            try {
+                ClassInfo classInfo = ClassInfo.newInstance((TypeElement) element);
                 classesInfo.add(classInfo);
+            } catch (InvalidElementException e) {
+                e.putError();
+                return false;
             }
         }
 
-        if (valid) {
-            for (ClassInfo classInfo : classesInfo) {
-                ClassJsonSerializerGenerator generator = new ClassJsonSerializerGenerator(processingEnv, classInfo);
-                generator.generateFile();
-            }
-
-            MainJsonSerializerGenerator generator = new MainJsonSerializerGenerator(processingEnv, classesInfo);
+        for (ClassInfo classInfo : classesInfo) {
+            ClassJsonSerializerGenerator generator = new ClassJsonSerializerGenerator(processingEnv, classInfo);
             generator.generateFile();
         }
+
+        MainJsonSerializerGenerator generator = new MainJsonSerializerGenerator(processingEnv, classesInfo);
+        generator.generateFile();
 
         return false;
     }

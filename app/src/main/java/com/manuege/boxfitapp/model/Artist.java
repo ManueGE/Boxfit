@@ -1,7 +1,9 @@
 package com.manuege.boxfitapp.model;
 
 import com.manuege.boxfit.annotations.JsonSerializable;
+import com.manuege.boxfit.annotations.JsonSerializableField;
 import com.manuege.boxfitapp.transformers.ArtistTypeTransformer;
+import com.manuege.boxfitapp.transformers.StringToDateTransformer;
 
 import java.util.Date;
 
@@ -34,12 +36,21 @@ public class Artist {
         }
     }
 
+    @JsonSerializableField
     @Id(assignable = true)
     long id;
+
+    @JsonSerializableField
     String name;
+
+    @JsonSerializableField(value = "birth", transformer = StringToDateTransformer.class)
     Date birthDate;
+
+    @JsonSerializableField(transformer = ArtistTypeTransformer.class)
     @Convert(converter = ArtistTypeTransformer.class, dbType = String.class)
     Type type;
+
+    @JsonSerializableField
     @Backlink
     ToMany<Album> albums;
 

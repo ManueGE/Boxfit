@@ -134,7 +134,7 @@ public class AlbumJsonSerializer extends AbstractSerializer<Album, Long> {
     }
 
     @Override
-    protected JSONObject convertedJSONObject(JSONObject object) {
+    protected JSONObject getTransformedJSONObject(JSONObject object) {
         AlbumJSONTransformer transformer = new AlbumJSONTransformer();
         return transformer.transform(object);
     }
