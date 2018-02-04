@@ -1,36 +1,50 @@
 package com.manuege.boxfit_processor.info;
 
-import com.manuege.boxfit_processor.errors.Error;
+import com.manuege.boxfit.annotations.IdentityTransformer;
+import com.manuege.boxfit.annotations.JsonSerializableField;
+import com.manuege.boxfit.constants.Constants;
+import com.squareup.javapoet.TypeName;
 
 import java.util.List;
 
 import javax.lang.model.element.AnnotationMirror;
-import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
-import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.TypeMirror;
+
+import io.objectbox.annotation.Id;
 
 /**
  * Created by Manu on 1/2/18.
  */
 
 public class FieldInfo {
+    private TypeMirror type;
+    private TypeName typeName;
     private boolean isPrimaryKey;
-    private boolean isIgnored;
     private String name;
     private String serializedName;
-    private String type;
     private boolean isStatic;
+    private Class transformer;
 
     public static FieldInfo newInstance(Element element) {
 
         boolean valid = true;
 
         FieldInfo fieldInfo = new FieldInfo();
+
+        fieldInfo.type = element.asType();
+        if (fieldInfo.type.getKind().isPrimitive()) {
+            fieldInfo.typeName = TypeName.get(Utils.getClassFromPrimitive(fieldInfo.type.toString()));
+        } else {
+            fieldInfo.typeName = TypeName.get(fieldInfo.type);
+        }
+
+        fieldInfo.type = element.asType();
+
         fieldInfo.isPrimaryKey = false;
         fieldInfo.name = element.getSimpleName().toString();
-        fieldInfo.type = element.asType().toString();
 
         String serializedName = fieldInfo.name;
 
@@ -38,30 +52,27 @@ public class FieldInfo {
         List<? extends AnnotationMirror> annotations = element.getAnnotationMirrors();
         for (AnnotationMirror annotation: annotations) {
             String annotationName = ((TypeElement) annotation.getAnnotationType().asElement()).getQualifiedName().toString();
-            if (annotationName.equals("com.google.gson.annotations.SerializedName")) {
-                AnnotationValue value = getAnnotationValue(annotation, "value");
-                if (value != null) {
-                    serializedName = (String) value.getValue();
+            if (annotationName.equals(JsonSerializableField.class.getCanonicalName())) {
+                String value = (String) Utils.getAnnotationValue(annotation, "value").getValue();
+                if (value.equals(Constants.SERIALIZABLE_NULL_KEY_PATH)) {
+                    serializedName = fieldInfo.name;
+                } else {
+                    serializedName = value;
+                }
+
+                Class transformerClass = (Class) Utils.getAnnotationValue(annotation, "transformer").getValue();
+                if (!transformerClass.equals(IdentityTransformer.class)) {
+                    fieldInfo.transformer = transformerClass;
                 }
             }
 
-            else if (annotationName.equals("io.realm.annotations.PrimaryKey")) {
+            else if (annotationName.equals(Id.class.getCanonicalName())) {
                 fieldInfo.isPrimaryKey = true;
-            }
-
-            else if (annotationName.equals("io.realm.annotations.Ignore")) {
-                fieldInfo.isIgnored = true;
             }
         }
 
         fieldInfo.serializedName = serializedName;
 
-        if (!fieldInfo.isIgnored()) {
-            if (element.getModifiers().contains(Modifier.PRIVATE)) {
-                Error.putError("Fields annotated with `@JsonSerializableField` can't be private", element);
-                valid = false;
-            }
-        }
 
         fieldInfo.isStatic = element.getModifiers().contains(Modifier.STATIC);
 
@@ -80,30 +91,19 @@ public class FieldInfo {
         return isStatic;
     }
 
-    public boolean isIgnored() {
-        return isIgnored;
-    }
-
-    String getSerializedName() {
+    public String getSerializedName() {
         return serializedName;
     }
 
-    String getName() {
+    public String getName() {
         return name;
     }
 
-    String getType() {
+    public TypeMirror getType() {
         return type;
     }
 
-
-    // Helpers
-    private static AnnotationValue getAnnotationValue(AnnotationMirror annotation, String fieldName) {
-        for (ExecutableElement executable : annotation.getElementValues().keySet()) {
-            if (fieldName.equals(executable.getSimpleName().toString())) {
-                return annotation.getElementValues().get(executable);
-            }
-        }
-        return null;
+    public TypeName getTypeName() {
+        return typeName;
     }
 }

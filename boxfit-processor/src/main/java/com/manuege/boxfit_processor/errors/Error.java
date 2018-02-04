@@ -11,7 +11,15 @@ import javax.tools.Diagnostic;
 
 final public class Error {
     public static void putError(String reason, Element element) {
+        putMessage(reason, Diagnostic.Kind.ERROR, element);
+    }
+
+    public static void putWarning(String reason, Element element) {
+        putMessage(reason, Diagnostic.Kind.WARNING, element);
+    }
+
+    private static void putMessage(String reason, Diagnostic.Kind kind, Element element) {
         String message = "Boxfit: " + reason;
-        Enviroment.getEnvironment().getMessager().printMessage(Diagnostic.Kind.ERROR, message, element);
+        Enviroment.getEnvironment().getMessager().printMessage(kind, message, element);
     }
 }

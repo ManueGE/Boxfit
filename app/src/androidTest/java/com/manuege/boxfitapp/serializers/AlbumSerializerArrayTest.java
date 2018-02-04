@@ -1,8 +1,9 @@
 package com.manuege.boxfitapp.serializers;
 
+import com.manuege.boxfit.MainJsonSerializer;
+import com.manuege.boxfit.utils.Json;
 import com.manuege.boxfitapp.AbstractObjectBoxTest;
 import com.manuege.boxfitapp.api.model.Paginated;
-import com.manuege.boxfit.utils.Json;
 import com.manuege.boxfitapp.model.Album;
 import com.manuege.boxfitapp.model.Artist;
 import com.manuege.boxfitapp.utils.JsonProvider;

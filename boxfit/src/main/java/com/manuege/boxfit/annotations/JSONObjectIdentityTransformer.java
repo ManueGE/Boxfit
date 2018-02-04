@@ -8,5 +8,5 @@ import org.json.JSONObject;
  * Created by Manu on 25/12/17.
  */
 
-final class JSONObjectIdentityTransformer extends IdentityTransformer<JSONObject> implements JSONObjectTransformer {
+final public class JSONObjectIdentityTransformer extends IdentityTransformer<JSONObject> implements JSONObjectTransformer {
 }

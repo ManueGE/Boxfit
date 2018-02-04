@@ -56,7 +56,7 @@ public class MainJsonSerializerGenerator extends AbstractFileGenerator {
         // Define single serializer
         MethodSpec.Builder serializeMethod = MethodSpec
                 .methodBuilder("serialize")
-                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                .addModifiers(Modifier.PUBLIC)
                 .addTypeVariable(genericParam)
                 .addParameter(Class.class, "clazz")
                 .addParameter(JSONObject.class, "jsonObject")
@@ -67,7 +67,7 @@ public class MainJsonSerializerGenerator extends AbstractFileGenerator {
         TypeName listOfObjects = ParameterizedTypeName.get(list, genericParam);
         MethodSpec.Builder serializeManyMethod = MethodSpec
                 .methodBuilder("serialize")
-                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                .addModifiers(Modifier.PUBLIC)
                 .addTypeVariable(genericParam)
                 .addParameter(Class.class, "clazz")
                 .addParameter(JSONArray.class, "jsonArray")
@@ -78,11 +78,11 @@ public class MainJsonSerializerGenerator extends AbstractFileGenerator {
             ClassName serializer = Utils.getSerializer(environment, classInfo.getTypeElement());
 
             serializeMethod.beginControlFlow("if ($T.class.isAssignableFrom(clazz))", element);
-            serializeMethod.addStatement("return (T) $T.serialize(jsonObject)", serializer);
+            serializeMethod.addStatement("return (T) new $T(boxStore).serialize(jsonObject)", serializer);
             serializeMethod.endControlFlow();
 
             serializeManyMethod.beginControlFlow("if ($T.class.isAssignableFrom(clazz))", element);
-            serializeManyMethod.addStatement("return (List<T>) $T.serializeMany(jsonArray)", serializer);
+            serializeManyMethod.addStatement("return (List<T>) new $T(boxStore).serialize(jsonArray)", serializer);
             serializeManyMethod.endControlFlow();
         }
 
