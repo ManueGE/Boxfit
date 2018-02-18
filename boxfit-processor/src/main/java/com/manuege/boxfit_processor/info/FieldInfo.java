@@ -41,16 +41,19 @@ public class FieldInfo {
     private String serializedName;
     private Kind kind;
 
-    private TypeMirror typeMirror;
+    // Typename representing the type of the field
     private TypeName typeName;
 
-    private TypeMirror transformerMirror;
+    // Typename representing the type if the transformer of the field
     private TypeName transformerName;
 
-    private TypeMirror relationshipFieldMirror;
-    private TypeName relationshipFieldName;
-    private TypeElement relationshipFieldElement;
+    // Typename representing the type of the relationship target
+    private TypeName relationshipName;
 
+    // Typename representing the type of the relationship target serializer
+    private TypeName relationshipSerializerName;
+
+    // Typename representing the type of the value in a json
     private TypeName jsonFieldTypeName;
 
     public static FieldInfo newInstance(Element element) throws InvalidElementException {
@@ -76,16 +79,16 @@ public class FieldInfo {
         // Basic info
         FieldInfo fieldInfo = new FieldInfo();
 
-        fieldInfo.typeMirror = element.asType();
-        if (fieldInfo.typeMirror.getKind().isPrimitive()) {
-            fieldInfo.typeName = TypeName.get(fieldInfo.typeMirror).box();
+        TypeMirror typeMirror = element.asType();
+        if (typeMirror.getKind().isPrimitive()) {
+            fieldInfo.typeName = TypeName.get(typeMirror).box();
         } else {
-            fieldInfo.typeName = TypeName.get(fieldInfo.typeMirror);
+            fieldInfo.typeName = TypeName.get(typeMirror);
         }
 
         fieldInfo.kind = Kind.NORMAL;
-        fieldInfo.typeMirror = element.asType();
         fieldInfo.name = element.getSimpleName().toString();
+        fieldInfo.jsonFieldTypeName = fieldInfo.getTypeName();
 
         // Primary key
         Id id = element.getAnnotation(Id.class);
@@ -114,31 +117,31 @@ public class FieldInfo {
                 // We need the place where the interface is declared, in order to get their generic params
                 for (TypeMirror interfaceMirror: typeElement.getInterfaces()) {
                     if (TypeName.get(interfaceMirror).toString().startsWith(TypeName.get(Transformer.class).toString())) {
-                        fieldInfo.transformerMirror = interfaceMirror;
+                        TypeMirror genericType = Utils.getGenericType(interfaceMirror, 0);
+                        fieldInfo.jsonFieldTypeName = TypeName.get(genericType);
                         break;
                     }
                 }
             }
         }
 
-        // To One Relationship
-        Element fieldTypeElement = typeUtil.asElement(fieldInfo.typeMirror);
+        // Relationships
+        Element fieldTypeElement = typeUtil.asElement(typeMirror);
         if (fieldTypeElement instanceof TypeElement) {
             if (((TypeElement) fieldTypeElement).getQualifiedName().toString().startsWith(TypeName.get(ToOne.class).toString())) {
                 fieldInfo.kind = Kind.TO_ONE;
             } else if (((TypeElement) fieldTypeElement).getQualifiedName().toString().startsWith(TypeName.get(ToMany.class).toString())) {
                 fieldInfo.kind = Kind.TO_MANY;
-            }
-            // TODO:
-            /*else if (((TypeElement) fieldTypeElement).getQualifiedName().toString().startsWith(TypeName.get(List.class).toString())) {
+            } else if (((TypeElement) fieldTypeElement).getQualifiedName().toString().startsWith(TypeName.get(List.class).toString())) {
                 fieldInfo.kind = Kind.TO_MANY;
-            }*/
+            }
 
 
             if (fieldInfo.kind.equals(Kind.TO_MANY) || fieldInfo.kind.equals(Kind.TO_ONE)) {
-                fieldInfo.relationshipFieldMirror = Utils.getGenericType(fieldInfo.typeMirror, 0);
-                fieldInfo.relationshipFieldElement = (TypeElement) typeUtil.asElement(fieldInfo.relationshipFieldMirror);
-                fieldInfo.relationshipFieldName = TypeName.get(fieldInfo.relationshipFieldMirror);
+                TypeMirror relationshipFieldMirror = Utils.getGenericType(typeMirror, 0);
+                TypeElement relationshipFieldElement = (TypeElement) typeUtil.asElement(relationshipFieldMirror);
+                fieldInfo.relationshipName = TypeName.get(relationshipFieldMirror);
+                fieldInfo.relationshipSerializerName = Utils.getSerializer(relationshipFieldElement);
             }
         }
 
@@ -158,10 +161,6 @@ public class FieldInfo {
         return name;
     }
 
-    public TypeMirror getTypeMirror() {
-        return typeMirror;
-    }
-
     public TypeName getTypeName() {
         return typeName;
     }
@@ -174,23 +173,15 @@ public class FieldInfo {
         return kind;
     }
 
-    public TypeElement getRelationshipFieldElement() {
-        return relationshipFieldElement;
+    public TypeName getRelationshipName() {
+        return relationshipName;
     }
 
-    public TypeName getRelationshipFieldName() {
-        return relationshipFieldName;
+    public TypeName getRelationshipSerializerName() {
+        return relationshipSerializerName;
     }
 
     public TypeName getJsonFieldTypeName() {
-        if (jsonFieldTypeName == null) {
-            if (transformerName == null) {
-                jsonFieldTypeName = getTypeName();
-            } else {
-                TypeMirror genericType = Utils.getGenericType(transformerMirror, 0);
-                jsonFieldTypeName = TypeName.get(genericType);
-            }
-        }
         return jsonFieldTypeName;
     }
 

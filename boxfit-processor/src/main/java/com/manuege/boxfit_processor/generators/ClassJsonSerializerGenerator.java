@@ -121,7 +121,7 @@ public class ClassJsonSerializerGenerator extends AbstractFileGenerator {
     }
 
     private void addToOneFieldSerializer(MethodSpec.Builder builder, FieldInfo fieldInfo) {
-        ClassName serializer = Utils.getSerializer(fieldInfo.getRelationshipFieldElement());
+        TypeName serializer = fieldInfo.getRelationshipSerializerName();
         builder.addStatement("$T serializer = new $T(boxStore)", serializer, serializer);
         builder.addStatement("object.$N.setTarget(serializer.serializeRelationship(json, $S))", fieldInfo.getName(), fieldInfo.getSerializedName());
     }
@@ -130,9 +130,9 @@ public class ClassJsonSerializerGenerator extends AbstractFileGenerator {
         builder.addStatement("$T jsonArray = json.getJSONArray($S)", JSONArray.class, fieldInfo.getSerializedName());
         builder.addStatement("object.$N.clear()", fieldInfo.getName());
         builder.beginControlFlow("if (jsonArray != null)");
-        ClassName serializer = Utils.getSerializer(fieldInfo.getRelationshipFieldElement());
+        TypeName serializer = fieldInfo.getRelationshipSerializerName();
         builder.addStatement("$T serializer = new $T(boxStore)", serializer, serializer);
-        builder.addStatement("$T<$T> property = serializer.serialize(jsonArray)", List.class, fieldInfo.getRelationshipFieldElement());
+        builder.addStatement("$T<$T> property = serializer.serialize(jsonArray)", List.class, fieldInfo.getRelationshipName());
         builder.addStatement("object.$N.addAll(property)", fieldInfo.getName());
         builder.endControlFlow();
     }
