@@ -7,9 +7,11 @@ import com.squareup.javapoet.TypeName;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.ArrayType;
 import javax.lang.model.type.DeclaredType;
@@ -18,6 +20,7 @@ import javax.lang.model.type.PrimitiveType;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.type.TypeVariable;
 import javax.lang.model.util.SimpleTypeVisitor6;
+import javax.lang.model.util.Types;
 
 /**
  * Created by Manu on 3/2/18.
@@ -92,5 +95,25 @@ public class Utils {
         }
 
         return "get";
+    }
+
+    public static List<TypeMirror> getInheritanceChain(TypeMirror typeMirror) {
+        ArrayList<TypeMirror> arrayList = new ArrayList<>();
+        arrayList.addAll(Enviroment.getEnvironment().getTypeUtils().directSupertypes(typeMirror));
+        arrayList.add(typeMirror);
+        return arrayList;
+    }
+
+    public static boolean isList(TypeMirror typeMirror) {
+        Types typeUtil = Enviroment.getEnvironment().getTypeUtils();
+        for (TypeMirror typeMirror1 : getInheritanceChain(typeMirror)) {
+            Element element = typeUtil.asElement(typeMirror1);
+            if (element instanceof TypeElement) {
+                if (((TypeElement) element).getQualifiedName().toString().startsWith(TypeName.get(List.class).toString())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

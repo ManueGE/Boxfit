@@ -1,6 +1,7 @@
 package com.manuege.boxfit_processor.info;
 
 import com.manuege.boxfit.annotations.IdentityTransformer;
+import com.manuege.boxfit.annotations.JsonSerializable;
 import com.manuege.boxfit.annotations.JsonSerializableField;
 import com.manuege.boxfit.constants.Constants;
 import com.manuege.boxfit.transformers.Transformer;
@@ -12,17 +13,15 @@ import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeVariableName;
 
-import java.util.List;
-
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.MirroredTypeException;
 import javax.lang.model.type.TypeMirror;
+import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 
 import io.objectbox.annotation.Id;
-import io.objectbox.relation.ToMany;
 import io.objectbox.relation.ToOne;
 
 /**
@@ -35,7 +34,12 @@ public class FieldInfo {
         NORMAL,
         TRANSFORMED,
         TO_ONE,
-        TO_MANY
+        TO_MANY,
+        JSON_SERIALIZABLE;
+
+        private boolean isRelationship() {
+            return this == TO_ONE || this == TO_MANY || this == JSON_SERIALIZABLE;
+        }
     }
 
     private boolean isPrimaryKey;
@@ -61,6 +65,7 @@ public class FieldInfo {
     public static FieldInfo newInstance(Element element) throws InvalidElementException {
 
         Types typeUtil = Enviroment.getEnvironment().getTypeUtils();
+        Elements elementUtil = Enviroment.getEnvironment().getElementUtils();
 
         // Check if serializable
         JsonSerializableField jsonSerializableField = element.getAnnotation(JsonSerializableField.class);
@@ -129,16 +134,17 @@ public class FieldInfo {
         // Relationships
         Element fieldTypeElement = typeUtil.asElement(typeMirror);
         if (fieldTypeElement instanceof TypeElement) {
-            if (((TypeElement) fieldTypeElement).getQualifiedName().toString().startsWith(TypeName.get(ToOne.class).toString())) {
+            Error.putWarning(typeMirror.toString() + ": " + Utils.isList(typeMirror), element);
+
+            if (fieldTypeElement.getAnnotation(JsonSerializable.class) != null) {
+                fieldInfo.kind = Kind.JSON_SERIALIZABLE;
+            } else if (((TypeElement) fieldTypeElement).getQualifiedName().toString().startsWith(TypeName.get(ToOne.class).toString())) {
                 fieldInfo.kind = Kind.TO_ONE;
-            } else if (((TypeElement) fieldTypeElement).getQualifiedName().toString().startsWith(TypeName.get(ToMany.class).toString())) {
-                fieldInfo.kind = Kind.TO_MANY;
-            } else if (((TypeElement) fieldTypeElement).getQualifiedName().toString().startsWith(TypeName.get(List.class).toString())) {
+            } else if (Utils.isList(typeMirror)) {
                 fieldInfo.kind = Kind.TO_MANY;
             }
 
-
-            if (fieldInfo.kind.equals(Kind.TO_MANY) || fieldInfo.kind.equals(Kind.TO_ONE)) {
+            if (fieldInfo.kind.isRelationship()) {
                 if (fieldInfo.getTypeName() instanceof ParameterizedTypeName) {
                     ParameterizedTypeName parameterizedTypeName = (ParameterizedTypeName) fieldInfo.getTypeName();
                     TypeName relationshipTypeName = parameterizedTypeName.typeArguments.get(0);
@@ -153,6 +159,9 @@ public class FieldInfo {
                         TypeVariableName typeVariableName = (TypeVariableName) relationshipTypeName;
                         Error.putWarning(typeVariableName.toString(), element);
                     }
+                } else {
+                    fieldInfo.relationshipName = fieldInfo.typeName;
+                    fieldInfo.relationshipSerializerName = Utils.getSerializer((TypeElement) fieldTypeElement);
                 }
             }
         }

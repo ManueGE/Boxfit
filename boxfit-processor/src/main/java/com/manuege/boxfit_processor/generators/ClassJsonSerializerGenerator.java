@@ -105,6 +105,8 @@ public class ClassJsonSerializerGenerator extends AbstractFileGenerator {
             case TO_MANY:
                 addToManyFieldSerializer(builder, fieldInfo);
                 break;
+            case JSON_SERIALIZABLE:
+                addJsonSerializableFieldSerializer(builder, fieldInfo);
         }
 
         builder.endControlFlow();
@@ -135,6 +137,12 @@ public class ClassJsonSerializerGenerator extends AbstractFileGenerator {
         builder.addStatement("$T<$T> property = serializer.serialize(jsonArray)", List.class, fieldInfo.getRelationshipName());
         builder.addStatement("object.$N.addAll(property)", fieldInfo.getName());
         builder.endControlFlow();
+    }
+
+    private void addJsonSerializableFieldSerializer(MethodSpec.Builder builder, FieldInfo fieldInfo) {
+        TypeName serializer = fieldInfo.getRelationshipSerializerName();
+        builder.addStatement("$T serializer = new $T(boxStore)", serializer, serializer);
+        builder.addStatement("object.$N = serializer.serializeRelationship(json, $S)", fieldInfo.getName(), fieldInfo.getSerializedName());
     }
 
     private MethodSpec getBoxMethod() {
