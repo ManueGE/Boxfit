@@ -42,7 +42,7 @@ public abstract class AbstractSerializer<Entity, Id> {
         return null;
     }
 
-    public Entity serialize(Id id) {
+    private Entity serialize(Id id) {
         JSONObject jsonObject = getJSONObject(id);
         return serialize(jsonObject);
     }

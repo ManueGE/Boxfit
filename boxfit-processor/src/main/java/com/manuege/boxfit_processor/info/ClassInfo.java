@@ -15,12 +15,15 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.MirroredTypeException;
 import javax.lang.model.type.TypeMirror;
 
+import io.objectbox.annotation.Entity;
+
 /**
  * Created by Manu on 1/2/18.
  */
 
 public class ClassInfo {
     private TypeName type;
+    private Boolean isEntity;
     private TypeElement typeElement;
     private FieldInfo primaryKey;
     private List<FieldInfo> fields;
@@ -43,6 +46,8 @@ public class ClassInfo {
                 classInfo.transformer = typeName;
             }
         }
+
+        classInfo.isEntity = element.getAnnotation(Entity.class) != null;
 
         // Fields
         classInfo.fields = getFields(element);
@@ -83,6 +88,10 @@ public class ClassInfo {
 
     public TypeName getType() {
         return type;
+    }
+
+    public Boolean isEntity() {
+        return isEntity;
     }
 
     public TypeElement getTypeElement() {

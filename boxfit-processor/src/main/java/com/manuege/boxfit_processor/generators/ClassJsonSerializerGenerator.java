@@ -138,11 +138,17 @@ public class ClassJsonSerializerGenerator extends AbstractFileGenerator {
     }
 
     private MethodSpec getBoxMethod() {
-        return MethodSpec.methodBuilder("getBox")
+        MethodSpec.Builder builder = MethodSpec.methodBuilder("getBox")
                 .addModifiers(Modifier.PROTECTED)
-                .returns(ParameterizedTypeName.get(ClassName.get(Box.class), getEntityTypeName()))
-                .addStatement("return boxStore.boxFor($T.class)", classInfo.getType())
-                .build();
+                .returns(ParameterizedTypeName.get(ClassName.get(Box.class), getEntityTypeName()));
+
+        if (classInfo.isEntity()) {
+            builder.addStatement("return boxStore.boxFor($T.class)", classInfo.getType());
+        } else {
+            builder.addStatement("return null");
+        }
+
+        return builder.build();
     }
 
     private MethodSpec getCreateFreshObject() {
