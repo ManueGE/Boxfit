@@ -5,7 +5,7 @@ import com.manuege.boxfit.annotations.JsonSerializable;
 import com.manuege.boxfit.annotations.JsonSerializableField;
 import com.manuege.boxfit.constants.Constants;
 import com.manuege.boxfit.transformers.Transformer;
-import com.manuege.boxfit_processor.errors.Error;
+import com.manuege.boxfit_processor.errors.ErrorLogger;
 import com.manuege.boxfit_processor.errors.InvalidElementException;
 import com.manuege.boxfit_processor.processor.Enviroment;
 import com.squareup.javapoet.ClassName;
@@ -134,8 +134,6 @@ public class FieldInfo {
         // Relationships
         Element fieldTypeElement = typeUtil.asElement(typeMirror);
         if (fieldTypeElement instanceof TypeElement) {
-            Error.putWarning(typeMirror.toString() + ": " + Utils.isList(typeMirror), element);
-
             if (fieldTypeElement.getAnnotation(JsonSerializable.class) != null) {
                 fieldInfo.kind = Kind.JSON_SERIALIZABLE;
             } else if (((TypeElement) fieldTypeElement).getQualifiedName().toString().startsWith(TypeName.get(ToOne.class).toString())) {
@@ -157,7 +155,7 @@ public class FieldInfo {
 
                     } else if (relationshipTypeName instanceof TypeVariableName) {
                         TypeVariableName typeVariableName = (TypeVariableName) relationshipTypeName;
-                        Error.putWarning(typeVariableName.toString(), element);
+                        ErrorLogger.putWarning(typeVariableName.toString(), element);
                     }
                 } else {
                     fieldInfo.relationshipName = fieldInfo.typeName;

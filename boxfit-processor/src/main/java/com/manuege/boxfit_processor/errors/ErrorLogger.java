@@ -9,7 +9,7 @@ import javax.tools.Diagnostic;
  * Created by Manu on 10/1/17.
  */
 
-final public class Error {
+final public class ErrorLogger {
     public static void putError(String reason, Element element) {
         putMessage(reason, Diagnostic.Kind.ERROR, element);
     }

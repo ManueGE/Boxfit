@@ -15,6 +15,6 @@ public class InvalidElementException extends Exception {
     }
 
     public void putError() {
-        Error.putError(getMessage(), element);
+        ErrorLogger.putError(getMessage(), element);
     }
 }

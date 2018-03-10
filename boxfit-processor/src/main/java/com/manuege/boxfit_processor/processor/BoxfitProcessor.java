@@ -1,7 +1,7 @@
 package com.manuege.boxfit_processor.processor;
 
 import com.manuege.boxfit.annotations.JsonSerializable;
-import com.manuege.boxfit_processor.errors.Error;
+import com.manuege.boxfit_processor.errors.ErrorLogger;
 import com.manuege.boxfit_processor.errors.InvalidElementException;
 import com.manuege.boxfit_processor.generators.ClassJsonSerializerGenerator;
 import com.manuege.boxfit_processor.generators.MainJsonSerializerGenerator;
@@ -34,7 +34,7 @@ public class BoxfitProcessor extends AbstractProcessor {
         ArrayList<ClassInfo> classesInfo = new ArrayList<>();
         for (Element element : roundEnvironment.getElementsAnnotatedWith(JsonSerializable.class)) {
             if (element.getKind() != ElementKind.CLASS || !(element instanceof TypeElement)) {
-                Error.putError("JsonSerializer must be applied to classes", element);
+                ErrorLogger.putError("JsonSerializer must be applied to classes", element);
                 continue;
             }
 
