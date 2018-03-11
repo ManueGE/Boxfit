@@ -19,11 +19,8 @@ public class PaginatedResponse<T> {
     @JsonSerializableField
     int previous;
 
-    // TODO: Fix
-    /*
     @JsonSerializableField
-    List<T> results;
-    */
+    List<T> results = new ArrayList<>();
 
     public int getCount() {
         return count;
@@ -38,6 +35,6 @@ public class PaginatedResponse<T> {
     }
 
     public List<T> getResults() {
-        return new ArrayList<>();
+        return results;
     }
 }

@@ -5,7 +5,6 @@ import com.manuege.boxfit.annotations.JsonSerializable;
 import com.manuege.boxfit.annotations.JsonSerializableField;
 import com.manuege.boxfit.constants.Constants;
 import com.manuege.boxfit.transformers.Transformer;
-import com.manuege.boxfit_processor.errors.ErrorLogger;
 import com.manuege.boxfit_processor.errors.InvalidElementException;
 import com.manuege.boxfit_processor.processor.Enviroment;
 import com.squareup.javapoet.ClassName;
@@ -62,7 +61,9 @@ public class FieldInfo {
     // Typename representing the type of the value in a json
     private TypeName jsonFieldTypeName;
 
-    public static FieldInfo newInstance(Element element) throws InvalidElementException {
+    private ClassInfo classInfo;
+
+    public static FieldInfo newInstance(Element element, ClassInfo classInfo) throws InvalidElementException {
 
         Types typeUtil = Enviroment.getEnvironment().getTypeUtils();
         Elements elementUtil = Enviroment.getEnvironment().getElementUtils();
@@ -84,6 +85,7 @@ public class FieldInfo {
 
         // Basic info
         FieldInfo fieldInfo = new FieldInfo();
+        fieldInfo.classInfo = classInfo;
 
         TypeMirror typeMirror = element.asType();
         if (typeMirror.getKind().isPrimitive()) {
@@ -155,8 +157,11 @@ public class FieldInfo {
 
                     } else if (relationshipTypeName instanceof TypeVariableName) {
                         TypeVariableName typeVariableName = (TypeVariableName) relationshipTypeName;
-                        ErrorLogger.putWarning(typeVariableName.toString(), element);
+                        fieldInfo.relationshipName = classInfo.getGenericParamsMap().get(typeVariableName);
+                        TypeElement relationshipFieldElement = elementUtil.getTypeElement(fieldInfo.relationshipName.toString());
+                        fieldInfo.relationshipSerializerName = Utils.getSerializer(relationshipFieldElement);
                     }
+
                 } else {
                     fieldInfo.relationshipName = fieldInfo.typeName;
                     fieldInfo.relationshipSerializerName = Utils.getSerializer((TypeElement) fieldTypeElement);

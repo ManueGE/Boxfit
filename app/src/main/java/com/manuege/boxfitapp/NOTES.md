@@ -1,5 +1,8 @@
 # NOTES:
 
+## Known issues
+- Lists must be initialized (ToMany already does it)
+
 ## Code generation checks
 - disallow JsonSerializable in generic classes, but allow it in its concrete subclasses.
 - Transformers must have empty initializer
