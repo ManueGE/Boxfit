@@ -107,7 +107,7 @@ public class MainJsonSerializerGenerator extends AbstractFileGenerator {
         return MethodSpec.methodBuilder("getConverterFactory")
                 .addParameter(BoxStore.class, "boxStore")
                 .returns(JsonSerializableConverterFactory.class)
-                .addModifiers(Modifier.PROTECTED, Modifier.STATIC)
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .addStatement("$N mainSerializer = new $N(boxStore)", getClassName(), getClassName())
                 .addStatement("return new $T(mainSerializer)", JsonSerializableConverterFactory.class)
                 .build();

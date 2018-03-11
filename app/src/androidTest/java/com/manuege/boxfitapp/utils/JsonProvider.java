@@ -15,29 +15,33 @@ import java.io.InputStream;
  */
 
 public class JsonProvider {
-    public static JSONObject getJSONObject(String filename) {
+    public static String getResponse(String filename) {
         try {
             // https://medium.com/@yair.kukielka/android-unit-tests-explained-part-2-a0f1e1413569
             Context context = InstrumentationRegistry.getTargetContext();
             InputStream inputStream = context.getResources().getAssets().open(filename);
-            String s = readTextStream(inputStream);
+            return readTextStream(inputStream);
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    public static JSONObject getJSONObject(String filename) {
+        try {
+            // https://medium.com/@yair.kukielka/android-unit-tests-explained-part-2-a0f1e1413569
+            String s = getResponse(filename);
             return new JSONObject(s);
         } catch (JSONException e) {
-            return null;
-        } catch (IOException e) {
             return null;
         }
     }
 
     public static JSONArray getJSONArray(String filename) {
         try {
-            Context context = InstrumentationRegistry.getTargetContext();
-            InputStream inputStream = context.getResources().getAssets().open(filename);
-            String s = readTextStream(inputStream);
+
+            String s = getResponse(filename);
             return new JSONArray(s);
         } catch (JSONException e) {
-            return null;
-        } catch (IOException e) {
             return null;
         }
     }

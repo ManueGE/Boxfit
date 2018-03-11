@@ -65,7 +65,7 @@
     },
     {
       "id": "3:15497024806815410",
-      "lastPropertyId": "3:7667420353396732555",
+      "lastPropertyId": "4:1430975923972946920",
       "name": "Artist",
       "properties": [
         {
@@ -79,6 +79,10 @@
         {
           "id": "3:7667420353396732555",
           "name": "birthDate"
+        },
+        {
+          "id": "4:1430975923972946920",
+          "name": "type"
         }
       ],
       "relations": []
@@ -98,9 +102,53 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "5:7803018209820482938",
+      "lastPropertyId": "9:4603743906212045776",
+      "name": "CoreModel",
+      "properties": [
+        {
+          "id": "1:6024666911401449404",
+          "name": "id"
+        },
+        {
+          "id": "2:6191072479123230871",
+          "name": "longClassField"
+        },
+        {
+          "id": "3:5189954356716104080",
+          "name": "integerField"
+        },
+        {
+          "id": "4:2289581737967122168",
+          "name": "integerClassFielf"
+        },
+        {
+          "id": "5:1073519974465256915",
+          "name": "boolField"
+        },
+        {
+          "id": "6:1850532269757550522",
+          "name": "boolClassField"
+        },
+        {
+          "id": "7:4312253211393687757",
+          "name": "doubleField"
+        },
+        {
+          "id": "8:6372062905080672472",
+          "name": "doubleClassField"
+        },
+        {
+          "id": "9:4603743906212045776",
+          "name": "stringField"
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "4:8115265302674283461",
+  "lastEntityId": "5:7803018209820482938",
   "lastIndexId": "4:8049288946852273781",
   "lastRelationId": "3:7071660507328235032",
   "lastSequenceId": "0:0",

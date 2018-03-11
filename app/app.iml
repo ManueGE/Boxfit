@@ -119,6 +119,7 @@
     <orderEntry type="library" name="android.arch.lifecycle:runtime-1.0.0" level="project" />
     <orderEntry type="library" name="com.android.support:appcompat-v7-26.1.0" level="project" />
     <orderEntry type="library" name="com.android.support:support-annotations:26.1.0@jar" level="project" />
+    <orderEntry type="library" name="com.squareup.okhttp:okhttp-ws:2.3.0@jar" level="project" />
     <orderEntry type="library" name="org.greenrobot:essentials:3.0.0-RC1@jar" level="project" />
     <orderEntry type="library" name="com.android.support.constraint:constraint-layout-solver:1.0.2@jar" level="project" />
     <orderEntry type="library" name="com.android.support:support-core-utils-26.1.0" level="project" />
@@ -128,10 +129,12 @@
     <orderEntry type="library" scope="TEST" name="com.android.support.test:runner-1.0.1" level="project" />
     <orderEntry type="library" scope="TEST" name="com.android.support.test:rules-1.0.1" level="project" />
     <orderEntry type="library" name="com.squareup.retrofit2:retrofit:2.3.0@jar" level="project" />
+    <orderEntry type="library" name="com.squareup.okhttp:mockwebserver:2.3.0@jar" level="project" />
     <orderEntry type="library" scope="TEST" name="com.android.support.test.espresso:espresso-idling-resource-3.0.1" level="project" />
     <orderEntry type="library" scope="TEST" name="org.hamcrest:hamcrest-core:1.3@jar" level="project" />
     <orderEntry type="library" name="com.android.support:support-compat-26.1.0" level="project" />
     <orderEntry type="library" name="com.squareup.okhttp3:okhttp:3.8.0@jar" level="project" />
+    <orderEntry type="library" name="org.bouncycastle:bcprov-jdk15on:1.50@jar" level="project" />
     <orderEntry type="library" name="io.objectbox:objectbox-java-api:1.4.1@jar" level="project" />
     <orderEntry type="library" name="io.objectbox:objectbox-android-1.4.1" level="project" />
     <orderEntry type="library" name="io.objectbox:objectbox-java:1.4.1@jar" level="project" />
@@ -143,6 +146,7 @@
     <orderEntry type="library" scope="TEST" name="net.sf.kxml:kxml2:2.3.0@jar" level="project" />
     <orderEntry type="library" name="com.android.support:animated-vector-drawable-26.1.0" level="project" />
     <orderEntry type="library" name="org.json:json:20171018@jar" level="project" />
+    <orderEntry type="library" name="com.squareup.okhttp:okhttp:2.3.0@jar" level="project" />
     <orderEntry type="module" module-name="boxfit" />
   </component>
 </module>
