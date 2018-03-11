@@ -142,5 +142,7 @@
     <orderEntry type="library" name="com.google.code.findbugs:jsr305:3.0.2@jar" level="project" />
     <orderEntry type="library" scope="TEST" name="net.sf.kxml:kxml2:2.3.0@jar" level="project" />
     <orderEntry type="library" name="com.android.support:animated-vector-drawable-26.1.0" level="project" />
+    <orderEntry type="library" name="org.json:json:20171018@jar" level="project" />
+    <orderEntry type="module" module-name="boxfit" />
   </component>
 </module>
