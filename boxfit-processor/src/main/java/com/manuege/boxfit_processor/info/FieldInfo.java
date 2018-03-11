@@ -120,15 +120,21 @@ public class FieldInfo {
             if (!transformerName.equals(TypeName.get(IdentityTransformer.class))) {
                 fieldInfo.kind = Kind.TRANSFORMED;
                 fieldInfo.transformerName = transformerName;
-                TypeElement typeElement = (TypeElement) typeUtil.asElement(transformerMirror);
 
                 // We need the place where the interface is declared, in order to get their generic params
-                for (TypeMirror interfaceMirror: typeElement.getInterfaces()) {
-                    if (TypeName.get(interfaceMirror).toString().startsWith(TypeName.get(Transformer.class).toString())) {
-                        TypeMirror genericType = Utils.getGenericType(interfaceMirror, 0);
-                        fieldInfo.jsonFieldTypeName = TypeName.get(genericType);
-                        break;
+                TypeMirror mirror = transformerMirror;
+                boolean found = false;
+                while (!found && mirror != null) {
+                    TypeElement typeElement = (TypeElement) typeUtil.asElement(mirror);
+                    for (TypeMirror interfaceMirror : typeElement.getInterfaces()) {
+                        if (TypeName.get(interfaceMirror).toString().startsWith(TypeName.get(Transformer.class).toString())) {
+                            TypeMirror genericType = Utils.getGenericType(interfaceMirror, 0);
+                            fieldInfo.jsonFieldTypeName = TypeName.get(genericType);
+                            found = true;
+                            break;
+                        }
                     }
+                    mirror = typeElement.getSuperclass();
                 }
             }
         }

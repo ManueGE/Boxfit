@@ -10,4 +10,7 @@ import com.manuege.boxfitapp.model.Album;
 public class Paginated {
     @JsonSerializable
     public static class Albums extends PaginatedResponse<Album> {}
+
+    @JsonSerializable
+    public static class AlbumsSubclass extends Albums {}
 }

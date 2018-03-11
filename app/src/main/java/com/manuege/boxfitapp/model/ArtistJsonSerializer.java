@@ -3,6 +3,7 @@ package com.manuege.boxfitapp.model;
 import com.manuege.boxfit.serializers.AbstractSerializer;
 import com.manuege.boxfit.utils.Json;
 import com.manuege.boxfit.utils.JsonArray;
+import com.manuege.boxfitapp.transformers.ApiStringToDateTransformer;
 import com.manuege.boxfitapp.transformers.ArtistTypeTransformer;
 import com.manuege.boxfitapp.transformers.StringToDateTransformer;
 
@@ -37,7 +38,7 @@ public class ArtistJsonSerializer extends AbstractSerializer<Artist, Long> {
 
         if (json.has("birth")) {
             String originalValue = json.getString("birth");
-            StringToDateTransformer transformer = new StringToDateTransformer();
+            StringToDateTransformer transformer = new ApiStringToDateTransformer();
             object.birthDate = transformer.transform(originalValue);
         }
 

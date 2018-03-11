@@ -39,6 +39,23 @@ public class PaginatedResponseSerializerTest extends AbstractObjectBoxTest {
     }
 
     @Test
+    public void paginatedResponseSerializer_canSerializeSubclassOfGeneric() {
+        JSONObject jsonObject = JsonProvider.getJSONObject("album_paginated_response.json");
+        MainJsonSerializer serializer = new MainJsonSerializer(boxStore);
+        PaginatedResponse<Album> object = serializer.serialize(Paginated.AlbumsSubclass.class, jsonObject);
+
+        assertEquals(10, object.getCount());
+        assertEquals(0, object.getPrevious());
+        assertEquals(2, object.getNext());
+
+        assertEquals(3, boxStore.boxFor(Album.class).count());
+        assertEquals(2, boxStore.boxFor(Artist.class).count());
+
+        Album album = object.getResults().get(0);
+        assertEquals("Honestidad Brutal", album.getName());
+    }
+
+    @Test
     public void albumSerializer_serializeArrayOfNoEntities() {
         JSONArray array = JsonProvider.getJSONArray("array_of_paginated_response.json");
         MainJsonSerializer serializer = new MainJsonSerializer(boxStore);
