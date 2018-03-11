@@ -1,5 +1,7 @@
 package com.manuege.boxfit_processor.generators;
 
+import com.manuege.boxfit.converters.JsonSerializableConverterFactory;
+import com.manuege.boxfit.serializers.AbstractMainSerializer;
 import com.manuege.boxfit_processor.info.ClassInfo;
 import com.manuege.boxfit_processor.info.Utils;
 import com.squareup.javapoet.ClassName;
@@ -32,11 +34,16 @@ public class MainJsonSerializerGenerator extends AbstractFileGenerator {
         this.classes = classes;
     }
 
+    private String getClassName() {
+        return "MainJsonSerializer";
+    }
+
     @Override
     protected TypeSpec getTypeSpec() {
         // Class definition
         TypeSpec.Builder mainSerializerClass = TypeSpec
-                .classBuilder("MainJsonSerializer")
+                .classBuilder(getClassName())
+                .addSuperinterface(AbstractMainSerializer.class)
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
 
         // Constructor
@@ -89,10 +96,21 @@ public class MainJsonSerializerGenerator extends AbstractFileGenerator {
         serializeMethod.addStatement("return null");
         serializeManyMethod.addStatement("return null");
 
+        mainSerializerClass.addMethod(getConverterFactoryMethod());
         mainSerializerClass.addMethod(serializeMethod.build());
         mainSerializerClass.addMethod(serializeManyMethod.build());
 
         return mainSerializerClass.build();
+    }
+
+    private MethodSpec getConverterFactoryMethod() {
+        return MethodSpec.methodBuilder("getConverterFactory")
+                .addParameter(BoxStore.class, "boxStore")
+                .returns(JsonSerializableConverterFactory.class)
+                .addModifiers(Modifier.PROTECTED, Modifier.STATIC)
+                .addStatement("$N mainSerializer = new $N(boxStore)", getClassName(), getClassName())
+                .addStatement("return new $T(mainSerializer)", JsonSerializableConverterFactory.class)
+                .build();
     }
 
     @Override
