@@ -143,6 +143,7 @@ public abstract class AbstractSerializer<Entity, Id> {
     abstract protected JSONObject getJSONObject(Id id);
     abstract protected Entity getExistingObject(Id id);
     abstract protected List<Entity> getExistingObjects(List<Id> ids);
+    abstract public JSONObject toJson(Entity object);
     protected JSONObject getTransformedJSONObject(JSONObject object) {
         return object;
     }

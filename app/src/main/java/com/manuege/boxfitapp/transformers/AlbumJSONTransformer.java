@@ -21,4 +21,9 @@ public class AlbumJSONTransformer implements JSONObjectTransformer {
 
         return object;
     }
+
+    @Override
+    public JSONObject inverseTransform(JSONObject object) {
+        return object;
+    }
 }

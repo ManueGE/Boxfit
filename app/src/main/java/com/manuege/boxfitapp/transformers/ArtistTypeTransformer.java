@@ -12,7 +12,12 @@ import io.objectbox.converter.PropertyConverter;
 public class ArtistTypeTransformer implements PropertyConverter<Artist.Type, String>, Transformer<String, Artist.Type> {
     @Override
     public Artist.Type convertToEntityProperty(String databaseValue) {
-        return typeFromString(databaseValue);
+        for (Artist.Type type: Artist.Type.values()) {
+            if (type.getValue().equals(databaseValue)) {
+                return type;
+            }
+        }
+        return Artist.Type.UNKNOWN;
     }
 
     @Override
@@ -22,15 +27,11 @@ public class ArtistTypeTransformer implements PropertyConverter<Artist.Type, Str
 
     @Override
     public Artist.Type transform(String object) {
-        return typeFromString(object);
+        return convertToEntityProperty(object);
     }
 
-    private Artist.Type typeFromString(String string) {
-        for (Artist.Type type: Artist.Type.values()) {
-            if (type.getValue().equals(string)) {
-                return type;
-            }
-        }
-        return Artist.Type.UNKNOWN;
+    @Override
+    public String inverseTransform(Artist.Type object) {
+        return convertToDatabaseValue(object);
     }
 }

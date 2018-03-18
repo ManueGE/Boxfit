@@ -59,7 +59,8 @@ public class ClassJsonSerializerGenerator extends AbstractFileGenerator {
                 .addMethod(getIdFromObjectMethod())
                 .addMethod(getJsonObjectFromIdMethod())
                 .addMethod(getExistingObjectMethod())
-                .addMethod(getExistingObjectsMethod());
+                .addMethod(getExistingObjectsMethod())
+                .addMethod(getToJsonMethod());
 
         if (classInfo.getTransformer() != null) {
             serializerClass.addMethod(getTransformedJsonMethod());
@@ -294,6 +295,17 @@ public class ClassJsonSerializerGenerator extends AbstractFileGenerator {
                 .addParameter(JSONObject.class, "object")
                 .returns(JSONObject.class)
                 .addStatement("return new $T().transform(object)", classInfo.getTransformer());
+
+        return builder.build();
+    }
+
+    private MethodSpec getToJsonMethod() {
+        MethodSpec.Builder builder = MethodSpec.methodBuilder("toJson")
+                .addModifiers(Modifier.PUBLIC)
+                .addParameter(getEntityTypeName(), "object")
+                .returns(JSONObject.class);
+
+        builder.addStatement("return null");
 
         return builder.build();
     }
