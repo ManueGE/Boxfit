@@ -5,13 +5,11 @@ import com.manuege.boxfitapp.model.MyObjectBox;
 import org.junit.After;
 import org.junit.Before;
 
-import java.io.File;
 import java.io.IOException;
 
 import io.objectbox.BoxStore;
 
 public abstract class AbstractObjectBoxTest {
-    protected File boxStoreDir;
     protected BoxStore boxStore;
 
     @Before

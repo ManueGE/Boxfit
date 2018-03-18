@@ -65,7 +65,7 @@
     },
     {
       "id": "3:15497024806815410",
-      "lastPropertyId": "3:7667420353396732555",
+      "lastPropertyId": "4:1430975923972946920",
       "name": "Artist",
       "properties": [
         {
@@ -79,6 +79,10 @@
         {
           "id": "3:7667420353396732555",
           "name": "birthDate"
+        },
+        {
+          "id": "4:1430975923972946920",
+          "name": "type"
         }
       ],
       "relations": []
@@ -98,21 +102,81 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "6:6990667195199777511",
+      "lastPropertyId": "10:6908512890241904338",
+      "name": "Parent",
+      "properties": [
+        {
+          "id": "1:3304826387168356018",
+          "name": "id"
+        },
+        {
+          "id": "2:3870366772083399421",
+          "name": "longClassField"
+        },
+        {
+          "id": "3:7541535694508173855",
+          "name": "integerField"
+        },
+        {
+          "id": "4:6556611959578666431",
+          "name": "integerClassField"
+        },
+        {
+          "id": "5:2452147331403991236",
+          "name": "boolField"
+        },
+        {
+          "id": "6:8097084182023241514",
+          "name": "boolClassField"
+        },
+        {
+          "id": "7:4670348888782690319",
+          "name": "doubleField"
+        },
+        {
+          "id": "8:6170397576321091401",
+          "name": "doubleClassField"
+        },
+        {
+          "id": "9:551296963217207943",
+          "name": "stringField"
+        },
+        {
+          "id": "10:6908512890241904338",
+          "name": "serializerNameInferred"
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "4:8115265302674283461",
+  "lastEntityId": "6:6990667195199777511",
   "lastIndexId": "4:8049288946852273781",
   "lastRelationId": "3:7071660507328235032",
   "lastSequenceId": "0:0",
   "modelVersion": 4,
   "modelVersionParserMinimum": 4,
-  "retiredEntityUids": [],
+  "retiredEntityUids": [
+    7803018209820482938
+  ],
   "retiredIndexUids": [
     6493214582027386933
   ],
   "retiredPropertyUids": [
     4194429157066103034,
-    1029382557262451387
+    1029382557262451387,
+    2289581737967122168,
+    6024666911401449404,
+    6191072479123230871,
+    5189954356716104080,
+    1073519974465256915,
+    1850532269757550522,
+    4312253211393687757,
+    6372062905080672472,
+    4603743906212045776,
+    4319390414617818859
   ],
   "retiredRelationUids": [
     3944922486557142317,
