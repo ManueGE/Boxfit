@@ -88,7 +88,6 @@ public class JsonSerializableConverterFactory extends Converter.Factory {
         public List<T> convert(ResponseBody value) throws IOException {
             String jsonString = value.string();
             try {
-
                 JSONArray jsonArray = new JSONArray(jsonString);
                 return jsonSerializer.serialize(clazz, jsonArray);
             } catch (JSONException e) {

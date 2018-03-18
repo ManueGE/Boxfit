@@ -1,6 +1,8 @@
 package com.manuege.boxfitapp.api;
 
-import com.manuege.boxfitapp.model.CoreModel;
+import com.manuege.boxfitapp.model.Parent;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -11,5 +13,8 @@ import retrofit2.http.GET;
 
 public interface ApiService {
     @GET("model")
-    Call<CoreModel> getCoreModelDetail();
+    Call<List<Parent>> getModelList();
+
+    @GET("model/1")
+    Call<Parent> getModelDetail();
 }

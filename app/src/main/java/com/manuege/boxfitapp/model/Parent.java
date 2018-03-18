@@ -3,8 +3,12 @@ package com.manuege.boxfitapp.model;
 import com.manuege.boxfit.annotations.JsonSerializable;
 import com.manuege.boxfit.annotations.JsonSerializableField;
 
+import java.util.List;
+
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
+import io.objectbox.relation.ToMany;
+import io.objectbox.relation.ToOne;
 
 /**
  * Created by Manu on 11/3/18.
@@ -12,7 +16,7 @@ import io.objectbox.annotation.Id;
 
 @Entity
 @JsonSerializable
-public class CoreModel {
+public class Parent {
     @JsonSerializableField
     @Id(assignable = true)
     public long id;
@@ -40,4 +44,16 @@ public class CoreModel {
 
     @JsonSerializableField("string")
     public String stringField;
+
+    @JsonSerializableField
+    public String serializerNameInferred;
+
+    @JsonSerializableField
+    public ToOne<Child> toOne;
+
+    @JsonSerializableField
+    public ToMany<Child> toMany;
+
+    @JsonSerializableField
+    public List<Child> list;
 }

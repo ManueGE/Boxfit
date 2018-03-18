@@ -118,6 +118,9 @@ public abstract class AbstractSerializer<Entity, Id> {
             Entity object = existingObjectsById.get(id);
             if (object == null) {
                 object = createFreshObject(id);
+                if (getBox() != null) {
+                    getBox().put(object);
+                }
             }
             merge(json, object);
             objects.add(object);
