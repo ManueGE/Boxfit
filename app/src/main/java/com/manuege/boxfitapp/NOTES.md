@@ -22,3 +22,7 @@ class ObjectResponse<T extends Entity> {
     T result;
 }
 ```
+
+## To Json
+- add `ToJsonIgnore` to ignore fields when creating json
+- add `ToJsonIgnoreNull` to exclude null fields when creating json

@@ -317,8 +317,12 @@ public class ClassJsonSerializerGenerator extends AbstractFileGenerator {
                 builder.addStatement("$T $N = new $T(boxStore)", serializer, serializerName, serializer);
                 builder.addStatement("json.put($S, $N.toJson(object.$N))", fieldInfo.getSerializedName(), serializerName, fieldInfo.getName());
             } else if (fieldInfo.getKind() == FieldInfo.Kind.TO_ONE) {
+                builder.beginControlFlow("if (object.$N.getTarget() != null)", fieldInfo.getName());
                 builder.addStatement("$T $N = new $T(boxStore)", serializer, serializerName, serializer);
                 builder.addStatement("json.put($S, $N.toJson(object.$N.getTarget()))", fieldInfo.getSerializedName(), serializerName, fieldInfo.getName());
+                builder.nextControlFlow("else");
+                builder.addStatement("json.put($S, null)", fieldInfo.getSerializedName());
+                builder.endControlFlow();
             } else if (fieldInfo.getKind() == FieldInfo.Kind.TO_MANY) {
                 String jsonArrayName = fieldInfo.getName() + "JSONArray";
                 builder.addStatement("$T $N = new $T(boxStore)", serializer, serializerName, serializer);
