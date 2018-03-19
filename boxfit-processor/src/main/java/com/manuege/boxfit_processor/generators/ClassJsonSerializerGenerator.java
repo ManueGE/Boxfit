@@ -331,6 +331,24 @@ public class ClassJsonSerializerGenerator extends AbstractFileGenerator {
                         builder.endControlFlow();
                     }
                 }
+
+            } else if (fieldInfo.getKind() == FieldInfo.Kind.TRANSFORMED) {
+                String transformerName = fieldInfo.getName() + "Transformer";
+                String transformedValueName = fieldInfo.getName() + "TransformedValue";
+                builder.addStatement("$T $N = new $T()", fieldInfo.getTransformerName(), transformerName, fieldInfo.getTransformerName());
+                builder.addStatement("$T $N = $N.inverseTransform(object.$N)", fieldInfo.getJsonFieldTypeName(), transformedValueName, transformerName, fieldInfo.getName());
+
+                builder.beginControlFlow("if ($N != null)", transformedValueName);
+                builder.addStatement("json.put($S, $N)", fieldInfo.getSerializedName(), transformedValueName);
+
+                if (fieldInfo.isToJsonIncludeNull()) {
+                    builder.nextControlFlow("else");
+                    builder.addStatement("json.put($S, JSONObject.NULL)", fieldInfo.getSerializedName());
+                    builder.endControlFlow();
+                } else {
+                    builder.endControlFlow();
+                }
+
             } else if (fieldInfo.getKind() == FieldInfo.Kind.JSON_SERIALIZABLE) {
                 builder.beginControlFlow("if (object.$N != null)", fieldInfo.getName());
                 builder.addStatement("$T $N = new $T(boxStore)", serializer, serializerName, serializer);

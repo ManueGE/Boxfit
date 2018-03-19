@@ -1,5 +1,10 @@
 # NOTES:
 
+## To do
+- rename serialize to fromJson
+- reuse serializers instead of creating one and another. Add boxstore as function parameter instead of instance parameter
+- reuse transformers
+
 ## Known issues
 - Lists must be initialized (ToMany already does it)
 
@@ -24,5 +29,5 @@ class ObjectResponse<T extends Entity> {
 ```
 
 ## To Json
-- add test for `ToJsonIgnore` ¡
+- add test for `ToJsonIgnore`
 - add tests for `ToJsonIgnoreNull` taking in account all type of fields kind (to many, normal...), primitives...
