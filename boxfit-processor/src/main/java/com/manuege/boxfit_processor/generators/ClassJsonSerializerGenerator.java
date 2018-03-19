@@ -392,6 +392,11 @@ public class ClassJsonSerializerGenerator extends AbstractFileGenerator {
             builder.addCode("\n");
         }
 
+        if (classInfo.getTransformer() != null) {
+            builder.addStatement("$T transformer = new $T()", classInfo.getTransformer(), classInfo.getTransformer());
+            builder.addStatement("json = transformer.inverseTransform(json)");
+        }
+
         builder.addStatement("return json")
                 .endControlFlow()
                 .beginControlFlow("catch($T ignored)", JSONException.class)
