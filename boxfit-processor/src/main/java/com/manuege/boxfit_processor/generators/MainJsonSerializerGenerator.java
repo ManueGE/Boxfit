@@ -79,8 +79,25 @@ public class MainJsonSerializerGenerator extends AbstractFileGenerator {
         MethodSpec.Builder toJsonMethod = MethodSpec
                 .methodBuilder("toJson")
                 .addModifiers(Modifier.PUBLIC)
-                .addParameter(Object.class, "object")
+                .addTypeVariable(genericParam)
+                .addParameter(genericParam, "object")
                 .returns(JSONObject.class);
+
+        // Define to json array
+        MethodSpec.Builder toJsonArrayMethod = MethodSpec
+                .methodBuilder("toJson")
+                .addModifiers(Modifier.PUBLIC)
+                .addTypeVariable(genericParam)
+                .addParameter(listOfObjects, "objects")
+                .returns(JSONArray.class)
+                .beginControlFlow("if (objects == null)")
+                .addStatement("return null")
+                .endControlFlow()
+                .addStatement("JSONArray array = new $T()", JSONArray.class)
+                .beginControlFlow("for ($T object: objects)", genericParam)
+                .addStatement("array.put(toJson(object))")
+                .endControlFlow()
+                .addStatement("return array");
 
         for (ClassInfo classInfo: classes) {
             TypeElement element = classInfo.getTypeElement();
@@ -107,6 +124,7 @@ public class MainJsonSerializerGenerator extends AbstractFileGenerator {
         mainSerializerClass.addMethod(serializeMethod.build());
         mainSerializerClass.addMethod(serializeManyMethod.build());
         mainSerializerClass.addMethod(toJsonMethod.build());
+        mainSerializerClass.addMethod(toJsonArrayMethod.build());
 
         return mainSerializerClass.build();
     }

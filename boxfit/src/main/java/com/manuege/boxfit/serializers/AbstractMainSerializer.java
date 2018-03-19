@@ -12,5 +12,6 @@ import java.util.List;
 public interface AbstractMainSerializer {
     <T> T serialize(Class clazz, JSONObject jsonObject);
     <T> List<T> serialize(Class clazz, JSONArray jsonArray);
-    JSONObject toJson(Object object);
+    <T> JSONObject toJson(T object);
+    <T> JSONArray toJson(List<T> object);
 }

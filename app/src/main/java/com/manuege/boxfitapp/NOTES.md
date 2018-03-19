@@ -24,5 +24,5 @@ class ObjectResponse<T extends Entity> {
 ```
 
 ## To Json
-- add `ToJsonIgnore` to ignore fields when creating json
-- add `ToJsonIgnoreNull` to exclude null fields when creating json
+- add test for `ToJsonIgnore` ¡
+- add tests for `ToJsonIgnoreNull` taking in account all type of fields kind (to many, normal...), primitives...

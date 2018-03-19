@@ -309,29 +309,68 @@ public class ClassJsonSerializerGenerator extends AbstractFileGenerator {
         builder.beginControlFlow("try");
 
         for (FieldInfo fieldInfo: classInfo.getFields()) {
+            if (fieldInfo.isToJsonIgnore()) {
+                continue;
+            }
+
             TypeName serializer = fieldInfo.getRelationshipSerializerName();
             String serializerName = fieldInfo.getName() + "Serializer";
+
             if (fieldInfo.getKind() == FieldInfo.Kind.NORMAL) {
-                builder.addStatement("json.put($S, object.$N)", fieldInfo.getSerializedName(), fieldInfo.getName());
+                if (fieldInfo.isPrimitive()) {
+                    builder.addStatement("json.put($S, object.$N)", fieldInfo.getSerializedName(), fieldInfo.getName());
+                } else {
+                    builder.beginControlFlow("if (object.$N != null)", fieldInfo.getName());
+                    builder.addStatement("json.put($S, object.$N)", fieldInfo.getSerializedName(), fieldInfo.getName());
+
+                    if (fieldInfo.isToJsonIncludeNull()) {
+                        builder.nextControlFlow("else");
+                        builder.addStatement("json.put($S, JSONObject.NULL)", fieldInfo.getSerializedName());
+                        builder.endControlFlow();
+                    } else {
+                        builder.endControlFlow();
+                    }
+                }
             } else if (fieldInfo.getKind() == FieldInfo.Kind.JSON_SERIALIZABLE) {
+                builder.beginControlFlow("if (object.$N != null)", fieldInfo.getName());
                 builder.addStatement("$T $N = new $T(boxStore)", serializer, serializerName, serializer);
                 builder.addStatement("json.put($S, $N.toJson(object.$N))", fieldInfo.getSerializedName(), serializerName, fieldInfo.getName());
+
+                if (fieldInfo.isToJsonIncludeNull()) {
+                    builder.nextControlFlow("else");
+                    builder.addStatement("json.put($S, JSONObject.NULL)", fieldInfo.getSerializedName());
+                    builder.endControlFlow();
+                } else {
+                    builder.endControlFlow();
+                }
+
             } else if (fieldInfo.getKind() == FieldInfo.Kind.TO_ONE) {
                 builder.beginControlFlow("if (object.$N.getTarget() != null)", fieldInfo.getName());
                 builder.addStatement("$T $N = new $T(boxStore)", serializer, serializerName, serializer);
                 builder.addStatement("json.put($S, $N.toJson(object.$N.getTarget()))", fieldInfo.getSerializedName(), serializerName, fieldInfo.getName());
-                builder.nextControlFlow("else");
-                builder.addStatement("json.put($S, null)", fieldInfo.getSerializedName());
-                builder.endControlFlow();
+
+                if (fieldInfo.isToJsonIncludeNull()) {
+                    builder.nextControlFlow("else");
+                    builder.addStatement("json.put($S, JSONObject.NULL)", fieldInfo.getSerializedName());
+                    builder.endControlFlow();
+                } else {
+                    builder.endControlFlow();
+                }
+
             } else if (fieldInfo.getKind() == FieldInfo.Kind.TO_MANY) {
-                String jsonArrayName = fieldInfo.getName() + "JSONArray";
+                builder.beginControlFlow("if (object.$N != null)", fieldInfo.getName());
                 builder.addStatement("$T $N = new $T(boxStore)", serializer, serializerName, serializer);
-                builder.addStatement("$T $N = new $T()", JSONArray.class, jsonArrayName, JSONArray.class);
-                builder.beginControlFlow("for($T item: object.$N)", fieldInfo.getRelationshipName(), fieldInfo.getName());
-                builder.addStatement("$N.put($N.toJson(item))", jsonArrayName, serializerName);
-                builder.endControlFlow();
-                builder.addStatement("json.put($S, $N)", fieldInfo.getSerializedName(), jsonArrayName);
+                builder.addStatement("json.put($S, $N.toJson(object.$N))", fieldInfo.getSerializedName(), serializerName, fieldInfo.getName());
+
+                if (fieldInfo.isToJsonIncludeNull()) {
+                    builder.nextControlFlow("else");
+                    builder.addStatement("json.put($S, JSONObject.NULL)", fieldInfo.getSerializedName());
+                    builder.endControlFlow();
+                } else {
+                    builder.endControlFlow();
+                }
             }
+
             builder.addCode("\n");
         }
 

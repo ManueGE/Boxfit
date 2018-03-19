@@ -118,11 +118,7 @@ public class JsonSerializableConverterFactory extends Converter.Factory {
     private class RequestSerializableManyConverter<T> implements Converter<List<T>, RequestBody> {
         @Override
         public RequestBody convert(List<T> value) throws IOException {
-            JSONArray jsonArray = new JSONArray();
-            for (T obj: value) {
-                JSONObject jsonObject = jsonSerializer.toJson(obj);
-                jsonArray.put(jsonObject);
-            }
+            JSONArray jsonArray = jsonSerializer.toJson(value);
             String jsonString = jsonArray.toString();
             return RequestBody.create(MediaType.parse("application/json"), jsonString);
         }
