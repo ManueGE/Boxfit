@@ -47,12 +47,7 @@ public class MainJsonSerializerGenerator extends AbstractFileGenerator {
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
 
         // Constructor
-        MethodSpec constructor = MethodSpec.constructorBuilder()
-                .addModifiers(Modifier.PUBLIC)
-                .addParameter(BoxStore.class, "boxStore")
-                .addStatement("this.$N = $N", "boxStore", "boxStore")
-                .build();
-        mainSerializerClass.addMethod(constructor);
+        mainSerializerClass.addMethod(getConstructor());
 
         // Box store field
         mainSerializerClass.addField(BoxStore.class, "boxStore", Modifier.PRIVATE);
@@ -80,6 +75,30 @@ public class MainJsonSerializerGenerator extends AbstractFileGenerator {
                 .addParameter(JSONArray.class, "jsonArray")
                 .returns(listOfObjects);
 
+        // Define to json
+        MethodSpec.Builder toJsonMethod = MethodSpec
+                .methodBuilder("toJson")
+                .addModifiers(Modifier.PUBLIC)
+                .addTypeVariable(genericParam)
+                .addParameter(genericParam, "object")
+                .returns(JSONObject.class);
+
+        // Define to json array
+        MethodSpec.Builder toJsonArrayMethod = MethodSpec
+                .methodBuilder("toJson")
+                .addModifiers(Modifier.PUBLIC)
+                .addTypeVariable(genericParam)
+                .addParameter(listOfObjects, "objects")
+                .returns(JSONArray.class)
+                .beginControlFlow("if (objects == null)")
+                .addStatement("return null")
+                .endControlFlow()
+                .addStatement("JSONArray array = new $T()", JSONArray.class)
+                .beginControlFlow("for ($T object: objects)", genericParam)
+                .addStatement("array.put(toJson(object))")
+                .endControlFlow()
+                .addStatement("return array");
+
         for (ClassInfo classInfo: classes) {
             TypeElement element = classInfo.getTypeElement();
             ClassName serializer = Utils.getSerializer(classInfo.getTypeElement());
@@ -91,16 +110,31 @@ public class MainJsonSerializerGenerator extends AbstractFileGenerator {
             serializeManyMethod.beginControlFlow("if ($T.class.isAssignableFrom(clazz))", element);
             serializeManyMethod.addStatement("return (List<T>) new $T(boxStore).serialize(jsonArray)", serializer);
             serializeManyMethod.endControlFlow();
+
+            toJsonMethod.beginControlFlow("if (object instanceof $T)", element);
+            toJsonMethod.addStatement("return new $T(boxStore).toJson(($T) object)", serializer, element);
+            toJsonMethod.endControlFlow();
         }
 
         serializeMethod.addStatement("return null");
         serializeManyMethod.addStatement("return null");
+        toJsonMethod.addStatement("return null");
 
         mainSerializerClass.addMethod(getConverterFactoryMethod());
         mainSerializerClass.addMethod(serializeMethod.build());
         mainSerializerClass.addMethod(serializeManyMethod.build());
+        mainSerializerClass.addMethod(toJsonMethod.build());
+        mainSerializerClass.addMethod(toJsonArrayMethod.build());
 
         return mainSerializerClass.build();
+    }
+
+    private MethodSpec getConstructor() {
+        return MethodSpec.constructorBuilder()
+                .addModifiers(Modifier.PUBLIC)
+                .addParameter(BoxStore.class, "boxStore")
+                .addStatement("this.$N = $N", "boxStore", "boxStore")
+                .build();
     }
 
     private MethodSpec getConverterFactoryMethod() {

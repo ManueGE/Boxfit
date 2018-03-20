@@ -16,4 +16,11 @@ public interface Transformer<O, T> {
      * @return The transformed object
      */
     T transform(O object);
+
+    /**
+     * Take tha value of a class `T` and transforms it into a object of the class `O`
+     * @param object the object to be transformed
+     * @return The transformed object
+     */
+    O inverseTransform(T object);
 }

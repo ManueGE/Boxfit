@@ -11,4 +11,9 @@ public class IdentityTransformer<T> implements Transformer<T, T> {
     public T transform(T object) {
         return object;
     }
+
+    @Override
+    public T inverseTransform(T object) {
+        return object;
+    }
 }

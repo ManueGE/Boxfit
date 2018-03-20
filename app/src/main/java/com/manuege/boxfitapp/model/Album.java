@@ -2,6 +2,7 @@ package com.manuege.boxfitapp.model;
 
 import com.manuege.boxfit.annotations.JsonSerializable;
 import com.manuege.boxfit.annotations.JsonSerializableField;
+import com.manuege.boxfit.annotations.ToJsonIncludeNull;
 import com.manuege.boxfitapp.transformers.AlbumJSONTransformer;
 
 import io.objectbox.annotation.Entity;
@@ -27,9 +28,11 @@ public class Album {
     @JsonSerializableField
     Integer year;
 
+    @ToJsonIncludeNull
     @JsonSerializableField
     Integer rate;
 
+    @ToJsonIncludeNull
     @JsonSerializableField
     ToOne<Artist> artist;
 

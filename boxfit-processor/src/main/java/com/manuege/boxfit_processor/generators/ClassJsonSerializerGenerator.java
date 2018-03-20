@@ -59,7 +59,8 @@ public class ClassJsonSerializerGenerator extends AbstractFileGenerator {
                 .addMethod(getIdFromObjectMethod())
                 .addMethod(getJsonObjectFromIdMethod())
                 .addMethod(getExistingObjectMethod())
-                .addMethod(getExistingObjectsMethod());
+                .addMethod(getExistingObjectsMethod())
+                .addMethod(getToJsonMethod());
 
         if (classInfo.getTransformer() != null) {
             serializerClass.addMethod(getTransformedJsonMethod());
@@ -294,6 +295,113 @@ public class ClassJsonSerializerGenerator extends AbstractFileGenerator {
                 .addParameter(JSONObject.class, "object")
                 .returns(JSONObject.class)
                 .addStatement("return new $T().transform(object)", classInfo.getTransformer());
+
+        return builder.build();
+    }
+
+    private MethodSpec getToJsonMethod() {
+        MethodSpec.Builder builder = MethodSpec.methodBuilder("toJson")
+                .addModifiers(Modifier.PUBLIC)
+                .addParameter(getEntityTypeName(), "object")
+                .returns(JSONObject.class);
+
+        builder.addStatement("$T json = new $T()", JSONObject.class, JSONObject.class);
+        builder.beginControlFlow("try");
+
+        for (FieldInfo fieldInfo: classInfo.getFields()) {
+            if (fieldInfo.isToJsonIgnore()) {
+                continue;
+            }
+
+            TypeName serializer = fieldInfo.getRelationshipSerializerName();
+            String serializerName = fieldInfo.getName() + "Serializer";
+
+            if (fieldInfo.getKind() == FieldInfo.Kind.NORMAL) {
+                if (fieldInfo.isPrimitive()) {
+                    builder.addStatement("json.put($S, object.$N)", fieldInfo.getSerializedName(), fieldInfo.getName());
+                } else {
+                    builder.beginControlFlow("if (object.$N != null)", fieldInfo.getName());
+                    builder.addStatement("json.put($S, object.$N)", fieldInfo.getSerializedName(), fieldInfo.getName());
+
+                    if (fieldInfo.isToJsonIncludeNull()) {
+                        builder.nextControlFlow("else");
+                        builder.addStatement("json.put($S, JSONObject.NULL)", fieldInfo.getSerializedName());
+                        builder.endControlFlow();
+                    } else {
+                        builder.endControlFlow();
+                    }
+                }
+
+            } else if (fieldInfo.getKind() == FieldInfo.Kind.TRANSFORMED) {
+                String transformerName = fieldInfo.getName() + "Transformer";
+                String transformedValueName = fieldInfo.getName() + "TransformedValue";
+                builder.addStatement("$T $N = new $T()", fieldInfo.getTransformerName(), transformerName, fieldInfo.getTransformerName());
+                builder.addStatement("$T $N = $N.inverseTransform(object.$N)", fieldInfo.getJsonFieldTypeName(), transformedValueName, transformerName, fieldInfo.getName());
+
+                builder.beginControlFlow("if ($N != null)", transformedValueName);
+                builder.addStatement("json.put($S, $N)", fieldInfo.getSerializedName(), transformedValueName);
+
+                if (fieldInfo.isToJsonIncludeNull()) {
+                    builder.nextControlFlow("else");
+                    builder.addStatement("json.put($S, JSONObject.NULL)", fieldInfo.getSerializedName());
+                    builder.endControlFlow();
+                } else {
+                    builder.endControlFlow();
+                }
+
+            } else if (fieldInfo.getKind() == FieldInfo.Kind.JSON_SERIALIZABLE) {
+                builder.beginControlFlow("if (object.$N != null)", fieldInfo.getName());
+                builder.addStatement("$T $N = new $T(boxStore)", serializer, serializerName, serializer);
+                builder.addStatement("json.put($S, $N.toJson(object.$N))", fieldInfo.getSerializedName(), serializerName, fieldInfo.getName());
+
+                if (fieldInfo.isToJsonIncludeNull()) {
+                    builder.nextControlFlow("else");
+                    builder.addStatement("json.put($S, JSONObject.NULL)", fieldInfo.getSerializedName());
+                    builder.endControlFlow();
+                } else {
+                    builder.endControlFlow();
+                }
+
+            } else if (fieldInfo.getKind() == FieldInfo.Kind.TO_ONE) {
+                builder.beginControlFlow("if (object.$N.getTarget() != null)", fieldInfo.getName());
+                builder.addStatement("$T $N = new $T(boxStore)", serializer, serializerName, serializer);
+                builder.addStatement("json.put($S, $N.toJson(object.$N.getTarget()))", fieldInfo.getSerializedName(), serializerName, fieldInfo.getName());
+
+                if (fieldInfo.isToJsonIncludeNull()) {
+                    builder.nextControlFlow("else");
+                    builder.addStatement("json.put($S, JSONObject.NULL)", fieldInfo.getSerializedName());
+                    builder.endControlFlow();
+                } else {
+                    builder.endControlFlow();
+                }
+
+            } else if (fieldInfo.getKind() == FieldInfo.Kind.TO_MANY) {
+                builder.beginControlFlow("if (object.$N != null)", fieldInfo.getName());
+                builder.addStatement("$T $N = new $T(boxStore)", serializer, serializerName, serializer);
+                builder.addStatement("json.put($S, $N.toJson(object.$N))", fieldInfo.getSerializedName(), serializerName, fieldInfo.getName());
+
+                if (fieldInfo.isToJsonIncludeNull()) {
+                    builder.nextControlFlow("else");
+                    builder.addStatement("json.put($S, JSONObject.NULL)", fieldInfo.getSerializedName());
+                    builder.endControlFlow();
+                } else {
+                    builder.endControlFlow();
+                }
+            }
+
+            builder.addCode("\n");
+        }
+
+        if (classInfo.getTransformer() != null) {
+            builder.addStatement("$T transformer = new $T()", classInfo.getTransformer(), classInfo.getTransformer());
+            builder.addStatement("json = transformer.inverseTransform(json)");
+        }
+
+        builder.addStatement("return json")
+                .endControlFlow()
+                .beginControlFlow("catch($T ignored)", JSONException.class)
+                .addStatement("return null")
+                .endControlFlow();
 
         return builder.build();
     }

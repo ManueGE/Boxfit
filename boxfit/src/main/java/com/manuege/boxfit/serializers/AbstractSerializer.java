@@ -146,4 +146,13 @@ public abstract class AbstractSerializer<Entity, Id> {
     protected JSONObject getTransformedJSONObject(JSONObject object) {
         return object;
     }
+
+    abstract public JSONObject toJson(Entity object);
+    public JSONArray toJson(List<Entity> objects) {
+        JSONArray array = new JSONArray();
+        for (Entity object: objects) {
+            array.put(toJson(object));
+        }
+        return array;
+    }
 }

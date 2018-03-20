@@ -13,6 +13,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Converter;
@@ -34,10 +35,7 @@ public class JsonSerializableConverterFactory extends Converter.Factory {
     public Converter<ResponseBody, ?> responseBodyConverter(Type type, Annotation[] annotations, Retrofit retrofit) {
         if (typeIsJsonSerializable(type)) {
             return new ResponseSerializableConverter((Class<?>) type);
-        } else if (type instanceof ParameterizedType &&
-                ((ParameterizedType) type).getRawType() instanceof Class &&
-                List.class.isAssignableFrom((Class<?>) ((ParameterizedType) type).getRawType()) &&
-                typeIsJsonSerializable(((ParameterizedType) type).getActualTypeArguments()[0])) {
+        } else if (typeIsListOfJsonSerializable(type)) {
             return new ResponseSerializableManyConverter((Class<?>) ((ParameterizedType) type).getActualTypeArguments()[0]);
         }
         return null;
@@ -45,7 +43,19 @@ public class JsonSerializableConverterFactory extends Converter.Factory {
 
     @Override
     public Converter<?, RequestBody> requestBodyConverter(Type type, Annotation[] parameterAnnotations, Annotation[] methodAnnotations, Retrofit retrofit) {
-        return super.requestBodyConverter(type, parameterAnnotations, methodAnnotations, retrofit);
+        if (typeIsJsonSerializable(type)) {
+            return new RequestSerializableConverter<>();
+        } else if (typeIsListOfJsonSerializable(type)) {
+            return new RequestSerializableManyConverter<>();
+        }
+        return null;
+    }
+
+    private boolean typeIsListOfJsonSerializable(Type type) {
+        return (type instanceof ParameterizedType &&
+                ((ParameterizedType) type).getRawType() instanceof Class &&
+                List.class.isAssignableFrom((Class<?>) ((ParameterizedType) type).getRawType()) &&
+                typeIsJsonSerializable(((ParameterizedType) type).getActualTypeArguments()[0]));
     }
 
     private boolean typeIsJsonSerializable(Type type) {
@@ -93,6 +103,24 @@ public class JsonSerializableConverterFactory extends Converter.Factory {
             } catch (JSONException e) {
                 return null;
             }
+        }
+    }
+
+    private class RequestSerializableConverter<T> implements Converter<T, RequestBody> {
+        @Override
+        public RequestBody convert(T value) throws IOException {
+            JSONObject jsonObject = jsonSerializer.toJson(value);
+            String jsonString = jsonObject.toString();
+            return RequestBody.create(MediaType.parse("application/json"), jsonString);
+        }
+    }
+
+    private class RequestSerializableManyConverter<T> implements Converter<List<T>, RequestBody> {
+        @Override
+        public RequestBody convert(List<T> value) throws IOException {
+            JSONArray jsonArray = jsonSerializer.toJson(value);
+            String jsonString = jsonArray.toString();
+            return RequestBody.create(MediaType.parse("application/json"), jsonString);
         }
     }
 }

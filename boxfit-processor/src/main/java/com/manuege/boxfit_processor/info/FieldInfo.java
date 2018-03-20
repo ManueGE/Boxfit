@@ -3,6 +3,8 @@ package com.manuege.boxfit_processor.info;
 import com.manuege.boxfit.annotations.IdentityTransformer;
 import com.manuege.boxfit.annotations.JsonSerializable;
 import com.manuege.boxfit.annotations.JsonSerializableField;
+import com.manuege.boxfit.annotations.ToJsonIgnore;
+import com.manuege.boxfit.annotations.ToJsonIncludeNull;
 import com.manuege.boxfit.constants.Constants;
 import com.manuege.boxfit.transformers.Transformer;
 import com.manuege.boxfit_processor.errors.InvalidElementException;
@@ -42,9 +44,12 @@ public class FieldInfo {
     }
 
     private boolean isPrimaryKey;
+    private boolean isPrimitive;
     private String name;
     private String serializedName;
     private Kind kind;
+    private boolean toJsonIncludeNull;
+    private boolean toJsonIgnore;
 
     // Typename representing the type of the field
     private TypeName typeName;
@@ -88,7 +93,8 @@ public class FieldInfo {
         fieldInfo.classInfo = classInfo;
 
         TypeMirror typeMirror = element.asType();
-        if (typeMirror.getKind().isPrimitive()) {
+        fieldInfo.isPrimitive = typeMirror.getKind().isPrimitive();
+        if (fieldInfo.isPrimitive) {
             fieldInfo.typeName = TypeName.get(typeMirror).box();
         } else {
             fieldInfo.typeName = TypeName.get(typeMirror);
@@ -97,6 +103,8 @@ public class FieldInfo {
         fieldInfo.kind = Kind.NORMAL;
         fieldInfo.name = element.getSimpleName().toString();
         fieldInfo.jsonFieldTypeName = fieldInfo.getTypeName();
+        fieldInfo.toJsonIgnore = (element.getAnnotation(ToJsonIgnore.class) != null);
+        fieldInfo.toJsonIncludeNull = (element.getAnnotation(ToJsonIncludeNull.class) != null);
 
         // Primary key
         Id id = element.getAnnotation(Id.class);
@@ -182,6 +190,17 @@ public class FieldInfo {
         return isPrimaryKey;
     }
 
+    public boolean isPrimitive() {
+        return isPrimitive;
+    }
+
+    public boolean isToJsonIncludeNull() {
+        return toJsonIncludeNull;
+    }
+
+    public boolean isToJsonIgnore() {
+        return toJsonIgnore;
+    }
 
     public String getSerializedName() {
         return serializedName;
