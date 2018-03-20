@@ -136,7 +136,7 @@ public class FieldInfo {
                     TypeElement typeElement = (TypeElement) typeUtil.asElement(mirror);
                     for (TypeMirror interfaceMirror : typeElement.getInterfaces()) {
                         if (TypeName.get(interfaceMirror).toString().startsWith(TypeName.get(Transformer.class).toString())) {
-                            TypeMirror genericType = Utils.getGenericType(interfaceMirror, 0);
+                            TypeMirror genericType = Utils.getGenericType(interfaceMirror, 1);
                             fieldInfo.jsonFieldTypeName = TypeName.get(genericType);
                             found = true;
                             break;

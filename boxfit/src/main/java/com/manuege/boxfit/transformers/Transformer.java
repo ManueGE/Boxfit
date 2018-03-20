@@ -6,10 +6,10 @@ package com.manuege.boxfit.transformers;
 
 /**
  * A interface that take a value of one class anf transform it into a value of another class
- * @param <O> The class of the original value
  * @param <T> The class of the transformed value
+ * @param <O> The class of the original value
  */
-public interface Transformer<O, T> {
+public interface Transformer<T, O> {
     /**
      * Take tha value of a class `O` and transforms it into a object of the class `T`
      * @param object the object to be transformed
