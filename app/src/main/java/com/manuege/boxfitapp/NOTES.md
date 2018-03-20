@@ -1,8 +1,6 @@
 # NOTES:
 
 ## To do
-- rename serialize to fromJson
-- reuse serializers instead of creating one and another. Add boxstore as function parameter instead of instance parameter
 - reuse transformers
 
 ## Known issues
