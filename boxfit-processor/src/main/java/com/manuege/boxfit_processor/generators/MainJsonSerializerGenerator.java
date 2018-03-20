@@ -57,7 +57,7 @@ public class MainJsonSerializerGenerator extends AbstractFileGenerator {
 
         // Define single serializer
         MethodSpec.Builder serializeMethod = MethodSpec
-                .methodBuilder("serialize")
+                .methodBuilder("fromJson")
                 .addModifiers(Modifier.PUBLIC)
                 .addTypeVariable(genericParam)
                 .addParameter(Class.class, "clazz")
@@ -68,7 +68,7 @@ public class MainJsonSerializerGenerator extends AbstractFileGenerator {
         ClassName list = ClassName.get("java.util", "List");
         TypeName listOfObjects = ParameterizedTypeName.get(list, genericParam);
         MethodSpec.Builder serializeManyMethod = MethodSpec
-                .methodBuilder("serialize")
+                .methodBuilder("fromJson")
                 .addModifiers(Modifier.PUBLIC)
                 .addTypeVariable(genericParam)
                 .addParameter(Class.class, "clazz")

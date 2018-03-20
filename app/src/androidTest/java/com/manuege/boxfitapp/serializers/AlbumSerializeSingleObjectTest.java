@@ -26,7 +26,7 @@ public class AlbumSerializeSingleObjectTest extends AbstractObjectBoxTest {
     public void albumSerializer_serializeNewObject() throws Exception {
         JSONObject object = JsonProvider.getJSONObject("full_album.json");
         MainJsonSerializer mainSerializer = new MainJsonSerializer(boxStore);
-        Album album = mainSerializer.serialize(Album.class, object);
+        Album album = mainSerializer.fromJson(Album.class, object);
 
         assertEquals(1, boxStore.boxFor(Album.class).getAll().size());
         assertEquals(1, boxStore.boxFor(Artist.class).getAll().size());
@@ -62,12 +62,12 @@ public class AlbumSerializeSingleObjectTest extends AbstractObjectBoxTest {
     public void albumSerializer_serializeExistingObject() throws Exception {
         MainJsonSerializer serializer = new MainJsonSerializer(boxStore);
         JSONObject first_json = JsonProvider.getJSONObject("full_album.json");
-        serializer.serialize(Album.class, first_json);
+        serializer.fromJson(Album.class, first_json);
 
         JSONObject second_json = JsonProvider.getJSONObject("full_album_2.json");
-        serializer.serialize(Album.class, second_json);
+        serializer.fromJson(Album.class, second_json);
 
-        Album album = serializer.serialize(Album.class, second_json);
+        Album album = serializer.fromJson(Album.class, second_json);
 
         assertEquals(1, boxStore.boxFor(Album.class).getAll().size());
         assertEquals(1, boxStore.boxFor(Artist.class).getAll().size());
@@ -103,12 +103,12 @@ public class AlbumSerializeSingleObjectTest extends AbstractObjectBoxTest {
     public void albumSerializer_partialUpdateObjects() throws Exception {
         MainJsonSerializer serializer = new MainJsonSerializer(boxStore);
         JSONObject first_json = JsonProvider.getJSONObject("full_album.json");
-        serializer.serialize(Album.class, first_json);
+        serializer.fromJson(Album.class, first_json);
 
         JSONObject second_json = JsonProvider.getJSONObject("partial_album.json");
-        serializer.serialize(Album.class, second_json);
+        serializer.fromJson(Album.class, second_json);
 
-        Album album = serializer.serialize(Album.class, second_json);
+        Album album = serializer.fromJson(Album.class, second_json);
 
         assertEquals(1, boxStore.boxFor(Album.class).getAll().size());
         assertEquals(1, boxStore.boxFor(Artist.class).getAll().size());
@@ -140,7 +140,7 @@ public class AlbumSerializeSingleObjectTest extends AbstractObjectBoxTest {
     public void albumSerializer_relationsWithIds() throws Exception {
         MainJsonSerializer serializer = new MainJsonSerializer(boxStore);
         JSONObject json = JsonProvider.getJSONObject("album_with_properties_with_id.json");
-        Album album = serializer.serialize(Album.class, json);
+        Album album = serializer.fromJson(Album.class, json);
         assertEquals(3, album.getArtist().getTarget().getId());
         assertNull(album.getArtist().getTarget().getName());
 
@@ -163,7 +163,7 @@ public class AlbumSerializeSingleObjectTest extends AbstractObjectBoxTest {
 
         MainJsonSerializer serializer = new MainJsonSerializer(boxStore);
         JSONObject json = JsonProvider.getJSONObject("album_with_properties_with_id.json");
-        Album album = serializer.serialize(Album.class, json);
+        Album album = serializer.fromJson(Album.class, json);
 
         assertEquals(3, album.getArtist().getTarget().getId());
         assertEquals("Los Planetas", album.getArtist().getTarget().getName());
@@ -178,7 +178,7 @@ public class AlbumSerializeSingleObjectTest extends AbstractObjectBoxTest {
     public void albumSerializer_canAutoConvertStringInNumbersAndViceVersa() throws Exception {
         MainJsonSerializer serializer = new MainJsonSerializer(boxStore);
         JSONObject json = JsonProvider.getJSONObject("album_wrong_property_types.json");
-        Album album = serializer.serialize(Album.class, json);
+        Album album = serializer.fromJson(Album.class, json);
 
         assertEquals("4", album.getName());
         assertTrue(2003 == album.getYear());
@@ -209,7 +209,7 @@ public class AlbumSerializeSingleObjectTest extends AbstractObjectBoxTest {
 
         MainJsonSerializer serializer = new MainJsonSerializer(boxStore);
         JSONObject json = JsonProvider.getJSONObject("album_with_nil_properties.json");
-        album = serializer.serialize(Album.class, json);
+        album = serializer.fromJson(Album.class, json);
 
         assertNull(album.getName());
         assertNull(album.getYear());
@@ -222,7 +222,7 @@ public class AlbumSerializeSingleObjectTest extends AbstractObjectBoxTest {
     public void albumSerializer_serializeAlbumThatNeedsConversion() throws Exception {
         MainJsonSerializer serializer = new MainJsonSerializer(boxStore);
         JSONObject json = JsonProvider.getJSONObject("album_that_needs_conversion.json");
-        Album album = serializer.serialize(Album.class, json);
+        Album album = serializer.fromJson(Album.class, json);
         assertEquals(1, album.getId());
         assertEquals("Alta Suciedad", album.getName());
     }

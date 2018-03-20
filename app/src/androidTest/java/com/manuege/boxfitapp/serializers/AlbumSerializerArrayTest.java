@@ -25,7 +25,7 @@ public class AlbumSerializerArrayTest extends AbstractObjectBoxTest {
         JSONObject object = JsonProvider.getJSONObject("album_paginated_response.json");
         JSONArray array = new Json(object).getJSONArray("results");
         MainJsonSerializer serializer = new MainJsonSerializer(boxStore);
-        List<Album> objects = serializer.serialize(Album.class, array);
+        List<Album> objects = serializer.fromJson(Album.class, array);
 
         assertEquals(3, boxStore.boxFor(Album.class).count());
         assertEquals(2, boxStore.boxFor(Artist.class).count());
