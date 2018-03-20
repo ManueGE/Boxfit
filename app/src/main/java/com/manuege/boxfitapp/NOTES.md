@@ -1,14 +1,13 @@
 # NOTES:
 
 ## To do
-- reuse transformers
 
 ## Known issues
 - Lists must be initialized (ToMany already does it)
 
 ## Code generation checks
 - disallow JsonSerializable in generic classes, but allow it in its concrete subclasses.
-- Transformers must have empty initializer
+- Transformers must have a public empty initializer
 - Transformer can be added just to properties, no relationships
 - Make distinction between primary types (must have a default value) and classes (don't need it)
 - Just strings and longs valid as PK
