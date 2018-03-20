@@ -35,7 +35,7 @@ public abstract class AbstractSerializer<Entity, Id> {
             return null;
         }
         else if ((jsonObject = json.getJSONObject(key)) != null) {
-            return serialize(jsonObject);
+            return fromJson(jsonObject);
         } else if ((id = getId(json, key)) != null) {
             return serialize(id);
         }
@@ -44,10 +44,10 @@ public abstract class AbstractSerializer<Entity, Id> {
 
     private Entity serialize(Id id) {
         JSONObject jsonObject = getJSONObject(id);
-        return serialize(jsonObject);
+        return fromJson(jsonObject);
     }
 
-    public Entity serialize(JSONObject jsonObject) {
+    public Entity fromJson(JSONObject jsonObject) {
         jsonObject = getTransformedJSONObject(jsonObject);
         Json json = new Json(jsonObject);
         Id id = getId(json);
@@ -71,7 +71,7 @@ public abstract class AbstractSerializer<Entity, Id> {
         return object;
     }
 
-    public List<Entity> serialize(JSONArray array) {
+    public List<Entity> fromJson(JSONArray array) {
         JsonArray jsonArray = new JsonArray(array);
 
         // Get ids

@@ -135,7 +135,7 @@ public class ClassJsonSerializerGenerator extends AbstractFileGenerator {
         builder.beginControlFlow("if (jsonArray != null)");
         TypeName serializer = fieldInfo.getRelationshipSerializerName();
         builder.addStatement("$T serializer = new $T(boxStore)", serializer, serializer);
-        builder.addStatement("$T<$T> property = serializer.serialize(jsonArray)", List.class, fieldInfo.getRelationshipName());
+        builder.addStatement("$T<$T> property = serializer.fromJson(jsonArray)", List.class, fieldInfo.getRelationshipName());
         builder.addStatement("object.$N.addAll(property)", fieldInfo.getName());
         builder.endControlFlow();
     }
