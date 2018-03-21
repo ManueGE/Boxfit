@@ -21,13 +21,8 @@ import io.objectbox.BoxStore;
  * @param <Id> The class of the primary key of the objects that will be serialized.
  */
 public abstract class AbstractSerializer<Entity, Id> {
-    protected BoxStore boxStore;
 
-    public AbstractSerializer(BoxStore boxStore) {
-        this.boxStore = boxStore;
-    }
-
-    public Entity serializeRelationship(Json json, String key) {
+    public Entity serializeRelationship(Json json, String key, BoxStore boxStore) {
         Object value = json.get(key);
         JSONObject jsonObject;
         Id id;
@@ -35,43 +30,46 @@ public abstract class AbstractSerializer<Entity, Id> {
             return null;
         }
         else if ((jsonObject = json.getJSONObject(key)) != null) {
-            return serialize(jsonObject);
+            return fromJson(jsonObject, boxStore);
         } else if ((id = getId(json, key)) != null) {
-            return serialize(id);
+            return serialize(id, boxStore);
         }
         return null;
     }
 
-    private Entity serialize(Id id) {
+    private Entity serialize(Id id, BoxStore boxStore) {
         JSONObject jsonObject = getJSONObject(id);
-        return serialize(jsonObject);
+        return fromJson(jsonObject, boxStore);
     }
 
-    public Entity serialize(JSONObject jsonObject) {
+    public Entity fromJson(JSONObject jsonObject, BoxStore boxStore) {
+        Box<Entity> box = getBox(boxStore);
         jsonObject = getTransformedJSONObject(jsonObject);
         Json json = new Json(jsonObject);
         Id id = getId(json);
 
         Entity object;
-        if (getBox() != null) {
-            object = getExistingObject(id);
+
+        if (box != null) {
+            object = getExistingObject(id, boxStore);
             if (object == null) {
                 object = createFreshObject(id);
-                getBox().put(object);
+                box.put(object);
             }
         } else {
             object = createFreshObject(null);
         }
 
-        merge(json, object);
-        if (getBox() != null) {
-            getBox().put(object);
+        merge(json, object, boxStore);
+        if (box != null) {
+            box.put(object);
         }
 
         return object;
     }
 
-    public List<Entity> serialize(JSONArray array) {
+    public List<Entity> fromJson(JSONArray array, BoxStore boxStore) {
+        Box<Entity> box = getBox(boxStore);
         JsonArray jsonArray = new JsonArray(array);
 
         // Get ids
@@ -104,8 +102,8 @@ public abstract class AbstractSerializer<Entity, Id> {
 
         // Store objects by its id
         HashMap<Id, Entity> existingObjectsById = new HashMap<>();
-        if (getBox() != null) {
-            List<Entity> existingObjects = getExistingObjects(ids);
+        if (box != null) {
+            List<Entity> existingObjects = getExistingObjects(ids, boxStore);
             for (Entity existingObject : existingObjects) {
                 existingObjectsById.put(getId(existingObject), existingObject);
             }
@@ -118,31 +116,31 @@ public abstract class AbstractSerializer<Entity, Id> {
             Entity object = existingObjectsById.get(id);
             if (object == null) {
                 object = createFreshObject(id);
-                if (getBox() != null) {
-                    getBox().put(object);
+                if (box != null) {
+                    box.put(object);
                 }
             }
-            merge(json, object);
+            merge(json, object, boxStore);
             objects.add(object);
         }
 
-        if (getBox() != null) {
-            getBox().put(objects);
+        if (box != null) {
+            box.put(objects);
         }
 
         return objects;
     }
 
-    abstract protected void merge(Json json, Entity object);
-    abstract protected Box<Entity> getBox();
+    abstract protected void merge(Json json, Entity object, BoxStore boxStore);
+    abstract protected Box<Entity> getBox(BoxStore boxStore);
     abstract protected Entity createFreshObject(Id id);
     abstract protected Id getId(Json json);
     abstract protected Id getId(Json json, String key);
     abstract protected Id getId(JsonArray array, int index);
     abstract protected Id getId(Entity object);
     abstract protected JSONObject getJSONObject(Id id);
-    abstract protected Entity getExistingObject(Id id);
-    abstract protected List<Entity> getExistingObjects(List<Id> ids);
+    abstract protected Entity getExistingObject(Id id, BoxStore boxStore);
+    abstract protected List<Entity> getExistingObjects(List<Id> ids, BoxStore boxStore);
     protected JSONObject getTransformedJSONObject(JSONObject object) {
         return object;
     }

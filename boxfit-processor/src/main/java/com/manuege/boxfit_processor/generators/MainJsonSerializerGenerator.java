@@ -56,8 +56,8 @@ public class MainJsonSerializerGenerator extends AbstractFileGenerator {
         TypeVariableName genericParam = TypeVariableName.get("T");
 
         // Define single serializer
-        MethodSpec.Builder serializeMethod = MethodSpec
-                .methodBuilder("serialize")
+        MethodSpec.Builder fromJsonMethod = MethodSpec
+                .methodBuilder("fromJson")
                 .addModifiers(Modifier.PUBLIC)
                 .addTypeVariable(genericParam)
                 .addParameter(Class.class, "clazz")
@@ -67,8 +67,8 @@ public class MainJsonSerializerGenerator extends AbstractFileGenerator {
         // Define many serializer
         ClassName list = ClassName.get("java.util", "List");
         TypeName listOfObjects = ParameterizedTypeName.get(list, genericParam);
-        MethodSpec.Builder serializeManyMethod = MethodSpec
-                .methodBuilder("serialize")
+        MethodSpec.Builder fromJsonArrayMethod = MethodSpec
+                .methodBuilder("fromJson")
                 .addModifiers(Modifier.PUBLIC)
                 .addTypeVariable(genericParam)
                 .addParameter(Class.class, "clazz")
@@ -103,26 +103,26 @@ public class MainJsonSerializerGenerator extends AbstractFileGenerator {
             TypeElement element = classInfo.getTypeElement();
             ClassName serializer = Utils.getSerializer(classInfo.getTypeElement());
 
-            serializeMethod.beginControlFlow("if ($T.class.isAssignableFrom(clazz))", element);
-            serializeMethod.addStatement("return (T) new $T(boxStore).serialize(jsonObject)", serializer);
-            serializeMethod.endControlFlow();
+            fromJsonMethod.beginControlFlow("if ($T.class.isAssignableFrom(clazz))", element);
+            fromJsonMethod.addStatement("return (T) $T.getInstance().fromJson(jsonObject, boxStore)", serializer);
+            fromJsonMethod.endControlFlow();
 
-            serializeManyMethod.beginControlFlow("if ($T.class.isAssignableFrom(clazz))", element);
-            serializeManyMethod.addStatement("return (List<T>) new $T(boxStore).serialize(jsonArray)", serializer);
-            serializeManyMethod.endControlFlow();
+            fromJsonArrayMethod.beginControlFlow("if ($T.class.isAssignableFrom(clazz))", element);
+            fromJsonArrayMethod.addStatement("return (List<T>) $T.getInstance().fromJson(jsonArray, boxStore)", serializer);
+            fromJsonArrayMethod.endControlFlow();
 
             toJsonMethod.beginControlFlow("if (object instanceof $T)", element);
-            toJsonMethod.addStatement("return new $T(boxStore).toJson(($T) object)", serializer, element);
+            toJsonMethod.addStatement("return $T.getInstance().toJson(($T) object)", serializer, element);
             toJsonMethod.endControlFlow();
         }
 
-        serializeMethod.addStatement("return null");
-        serializeManyMethod.addStatement("return null");
+        fromJsonMethod.addStatement("return null");
+        fromJsonArrayMethod.addStatement("return null");
         toJsonMethod.addStatement("return null");
 
         mainSerializerClass.addMethod(getConverterFactoryMethod());
-        mainSerializerClass.addMethod(serializeMethod.build());
-        mainSerializerClass.addMethod(serializeManyMethod.build());
+        mainSerializerClass.addMethod(fromJsonMethod.build());
+        mainSerializerClass.addMethod(fromJsonArrayMethod.build());
         mainSerializerClass.addMethod(toJsonMethod.build());
         mainSerializerClass.addMethod(toJsonArrayMethod.build());
 

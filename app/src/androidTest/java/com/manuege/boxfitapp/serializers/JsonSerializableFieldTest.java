@@ -20,7 +20,7 @@ public class JsonSerializableFieldTest extends AbstractObjectBoxTest {
     public void jsonSerializableField_canSerialize() {
         JSONObject jsonObject = JsonProvider.getJSONObject("single_album_response.json");
         MainJsonSerializer serializer = new MainJsonSerializer(boxStore);
-        SingleAlbumResponse object = serializer.serialize(SingleAlbumResponse.class, jsonObject);
+        SingleAlbumResponse object = serializer.fromJson(SingleAlbumResponse.class, jsonObject);
 
         assertEquals(1, boxStore.boxFor(Album.class).count());
 

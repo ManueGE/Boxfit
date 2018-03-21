@@ -7,6 +7,7 @@ import com.manuege.boxfit.annotations.ToJsonIgnore;
 import com.manuege.boxfit.annotations.ToJsonIncludeNull;
 import com.manuege.boxfit.constants.Constants;
 import com.manuege.boxfit.transformers.Transformer;
+import com.manuege.boxfit_processor.errors.ErrorLogger;
 import com.manuege.boxfit_processor.errors.InvalidElementException;
 import com.manuege.boxfit_processor.processor.Enviroment;
 import com.squareup.javapoet.ClassName;
@@ -14,7 +15,11 @@ import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeVariableName;
 
+import java.util.ArrayList;
+
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.MirroredTypeException;
@@ -50,6 +55,8 @@ public class FieldInfo {
     private Kind kind;
     private boolean toJsonIncludeNull;
     private boolean toJsonIgnore;
+
+    private Element element;
 
     // Typename representing the type of the field
     private TypeName typeName;
@@ -90,6 +97,7 @@ public class FieldInfo {
 
         // Basic info
         FieldInfo fieldInfo = new FieldInfo();
+        fieldInfo.element = element;
         fieldInfo.classInfo = classInfo;
 
         TypeMirror typeMirror = element.asType();
@@ -136,7 +144,7 @@ public class FieldInfo {
                     TypeElement typeElement = (TypeElement) typeUtil.asElement(mirror);
                     for (TypeMirror interfaceMirror : typeElement.getInterfaces()) {
                         if (TypeName.get(interfaceMirror).toString().startsWith(TypeName.get(Transformer.class).toString())) {
-                            TypeMirror genericType = Utils.getGenericType(interfaceMirror, 0);
+                            TypeMirror genericType = Utils.getGenericType(interfaceMirror, 1);
                             fieldInfo.jsonFieldTypeName = TypeName.get(genericType);
                             found = true;
                             break;
@@ -183,6 +191,7 @@ public class FieldInfo {
             }
         }
 
+        fieldInfo.validate();
         return fieldInfo;
     }
 
@@ -236,5 +245,42 @@ public class FieldInfo {
 
     public String getJsonGetterMethodName() {
         return Utils.getJsonGetterMethodName(getJsonFieldTypeName());
+    }
+
+    private void validate() {
+        ensureTransformerHaveEmptySerializer();
+        transformersDoesNotHaveEffectInRelationships();
+    }
+
+    private void ensureTransformerHaveEmptySerializer() {
+        if (transformerName == null) {
+            return;
+        }
+
+        ArrayList<ExecutableElement> constructors = new ArrayList<>();
+        TypeElement transformer = Enviroment.getEnvironment().getElementUtils().getTypeElement(transformerName.toString());
+        for (Element e: transformer.getEnclosedElements()) {
+            if (e.getKind() == ElementKind.CONSTRUCTOR) {
+                constructors.add((ExecutableElement) e);
+            }
+        }
+
+        if (constructors.size() == 0) {
+            return;
+        }
+
+        for (ExecutableElement c : constructors) {
+            if (c.getParameters().size() == 0 && c.getModifiers().contains(Modifier.PUBLIC)) {
+                return;
+            }
+        }
+
+        ErrorLogger.putError(String.format("%s must have a public constructor with no arguments", transformer.getSimpleName()), transformer);
+    }
+
+    private void transformersDoesNotHaveEffectInRelationships() {
+        if (transformerName != null && getKind() != Kind.TRANSFORMED) {
+            ErrorLogger.putWarning("Transformer doesn't have effect in relationships fields", element);
+        }
     }
 }

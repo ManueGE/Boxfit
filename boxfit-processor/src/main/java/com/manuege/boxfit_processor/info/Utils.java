@@ -38,7 +38,7 @@ public class Utils {
         return elementName + "Serializer";
     }
 
-    public static TypeMirror getGenericType(final TypeMirror type, int index) {
+    public static TypeMirror getGenericType(final TypeMirror type, final int index) {
         final TypeMirror[] result = { null };
 
         type.accept(new SimpleTypeVisitor6<Void, Void>() {
@@ -46,7 +46,7 @@ public class Utils {
             public Void visitDeclared(DeclaredType declaredType, Void v) {
                 List<? extends TypeMirror> typeArguments = declaredType.getTypeArguments();
                 if (!typeArguments.isEmpty()) {
-                    result[0] = typeArguments.get(0);
+                    result[0] = typeArguments.get(index);
                 }
                 return null;
             }
@@ -72,7 +72,7 @@ public class Utils {
             }
         }, null);
 
-        return result[index];
+        return result[0];
     }
 
     private static HashMap<Class, String> classesAndMethods;

@@ -11,7 +11,8 @@ import java.util.Locale;
  * Created by Manu on 31/1/18.
  */
 
-public abstract class StringToDateTransformer implements Transformer<String, Date> {
+public abstract class StringToDateTransformer implements Transformer<Date, String> {
+
     @Override
     public Date transform(String object) {
         try {

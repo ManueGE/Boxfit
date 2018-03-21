@@ -80,7 +80,7 @@ public class JsonSerializableConverterFactory extends Converter.Factory {
             String jsonString = value.string();
             try {
                 JSONObject jsonObject = new JSONObject(jsonString);
-                return jsonSerializer.serialize(clazz, jsonObject);
+                return jsonSerializer.fromJson(clazz, jsonObject);
             } catch (JSONException e) {
                 return null;
             }
@@ -99,7 +99,7 @@ public class JsonSerializableConverterFactory extends Converter.Factory {
             String jsonString = value.string();
             try {
                 JSONArray jsonArray = new JSONArray(jsonString);
-                return jsonSerializer.serialize(clazz, jsonArray);
+                return jsonSerializer.fromJson(clazz, jsonArray);
             } catch (JSONException e) {
                 return null;
             }
