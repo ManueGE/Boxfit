@@ -19,132 +19,104 @@ public class Json {
         return jsonObject.has(key);
     }
 
+    private boolean isNull(String key) {
+        return jsonObject.isNull(key);
+    }
+
     // String
-    public String getString(String key, String defaultValue) {
-        if (jsonObject.isNull(key)) {
-            return defaultValue;
+    public String getString(String key) {
+        if (isNull(key)) {
+            return null;
         }
         try {
             return jsonObject.getString(key);
         } catch (JSONException e) {
-            return defaultValue;
+            return null;
         }
     }
 
-    public String getString(String key) {
-        return getString(key, null);
-    }
-
     // Integer
-    public Integer getInt(String key, Integer defaultValue) {
-        if (jsonObject.isNull(key)) {
-            return defaultValue;
+    public Integer getInt(String key) {
+        if (isNull(key)) {
+            return null;
         }
         try {
             return jsonObject.getInt(key);
         } catch (JSONException e) {
-            return defaultValue;
+            return null;
         }
     }
 
-    public Integer getInt(String key) {
-        return getInt(key, null);
-    }
-
     // Bool
-    public Boolean getBoolean(String key, Boolean defaultValue) {
-        if (jsonObject.isNull(key)) {
-            return defaultValue;
+    public Boolean getBoolean(String key) {
+        if (isNull(key)) {
+            return null;
         }
         try {
             return jsonObject.getBoolean(key);
         } catch (JSONException e) {
-            return defaultValue;
+            return null;
         }
     }
 
-    public Boolean getBoolean(String key) {
-        return getBoolean(key, null);
-    }
-
     // Double
-    public Double getDouble(String key, Double defaultValue) {
-        if (jsonObject.isNull(key)) {
-            return defaultValue;
+    public Double getDouble(String key) {
+        if (isNull(key)) {
+            return null;
         }
         try {
             return jsonObject.getDouble(key);
         } catch (JSONException e) {
-            return defaultValue;
+            return null;
         }
     }
 
-    public Double getDouble(String key) {
-        return getDouble(key, null);
-    }
-
     // Long
-    public Long getLong(String key, Long defaultValue) {
-        if (jsonObject.isNull(key)) {
-            return defaultValue;
+    public Long getLong(String key) {
+        if (isNull(key)) {
+            return null;
         }
         try {
             return jsonObject.getLong(key);
         } catch (JSONException e) {
-            return defaultValue;
+            return null;
         }
-    }
-
-    public Long getLong(String key) {
-        return getLong(key, null);
     }
     
     // JSONObject
-    public JSONObject getJSONObject(String key, JSONObject defaultValue) {
-        if (jsonObject.isNull(key)) {
-            return defaultValue;
+    public JSONObject getJSONObject(String key) {
+        if (isNull(key)) {
+            return null;
         }
         try {
             return jsonObject.getJSONObject(key);
         } catch (JSONException e) {
-            return defaultValue;
+            return null;
         }
     }
 
-    public JSONObject getJSONObject(String key) {
-        return getJSONObject(key, null);
-    }
-
     // JSONArray
-    public JSONArray getJSONArray(String key, JSONArray defaultValue) {
-        if (jsonObject.isNull(key)) {
-            return defaultValue;
+    public JSONArray getJSONArray(String key) {
+        if (isNull(key)) {
+            return null;
         }
         try {
             return jsonObject.getJSONArray(key);
         } catch (JSONException e) {
-            return defaultValue;
+            return null;
         }
     }
 
-    public JSONArray getJSONArray(String key) {
-        return getJSONArray(key, null);
-    }
-
     // Generic
-    public Object get(String key, Object defaultValue) {
-        if (jsonObject.isNull(key)) {
-            return defaultValue;
+    public Object get(String key) {
+        if (isNull(key)) {
+            return null;
         }
         try {
             return jsonObject.get(key);
         } catch (JSONException e) {
-            return defaultValue;
+            return null;
         }
-    }
-
-    public Object get(String key) {
-        return get(key, null);
     }
 }
 
