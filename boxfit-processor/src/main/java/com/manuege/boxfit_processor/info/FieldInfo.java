@@ -56,6 +56,8 @@ public class FieldInfo {
     private boolean toJsonIncludeNull;
     private boolean toJsonIgnore;
 
+    private Element element;
+
     // Typename representing the type of the field
     private TypeName typeName;
 
@@ -95,6 +97,7 @@ public class FieldInfo {
 
         // Basic info
         FieldInfo fieldInfo = new FieldInfo();
+        fieldInfo.element = element;
         fieldInfo.classInfo = classInfo;
 
         TypeMirror typeMirror = element.asType();
@@ -244,11 +247,12 @@ public class FieldInfo {
         return Utils.getJsonGetterMethodName(getJsonFieldTypeName());
     }
 
-    private void validate() throws InvalidElementException {
+    private void validate() {
         ensureTransformerHaveEmptySerializer();
+        transformersDoesNotHaveEffectInRelationships();
     }
 
-    private void ensureTransformerHaveEmptySerializer() throws InvalidElementException {
+    private void ensureTransformerHaveEmptySerializer() {
         if (transformerName == null) {
             return;
         }
@@ -272,5 +276,11 @@ public class FieldInfo {
         }
 
         ErrorLogger.putError(String.format("%s must have a public constructor with no arguments", transformer.getSimpleName()), transformer);
+    }
+
+    private void transformersDoesNotHaveEffectInRelationships() {
+        if (transformerName != null && getKind() != Kind.TRANSFORMED) {
+            ErrorLogger.putWarning("Transformer doesn't have effect in relationships fields", element);
+        }
     }
 }
