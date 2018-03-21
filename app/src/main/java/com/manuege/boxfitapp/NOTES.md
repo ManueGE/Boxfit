@@ -1,14 +1,8 @@
 # NOTES:
 
-## To do
-
 ## Known issues
 - Lists must be initialized (ToMany already does it)
-
-## Code generation checks
-- disallow JsonSerializable in generic classes, but allow it in its concrete subclasses.
-- Make distinction between primary types (must have a default value) and classes (don't need it)
-- Just strings and longs valid as PK
+- JsonSerializable not allowed in generic classes, but allow it in its concrete subclasses.
 
 ## Pending tests
 - Maybe write a test to check all the types
@@ -23,6 +17,6 @@ class ObjectResponse<T extends Entity> {
 }
 ```
 
-## To Json
+### To Json
 - add test for `ToJsonIgnore`
 - add tests for `ToJsonIgnoreNull` taking in account all type of fields kind (to many, normal...), primitives...

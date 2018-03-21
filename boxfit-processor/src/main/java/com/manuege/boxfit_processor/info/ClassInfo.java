@@ -36,6 +36,10 @@ public class ClassInfo {
     private HashMap<TypeVariableName, TypeName> genericParamsMap;
 
     public static ClassInfo newInstance(TypeElement element) throws InvalidElementException {
+        if (element.getTypeParameters().size() > 0) {
+            throw new InvalidElementException("Classes annotated with @JsonSerializable can't be generic. Please, add a concrete subclass and annotate it", element);
+        }
+
         ClassInfo classInfo = new ClassInfo();
         classInfo.typeElement = element;
 
