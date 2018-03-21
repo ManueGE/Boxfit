@@ -7,6 +7,7 @@ import com.manuege.boxfit.annotations.ToJsonIgnore;
 import com.manuege.boxfit.annotations.ToJsonIncludeNull;
 import com.manuege.boxfit.constants.Constants;
 import com.manuege.boxfit.transformers.Transformer;
+import com.manuege.boxfit_processor.errors.ErrorLogger;
 import com.manuege.boxfit_processor.errors.InvalidElementException;
 import com.manuege.boxfit_processor.processor.Enviroment;
 import com.squareup.javapoet.ClassName;
@@ -14,7 +15,11 @@ import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeVariableName;
 
+import java.util.ArrayList;
+
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.MirroredTypeException;
@@ -183,6 +188,7 @@ public class FieldInfo {
             }
         }
 
+        fieldInfo.validate();
         return fieldInfo;
     }
 
@@ -236,5 +242,35 @@ public class FieldInfo {
 
     public String getJsonGetterMethodName() {
         return Utils.getJsonGetterMethodName(getJsonFieldTypeName());
+    }
+
+    private void validate() throws InvalidElementException {
+        ensureTransformerHaveEmptySerializer();
+    }
+
+    private void ensureTransformerHaveEmptySerializer() throws InvalidElementException {
+        if (transformerName == null) {
+            return;
+        }
+
+        ArrayList<ExecutableElement> constructors = new ArrayList<>();
+        TypeElement transformer = Enviroment.getEnvironment().getElementUtils().getTypeElement(transformerName.toString());
+        for (Element e: transformer.getEnclosedElements()) {
+            if (e.getKind() == ElementKind.CONSTRUCTOR) {
+                constructors.add((ExecutableElement) e);
+            }
+        }
+
+        if (constructors.size() == 0) {
+            return;
+        }
+
+        for (ExecutableElement c : constructors) {
+            if (c.getParameters().size() == 0 && c.getModifiers().contains(Modifier.PUBLIC)) {
+                return;
+            }
+        }
+
+        ErrorLogger.putError(String.format("%s must have a public constructor with no arguments", transformer.getSimpleName()), transformer);
     }
 }

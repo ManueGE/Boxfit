@@ -19,7 +19,7 @@ public class TransformersCache {
             return (T) transformerHashMap.get(name);
 
         } catch (Exception e) {
-            throw new RuntimeException(String.format("%s transformer must have a public empty initializer", name));
+            throw new RuntimeException(String.format("%s transformer must have a public initializer with no arguments", name));
         }
     }
 }

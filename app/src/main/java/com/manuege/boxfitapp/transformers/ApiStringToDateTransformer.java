@@ -8,7 +8,6 @@ import java.text.SimpleDateFormat;
  */
 
 public class ApiStringToDateTransformer extends StringToDateTransformer {
-
     @Override
     protected DateFormat getFormat() {
         return new SimpleDateFormat("yyyy-MM-dd", getLocale());

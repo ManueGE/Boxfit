@@ -12,6 +12,7 @@ import java.util.Locale;
  */
 
 public abstract class StringToDateTransformer implements Transformer<Date, String> {
+
     @Override
     public Date transform(String object) {
         try {

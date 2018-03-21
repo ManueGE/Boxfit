@@ -10,6 +10,7 @@ import io.objectbox.converter.PropertyConverter;
  */
 
 public class ArtistTypeTransformer implements PropertyConverter<Artist.Type, String>, Transformer<Artist.Type, String> {
+
     @Override
     public Artist.Type convertToEntityProperty(String databaseValue) {
         for (Artist.Type type: Artist.Type.values()) {
