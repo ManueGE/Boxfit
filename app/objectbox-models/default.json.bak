@@ -105,7 +105,7 @@
     },
     {
       "id": "6:6990667195199777511",
-      "lastPropertyId": "10:6908512890241904338",
+      "lastPropertyId": "12:6774588749570446114",
       "name": "Parent",
       "properties": [
         {
@@ -147,14 +147,48 @@
         {
           "id": "10:6908512890241904338",
           "name": "serializerNameInferred"
+        },
+        {
+          "id": "11:7835430384361109738",
+          "indexId": "5:3133664721565303501",
+          "name": "toOneId"
+        },
+        {
+          "id": "12:6774588749570446114",
+          "name": "keyPathField"
+        }
+      ],
+      "relations": [
+        {
+          "id": "4:5300006996322938105",
+          "name": "toMany"
+        },
+        {
+          "id": "5:1958940966076249447",
+          "name": "list"
+        }
+      ]
+    },
+    {
+      "id": "7:5432096964970548112",
+      "lastPropertyId": "2:6802342942991748884",
+      "name": "Child",
+      "properties": [
+        {
+          "id": "1:1266821852707577101",
+          "name": "id"
+        },
+        {
+          "id": "2:6802342942991748884",
+          "name": "value"
         }
       ],
       "relations": []
     }
   ],
-  "lastEntityId": "6:6990667195199777511",
-  "lastIndexId": "4:8049288946852273781",
-  "lastRelationId": "3:7071660507328235032",
+  "lastEntityId": "7:5432096964970548112",
+  "lastIndexId": "5:3133664721565303501",
+  "lastRelationId": "5:1958940966076249447",
   "lastSequenceId": "0:0",
   "modelVersion": 4,
   "modelVersionParserMinimum": 4,

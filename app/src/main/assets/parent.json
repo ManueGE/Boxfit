@@ -13,6 +13,14 @@
     "id": 1,
     "value": "one"
   },
+  "first": {
+    "second": {
+      "third": {
+        "key": "keyPath"
+      }
+    }
+  },
+  "a.b.c.d": "fakeKeyPath",
   "toMany": [
     {
       "id": 2,

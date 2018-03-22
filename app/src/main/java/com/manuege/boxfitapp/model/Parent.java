@@ -48,6 +48,12 @@ public class Parent {
     @JsonSerializableField
     public String serializerNameInferred;
 
+    @JsonSerializableField("first.second.third.key")
+    public String keyPathField;
+
+    @JsonSerializableField("a.b.c.d")
+    public String fakeKeyPathField;
+
     @JsonSerializableField
     public ToOne<Child> toOne;
 
