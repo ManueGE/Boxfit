@@ -43,6 +43,8 @@ public class RetrofitConverterFactoryTest extends AbstractRetrofitTest {
 
         Assert.assertEquals("hello", parent.stringField);
         Assert.assertEquals("inferred", parent.serializerNameInferred);
+        Assert.assertEquals("keyPath", parent.keyPathField);
+        Assert.assertEquals("fakeKeyPath", parent.fakeKeyPathField);
 
         Assert.assertEquals(1, parent.toOne.getTarget().id);
         Assert.assertEquals("one", parent.toOne.getTarget().value);
