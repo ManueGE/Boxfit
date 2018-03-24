@@ -9,7 +9,7 @@ import org.json.JSONObject;
  * Created by Manu on 1/2/18.
  */
 
-public class AlbumJSONTransformer implements JSONObjectTransformer {
+public class SlashIdTransformer implements JSONObjectTransformer {
     @Override
     public JSONObject transform(JSONObject object) {
         try {

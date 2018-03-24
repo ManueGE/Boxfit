@@ -2,9 +2,14 @@ package com.manuege.boxfitapp.model;
 
 import com.manuege.boxfit.annotations.JsonSerializable;
 import com.manuege.boxfit.annotations.JsonSerializableField;
+import com.manuege.boxfitapp.transformers.SlashIdTransformer;
+import com.manuege.boxfitapp.transformers.ApiStringToDateTransformer;
+import com.manuege.boxfitapp.transformers.EnumToIntTransformer;
 
+import java.util.Date;
 import java.util.List;
 
+import io.objectbox.annotation.Convert;
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
 import io.objectbox.relation.ToMany;
@@ -15,8 +20,26 @@ import io.objectbox.relation.ToOne;
  */
 
 @Entity
-@JsonSerializable
+@JsonSerializable(transformer = SlashIdTransformer.class)
 public class Parent {
+
+    public enum Enum {
+        NONE(0),
+        ONE(1),
+        TWO(2),
+        THREE(3);
+
+        Integer value;
+
+        Enum(Integer value) {
+            this.value = value;
+        }
+
+        public Integer getValue() {
+            return value;
+        }
+    }
+
     @JsonSerializableField
     @Id(assignable = true)
     public long id;
@@ -62,4 +85,11 @@ public class Parent {
 
     @JsonSerializableField
     public List<Child> list;
+
+    @JsonSerializableField(value="enum", transformer = EnumToIntTransformer.class)
+    @Convert(converter = EnumToIntTransformer.class, dbType = Integer.class)
+    public Enum enumField;
+
+    @JsonSerializableField(value="date", transformer = ApiStringToDateTransformer.class)
+    public Date dateField;
 }

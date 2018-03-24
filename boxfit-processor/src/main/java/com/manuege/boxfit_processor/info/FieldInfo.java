@@ -248,34 +248,8 @@ public class FieldInfo {
     }
 
     private void validate() {
-        ensureTransformerHaveEmptySerializer();
+        Utils.ensureTypeNameHasEmptyInitializer(transformerName);;
         transformersDoesNotHaveEffectInRelationships();
-    }
-
-    private void ensureTransformerHaveEmptySerializer() {
-        if (transformerName == null) {
-            return;
-        }
-
-        ArrayList<ExecutableElement> constructors = new ArrayList<>();
-        TypeElement transformer = Enviroment.getEnvironment().getElementUtils().getTypeElement(transformerName.toString());
-        for (Element e: transformer.getEnclosedElements()) {
-            if (e.getKind() == ElementKind.CONSTRUCTOR) {
-                constructors.add((ExecutableElement) e);
-            }
-        }
-
-        if (constructors.size() == 0) {
-            return;
-        }
-
-        for (ExecutableElement c : constructors) {
-            if (c.getParameters().size() == 0 && c.getModifiers().contains(Modifier.PUBLIC)) {
-                return;
-            }
-        }
-
-        ErrorLogger.putError(String.format("%s must have a public constructor with no arguments", transformer.getSimpleName()), transformer);
     }
 
     private void transformersDoesNotHaveEffectInRelationships() {

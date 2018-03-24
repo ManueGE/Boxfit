@@ -24,6 +24,9 @@ public abstract class StringToDateTransformer implements Transformer<Date, Strin
 
     @Override
     public String inverseTransform(Date object) {
+        if (object == null) {
+            return null;
+        }
         return getFormat().format(object);
     }
 

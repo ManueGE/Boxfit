@@ -36,15 +36,14 @@ public class ClassInfo {
     private HashMap<TypeVariableName, TypeName> genericParamsMap;
 
     public static ClassInfo newInstance(TypeElement element) throws InvalidElementException {
-        if (element.getTypeParameters().size() > 0) {
-            throw new InvalidElementException("Classes annotated with @JsonSerializable can't be generic. Please, add a concrete subclass and annotate it", element);
-        }
 
         ClassInfo classInfo = new ClassInfo();
         classInfo.typeElement = element;
 
         TypeMirror typeMirror = element.asType();
         classInfo.type = TypeName.get(typeMirror);
+
+        classInfo.validate();
 
         // Transformer
         // http://hauchee.blogspot.com.es/2015/12/compile-time-annotation-processing-getting-class-value.html
@@ -167,5 +166,13 @@ public class ClassInfo {
 
     public HashMap<TypeVariableName, TypeName> getGenericParamsMap() {
         return genericParamsMap;
+    }
+
+    private void validate() throws InvalidElementException{
+        if (typeElement.getTypeParameters().size() > 0) {
+            throw new InvalidElementException("Classes annotated with @JsonSerializable can't be generic. Please, add a concrete subclass and annotate it", typeElement);
+        }
+
+        Utils.ensureTypeNameHasEmptyInitializer(type);
     }
 }

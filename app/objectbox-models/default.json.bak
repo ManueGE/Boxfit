@@ -105,7 +105,7 @@
     },
     {
       "id": "6:6990667195199777511",
-      "lastPropertyId": "12:6774588749570446114",
+      "lastPropertyId": "13:438392169139768920",
       "name": "Parent",
       "properties": [
         {
@@ -156,6 +156,10 @@
         {
           "id": "12:6774588749570446114",
           "name": "keyPathField"
+        },
+        {
+          "id": "13:438392169139768920",
+          "name": "fakeKeyPathField"
         }
       ],
       "relations": [

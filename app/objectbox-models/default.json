@@ -105,7 +105,7 @@
     },
     {
       "id": "6:6990667195199777511",
-      "lastPropertyId": "13:438392169139768920",
+      "lastPropertyId": "15:347297554562853109",
       "name": "Parent",
       "properties": [
         {
@@ -160,6 +160,14 @@
         {
           "id": "13:438392169139768920",
           "name": "fakeKeyPathField"
+        },
+        {
+          "id": "14:5285088989054085471",
+          "name": "enumField"
+        },
+        {
+          "id": "15:347297554562853109",
+          "name": "dateField"
         }
       ],
       "relations": [

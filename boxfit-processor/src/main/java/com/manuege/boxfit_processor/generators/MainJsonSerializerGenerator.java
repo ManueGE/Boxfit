@@ -53,14 +53,17 @@ public class MainJsonSerializerGenerator extends AbstractFileGenerator {
         mainSerializerClass.addField(BoxStore.class, "boxStore", Modifier.PRIVATE);
 
         // Generic param
-        TypeVariableName genericParam = TypeVariableName.get("T");
+        String genericParamName = "T";
+        TypeVariableName genericParam = TypeVariableName.get(genericParamName);
+        TypeVariableName typeVariableName = TypeVariableName.get(String.format("? extends %s", genericParamName));
+        ParameterizedTypeName genericClassParam = ParameterizedTypeName.get(ClassName.get(Class.class), typeVariableName);
 
         // Define single serializer
         MethodSpec.Builder fromJsonMethod = MethodSpec
                 .methodBuilder("fromJson")
                 .addModifiers(Modifier.PUBLIC)
                 .addTypeVariable(genericParam)
-                .addParameter(Class.class, "clazz")
+                .addParameter(genericClassParam, "clazz")
                 .addParameter(JSONObject.class, "jsonObject")
                 .returns(genericParam);
 
@@ -71,7 +74,7 @@ public class MainJsonSerializerGenerator extends AbstractFileGenerator {
                 .methodBuilder("fromJson")
                 .addModifiers(Modifier.PUBLIC)
                 .addTypeVariable(genericParam)
-                .addParameter(Class.class, "clazz")
+                .addParameter(genericClassParam, "clazz")
                 .addParameter(JSONArray.class, "jsonArray")
                 .returns(listOfObjects);
 

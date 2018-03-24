@@ -3,7 +3,7 @@ package com.manuege.boxfitapp.model;
 import com.manuege.boxfit.annotations.JsonSerializable;
 import com.manuege.boxfit.annotations.JsonSerializableField;
 import com.manuege.boxfit.annotations.ToJsonIncludeNull;
-import com.manuege.boxfitapp.transformers.AlbumJSONTransformer;
+import com.manuege.boxfitapp.transformers.SlashIdTransformer;
 
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
@@ -14,7 +14,7 @@ import io.objectbox.relation.ToOne;
  * Created by Manu on 28/1/18.
  */
 
-@JsonSerializable(transformer = AlbumJSONTransformer.class)
+@JsonSerializable(transformer = SlashIdTransformer.class)
 @Entity
 public class Album {
 

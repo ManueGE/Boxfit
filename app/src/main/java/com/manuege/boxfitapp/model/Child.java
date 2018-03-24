@@ -19,4 +19,12 @@ public class Child {
 
     @JsonSerializableField
     public String value;
+
+    public Child() {
+    }
+
+    public Child(long id, String value) {
+        this.id = id;
+        this.value = value;
+    }
 }

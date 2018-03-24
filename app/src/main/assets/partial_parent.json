@@ -1,0 +1,8 @@
+{
+  "id": 1,
+  "long_class": 20,
+  "integer": 30,
+  "bool": false,
+  "double_class": 60.6,
+  "string": "bye"
+}

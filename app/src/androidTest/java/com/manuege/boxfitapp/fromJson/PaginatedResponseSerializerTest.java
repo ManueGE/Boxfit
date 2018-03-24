@@ -1,4 +1,4 @@
-package com.manuege.boxfitapp.serializers;
+package com.manuege.boxfitapp.fromJson;
 
 import com.manuege.boxfit.MainJsonSerializer;
 import com.manuege.boxfitapp.AbstractObjectBoxTest;

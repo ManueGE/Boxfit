@@ -1,5 +1,6 @@
 package com.manuege.boxfit_processor.info;
 
+import com.manuege.boxfit_processor.errors.ErrorLogger;
 import com.manuege.boxfit_processor.processor.Enviroment;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeName;
@@ -12,6 +13,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.ArrayType;
 import javax.lang.model.type.DeclaredType;
@@ -115,5 +119,32 @@ public class Utils {
             }
         }
         return false;
+    }
+
+    public static void ensureTypeNameHasEmptyInitializer(TypeName typeName) {
+        if (typeName == null) {
+            return;
+        }
+
+        ArrayList<ExecutableElement> constructors = new ArrayList<>();
+        TypeElement element = Enviroment.getEnvironment().getElementUtils().getTypeElement(typeName.toString());
+        for (Element e: element.getEnclosedElements()) {
+            if (e.getKind() == ElementKind.CONSTRUCTOR) {
+                constructors.add((ExecutableElement) e);
+            }
+        }
+
+        if (constructors.size() == 0) {
+            return;
+        }
+
+        for (ExecutableElement c : constructors) {
+            if (c.getParameters().size() == 0 && c.getModifiers().contains(Modifier.PUBLIC)) {
+                return;
+            }
+        }
+
+        ErrorLogger.putError(String.format("%s must have a public constructor with no arguments", element.getSimpleName()), element);
+
     }
 }
