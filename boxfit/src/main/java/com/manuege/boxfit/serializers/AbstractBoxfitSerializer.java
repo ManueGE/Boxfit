@@ -9,7 +9,7 @@ import java.util.List;
  * Created by Manu on 11/3/18.
  */
 
-public interface AbstractMainSerializer {
+public interface AbstractBoxfitSerializer {
     <T> T fromJson(Class<? extends T> clazz, JSONObject jsonObject);
     <T> List<T> fromJson(Class<? extends T> clazz, JSONArray jsonArray);
     <T> JSONObject toJson(T object);

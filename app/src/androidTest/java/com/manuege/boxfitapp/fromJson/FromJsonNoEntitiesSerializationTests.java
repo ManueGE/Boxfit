@@ -1,6 +1,6 @@
 package com.manuege.boxfitapp.fromJson;
 
-import com.manuege.boxfit.MainJsonSerializer;
+import com.manuege.boxfit.BoxfitSerializer;
 import com.manuege.boxfitapp.AbstractObjectBoxTest;
 import com.manuege.boxfitapp.api.model.NoObjectBoxObject;
 import com.manuege.boxfitapp.api.model.ParentResponse;
@@ -26,7 +26,7 @@ public class FromJsonNoEntitiesSerializationTests extends AbstractObjectBoxTest 
         jsonObject.put("integer", 1);
         jsonObject.put("string", "hello");
 
-        MainJsonSerializer serializer = new MainJsonSerializer(boxStore);
+        BoxfitSerializer serializer = new BoxfitSerializer(boxStore);
         NoObjectBoxObject object = serializer.fromJson(NoObjectBoxObject.class, jsonObject);
 
         Assert.assertEquals(1, object.integer);
@@ -39,7 +39,7 @@ public class FromJsonNoEntitiesSerializationTests extends AbstractObjectBoxTest 
         jsonObject.put("integer", 1);
         jsonObject.put("string", "hello");
 
-        MainJsonSerializer serializer = new MainJsonSerializer(null);
+        BoxfitSerializer serializer = new BoxfitSerializer(null);
         NoObjectBoxObject object = serializer.fromJson(NoObjectBoxObject.class, jsonObject);
 
         Assert.assertEquals(1, object.integer);
@@ -60,7 +60,7 @@ public class FromJsonNoEntitiesSerializationTests extends AbstractObjectBoxTest 
         jsonArray.put(jsonObject1);
         jsonArray.put(jsonObject2);
 
-        MainJsonSerializer serializer = new MainJsonSerializer(null);
+        BoxfitSerializer serializer = new BoxfitSerializer(null);
         List<NoObjectBoxObject> array = serializer.fromJson(NoObjectBoxObject.class, jsonArray);
 
         Assert.assertEquals(2, array.size());
@@ -77,7 +77,7 @@ public class FromJsonNoEntitiesSerializationTests extends AbstractObjectBoxTest 
         JSONObject parentJSON = JsonProvider.getJSONObject("parent.json");
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("parent", parentJSON);
-        MainJsonSerializer serializer = new MainJsonSerializer(boxStore);
+        BoxfitSerializer serializer = new BoxfitSerializer(boxStore);
         ParentResponse object = serializer.fromJson(ParentResponse.class, jsonObject);
 
         Assert.assertNotNull(object.parent);
@@ -90,7 +90,7 @@ public class FromJsonNoEntitiesSerializationTests extends AbstractObjectBoxTest 
         JSONObject parentJSON = JsonProvider.getJSONObject("parent.json");
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("data", parentJSON);
-        MainJsonSerializer serializer = new MainJsonSerializer(boxStore);
+        BoxfitSerializer serializer = new BoxfitSerializer(boxStore);
         SingleParentResponse object = serializer.fromJson(SingleParentResponse.class, jsonObject);
 
         Assert.assertNotNull(object.data);

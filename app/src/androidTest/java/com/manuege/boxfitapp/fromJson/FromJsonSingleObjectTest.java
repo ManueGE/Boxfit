@@ -1,6 +1,6 @@
 package com.manuege.boxfitapp.fromJson;
 
-import com.manuege.boxfit.MainJsonSerializer;
+import com.manuege.boxfit.BoxfitSerializer;
 import com.manuege.boxfitapp.AbstractObjectBoxTest;
 import com.manuege.boxfitapp.model.Child;
 import com.manuege.boxfitapp.model.Parent;
@@ -18,8 +18,8 @@ public class FromJsonSingleObjectTest extends AbstractObjectBoxTest {
     @Test
     public void fromJson_importNewObject() throws Exception {
         JSONObject object = JsonProvider.getJSONObject("parent.json");
-        MainJsonSerializer mainSerializer = new MainJsonSerializer(boxStore);
-        Parent parent = mainSerializer.fromJson(Parent.class, object);
+        BoxfitSerializer boxfitSerializer = new BoxfitSerializer(boxStore);
+        Parent parent = boxfitSerializer.fromJson(Parent.class, object);
 
         Assert.assertEquals(1, boxStore.boxFor(Parent.class).count());
         Assert.assertNotNull(parent);
@@ -61,7 +61,7 @@ public class FromJsonSingleObjectTest extends AbstractObjectBoxTest {
 
     @Test
     public void fromJson_updateExistingObject() throws Exception {
-        MainJsonSerializer serializer = new MainJsonSerializer(boxStore);
+        BoxfitSerializer serializer = new BoxfitSerializer(boxStore);
         JSONObject first_json = JsonProvider.getJSONObject("parent_2.json");
         serializer.fromJson(Parent.class, first_json);
 
@@ -110,7 +110,7 @@ public class FromJsonSingleObjectTest extends AbstractObjectBoxTest {
 
     @Test
     public void fromJson_partialUpdateExistingObject() throws Exception {
-        MainJsonSerializer serializer = new MainJsonSerializer(boxStore);
+        BoxfitSerializer serializer = new BoxfitSerializer(boxStore);
         JSONObject first_json = JsonProvider.getJSONObject("parent.json");
         serializer.fromJson(Parent.class, first_json);
 
@@ -157,7 +157,7 @@ public class FromJsonSingleObjectTest extends AbstractObjectBoxTest {
 
     @Test
     public void fromJson_relationshipWithIds() throws Exception {
-        MainJsonSerializer serializer = new MainJsonSerializer(boxStore);
+        BoxfitSerializer serializer = new BoxfitSerializer(boxStore);
         JSONObject json = JsonProvider.getJSONObject("parent_with_properties_with_id.json");
         Parent parent = serializer.fromJson(Parent.class, json);
 
@@ -190,7 +190,7 @@ public class FromJsonSingleObjectTest extends AbstractObjectBoxTest {
                 new Child(6, "six")
         );
 
-        MainJsonSerializer serializer = new MainJsonSerializer(boxStore);
+        BoxfitSerializer serializer = new BoxfitSerializer(boxStore);
         JSONObject json = JsonProvider.getJSONObject("parent_with_properties_with_id.json");
         Parent parent = serializer.fromJson(Parent.class, json);
 
@@ -214,7 +214,7 @@ public class FromJsonSingleObjectTest extends AbstractObjectBoxTest {
 
     @Test
     public void fromJson_canAutoConvertStringInNumbersAndViceVersa() throws Exception {
-        MainJsonSerializer serializer = new MainJsonSerializer(boxStore);
+        BoxfitSerializer serializer = new BoxfitSerializer(boxStore);
         JSONObject json = JsonProvider.getJSONObject("parent.json");
         json.put("integer", "1");
         json.put("string", 2);
@@ -247,7 +247,7 @@ public class FromJsonSingleObjectTest extends AbstractObjectBoxTest {
         existingParent.list.add(four);
         existingParent.list.add(five);
 
-        MainJsonSerializer serializer = new MainJsonSerializer(boxStore);
+        BoxfitSerializer serializer = new BoxfitSerializer(boxStore);
         JSONObject json = new JSONObject();
         json.put("id", 1);
         json.put("integerClass", null);
@@ -268,7 +268,7 @@ public class FromJsonSingleObjectTest extends AbstractObjectBoxTest {
 
     @Test
     public void fromJson_serializeObjectThatNeedsConversion() throws Exception {
-        MainJsonSerializer serializer = new MainJsonSerializer(boxStore);
+        BoxfitSerializer serializer = new BoxfitSerializer(boxStore);
         JSONObject json = JsonProvider.getJSONObject("parent.json");
         json.put("_id", 1);
         json.remove("id");
@@ -279,7 +279,7 @@ public class FromJsonSingleObjectTest extends AbstractObjectBoxTest {
 
     @Test
     public void fromJson_serializeObjectFromJsonWithoutId() throws Exception {
-        MainJsonSerializer serializer = new MainJsonSerializer(boxStore);
+        BoxfitSerializer serializer = new BoxfitSerializer(boxStore);
         JSONObject json = new JSONObject();
         json.put("value", "sample");
         Child child = serializer.fromJson(Child.class, json);
