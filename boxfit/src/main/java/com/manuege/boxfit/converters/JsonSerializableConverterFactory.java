@@ -26,6 +26,7 @@ import retrofit2.Retrofit;
 public class JsonSerializableConverterFactory extends Converter.Factory {
 
     AbstractMainSerializer jsonSerializer;
+    private static final MediaType MEDIA_TYPE = MediaType.parse("application/json; charset=UTF-8");
 
     public JsonSerializableConverterFactory(AbstractMainSerializer jsonSerializer) {
         this.jsonSerializer = jsonSerializer;
@@ -65,7 +66,6 @@ public class JsonSerializableConverterFactory extends Converter.Factory {
 
         Class clazz = (Class) type;
         return clazz.getAnnotation(JsonSerializable.class) != null;
-
     }
 
     private class ResponseSerializableConverter<T> implements Converter<ResponseBody, T> {
@@ -111,7 +111,7 @@ public class JsonSerializableConverterFactory extends Converter.Factory {
         public RequestBody convert(T value) throws IOException {
             JSONObject jsonObject = jsonSerializer.toJson(value);
             String jsonString = jsonObject.toString();
-            return RequestBody.create(MediaType.parse("application/json"), jsonString);
+            return RequestBody.create(MEDIA_TYPE, jsonString);
         }
     }
 
@@ -120,7 +120,7 @@ public class JsonSerializableConverterFactory extends Converter.Factory {
         public RequestBody convert(List<T> value) throws IOException {
             JSONArray jsonArray = jsonSerializer.toJson(value);
             String jsonString = jsonArray.toString();
-            return RequestBody.create(MediaType.parse("application/json"), jsonString);
+            return RequestBody.create(MEDIA_TYPE, jsonString);
         }
     }
 }
