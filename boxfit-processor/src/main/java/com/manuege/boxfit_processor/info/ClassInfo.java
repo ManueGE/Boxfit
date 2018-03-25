@@ -1,7 +1,7 @@
 package com.manuege.boxfit_processor.info;
 
+import com.manuege.boxfit.annotations.BoxfitClass;
 import com.manuege.boxfit.annotations.JSONObjectIdentityTransformer;
-import com.manuege.boxfit.annotations.JsonSerializable;
 import com.manuege.boxfit_processor.errors.InvalidElementException;
 import com.manuege.boxfit_processor.processor.Enviroment;
 import com.squareup.javapoet.TypeName;
@@ -47,9 +47,9 @@ public class ClassInfo {
 
         // Transformer
         // http://hauchee.blogspot.com.es/2015/12/compile-time-annotation-processing-getting-class-value.html
-        JsonSerializable jsonSerializableAnnotation = element.getAnnotation(JsonSerializable.class);
+        BoxfitClass boxfitClassAnnotation = element.getAnnotation(BoxfitClass.class);
         try {
-            jsonSerializableAnnotation.transformer().getName();
+            boxfitClassAnnotation.transformer().getName();
         } catch (MirroredTypeException e) {
             TypeMirror transformerTypeMirror = e.getTypeMirror();
             TypeName typeName = TypeName.get(transformerTypeMirror);
@@ -170,7 +170,7 @@ public class ClassInfo {
 
     private void validate() throws InvalidElementException{
         if (typeElement.getTypeParameters().size() > 0) {
-            throw new InvalidElementException("Classes annotated with @JsonSerializable can't be generic. Please, add a concrete subclass and annotate it", typeElement);
+            throw new InvalidElementException("Classes annotated with @BoxfitClass can't be generic. Please, add a concrete subclass and annotate it", typeElement);
         }
 
         Utils.ensureTypeNameHasEmptyInitializer(type);

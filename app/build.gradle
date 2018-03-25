@@ -31,7 +31,7 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.4.0'
     compile 'com.squareup.okhttp:mockwebserver:2.4.0'
 
-    // Boxfit
+    // BoxfitClass
     compile project(':boxfit')
     annotationProcessor project(':boxfit-processor')
 }

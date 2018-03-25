@@ -10,6 +10,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface JsonSerializable {
+public @interface BoxfitClass {
     Class<? extends JSONObjectTransformer> transformer() default JSONObjectIdentityTransformer.class;
 }

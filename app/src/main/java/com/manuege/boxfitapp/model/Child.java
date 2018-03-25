@@ -1,7 +1,7 @@
 package com.manuege.boxfitapp.model;
 
-import com.manuege.boxfit.annotations.JsonSerializable;
-import com.manuege.boxfit.annotations.JsonSerializableField;
+import com.manuege.boxfit.annotations.BoxfitClass;
+import com.manuege.boxfit.annotations.BoxfitField;
 
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
@@ -11,13 +11,13 @@ import io.objectbox.annotation.Id;
  */
 
 @Entity
-@JsonSerializable
+@BoxfitClass
 public class Child {
     @Id(assignable = true)
-    @JsonSerializableField
+    @BoxfitField
     public long id;
 
-    @JsonSerializableField
+    @BoxfitField
     public String value;
 
     public Child() {

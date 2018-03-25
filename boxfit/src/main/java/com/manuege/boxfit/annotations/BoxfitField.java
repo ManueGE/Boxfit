@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.FIELD)
-public @interface JsonSerializableField {
+public @interface BoxfitField {
     String value() default Constants.SERIALIZABLE_NULL_KEY_PATH;
     Class<? extends Transformer> transformer() default IdentityTransformer.class;
 }

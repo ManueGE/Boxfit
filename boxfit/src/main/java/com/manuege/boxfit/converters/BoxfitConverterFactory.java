@@ -1,6 +1,6 @@
 package com.manuege.boxfit.converters;
 
-import com.manuege.boxfit.annotations.JsonSerializable;
+import com.manuege.boxfit.annotations.BoxfitClass;
 import com.manuege.boxfit.serializers.AbstractBoxfitSerializer;
 
 import org.json.JSONArray;
@@ -65,7 +65,7 @@ public class BoxfitConverterFactory extends Converter.Factory {
         }
 
         Class clazz = (Class) type;
-        return clazz.getAnnotation(JsonSerializable.class) != null;
+        return clazz.getAnnotation(BoxfitClass.class) != null;
     }
 
     private class BoxfitResponseConverter<T> implements Converter<ResponseBody, T> {

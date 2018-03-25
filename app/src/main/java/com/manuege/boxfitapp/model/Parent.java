@@ -1,7 +1,7 @@
 package com.manuege.boxfitapp.model;
 
-import com.manuege.boxfit.annotations.JsonSerializable;
-import com.manuege.boxfit.annotations.JsonSerializableField;
+import com.manuege.boxfit.annotations.BoxfitClass;
+import com.manuege.boxfit.annotations.BoxfitField;
 import com.manuege.boxfitapp.transformers.SlashIdTransformer;
 import com.manuege.boxfitapp.transformers.ApiStringToDateTransformer;
 import com.manuege.boxfitapp.transformers.EnumToIntTransformer;
@@ -20,7 +20,7 @@ import io.objectbox.relation.ToOne;
  */
 
 @Entity
-@JsonSerializable(transformer = SlashIdTransformer.class)
+@BoxfitClass(transformer = SlashIdTransformer.class)
 public class Parent {
 
     public enum Enum {
@@ -40,56 +40,56 @@ public class Parent {
         }
     }
 
-    @JsonSerializableField
+    @BoxfitField
     @Id(assignable = true)
     public long id;
 
-    @JsonSerializableField("long_class")
+    @BoxfitField("long_class")
     public Long longClassField;
 
-    @JsonSerializableField("integer")
+    @BoxfitField("integer")
     public int integerField;
 
-    @JsonSerializableField("integer_class")
+    @BoxfitField("integer_class")
     public Integer integerClassField;
 
-    @JsonSerializableField("bool")
+    @BoxfitField("bool")
     public boolean boolField;
 
-    @JsonSerializableField("bool_class")
+    @BoxfitField("bool_class")
     public Boolean boolClassField;
 
-    @JsonSerializableField("double")
+    @BoxfitField("double")
     public double doubleField;
 
-    @JsonSerializableField("double_class")
+    @BoxfitField("double_class")
     public Double doubleClassField;
 
-    @JsonSerializableField("string")
+    @BoxfitField("string")
     public String stringField;
 
-    @JsonSerializableField
+    @BoxfitField
     public String serializerNameInferred;
 
-    @JsonSerializableField("first.second.third.key")
+    @BoxfitField("first.second.third.key")
     public String keyPathField;
 
-    @JsonSerializableField("a.b.c.d")
+    @BoxfitField("a.b.c.d")
     public String fakeKeyPathField;
 
-    @JsonSerializableField
+    @BoxfitField
     public ToOne<Child> toOne;
 
-    @JsonSerializableField
+    @BoxfitField
     public ToMany<Child> toMany;
 
-    @JsonSerializableField
+    @BoxfitField
     public List<Child> list;
 
-    @JsonSerializableField(value="enum", transformer = EnumToIntTransformer.class)
+    @BoxfitField(value="enum", transformer = EnumToIntTransformer.class)
     @Convert(converter = EnumToIntTransformer.class, dbType = Integer.class)
     public Enum enumField;
 
-    @JsonSerializableField(value="date", transformer = ApiStringToDateTransformer.class)
+    @BoxfitField(value="date", transformer = ApiStringToDateTransformer.class)
     public Date dateField;
 }

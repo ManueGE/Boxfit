@@ -1,7 +1,7 @@
 package com.manuege.boxfitapp.model;
 
-import com.manuege.boxfit.annotations.JsonSerializable;
-import com.manuege.boxfit.annotations.JsonSerializableField;
+import com.manuege.boxfit.annotations.BoxfitClass;
+import com.manuege.boxfit.annotations.BoxfitField;
 import com.manuege.boxfit.annotations.ToJsonIgnore;
 import com.manuege.boxfit.annotations.ToJsonIncludeNull;
 
@@ -14,37 +14,37 @@ import io.objectbox.relation.ToOne;
  */
 
 @Entity
-@JsonSerializable
+@BoxfitClass
 public class ToJsonTestObject {
 
     @Id
     long id;
 
-    @JsonSerializableField("long_class")
+    @BoxfitField("long_class")
     @ToJsonIncludeNull
     public Long longClassField;
 
-    @JsonSerializableField("integer_class")
+    @BoxfitField("integer_class")
     @ToJsonIncludeNull
     public Integer integerClassField;
 
-    @JsonSerializableField("bool_class")
+    @BoxfitField("bool_class")
     @ToJsonIncludeNull
     public Boolean boolClassField;
 
-    @JsonSerializableField("double_class")
+    @BoxfitField("double_class")
     @ToJsonIncludeNull
     public Double doubleClassField;
 
-    @JsonSerializableField("string")
+    @BoxfitField("string")
     @ToJsonIncludeNull
     public String stringField;
 
     @ToJsonIncludeNull
-    @JsonSerializableField
+    @BoxfitField
     public ToOne<Child> toOne;
 
-    @JsonSerializableField("ignored")
+    @BoxfitField("ignored")
     @ToJsonIgnore
     public String ignoredField;
 }
