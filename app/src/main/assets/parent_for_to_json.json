@@ -9,18 +9,12 @@
   "double_class": 6.6,
   "string": "hello",
   "serializerNameInferred": "inferred",
+  "first.second.third.key": "keyPath",
+  "a.b.c.d": "fakeKeyPath",
   "toOne": {
     "id": 1,
     "value": "one"
   },
-  "first": {
-    "second": {
-      "third": {
-        "key": "keyPath"
-      }
-    }
-  },
-  "a.b.c.d": "fakeKeyPath",
   "toMany": [
     {
       "id": 2,

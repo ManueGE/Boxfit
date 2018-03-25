@@ -10,8 +10,8 @@ import java.util.List;
  */
 
 public interface AbstractMainSerializer {
-    <T> T fromJson(Class clazz, JSONObject jsonObject);
-    <T> List<T> fromJson(Class clazz, JSONArray jsonArray);
+    <T> T fromJson(Class<? extends T> clazz, JSONObject jsonObject);
+    <T> List<T> fromJson(Class<? extends T> clazz, JSONArray jsonArray);
     <T> JSONObject toJson(T object);
     <T> JSONArray toJson(List<T> object);
 }
