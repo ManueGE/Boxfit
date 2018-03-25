@@ -1,5 +1,7 @@
 package com.manuege.boxfitapp.transformers;
 
+import com.manuege.boxfit.transformers.StringToDateTransformer;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 

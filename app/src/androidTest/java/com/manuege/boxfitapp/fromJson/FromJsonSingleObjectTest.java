@@ -276,4 +276,13 @@ public class FromJsonSingleObjectTest extends AbstractObjectBoxTest {
         Assert.assertEquals(1, parent.id);
         Assert.assertEquals("hello", parent.stringField);
     }
+
+    @Test
+    public void fromJson_serializeObjectFromJsonWithoutId() throws Exception {
+        MainJsonSerializer serializer = new MainJsonSerializer(boxStore);
+        JSONObject json = new JSONObject();
+        json.put("value", "sample");
+        Child child = serializer.fromJson(Child.class, json);
+        Assert.assertEquals("sample", child.value);
+    }
 }
