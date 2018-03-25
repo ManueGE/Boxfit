@@ -134,7 +134,7 @@ public class ClassJsonSerializerGenerator extends AbstractFileGenerator {
     private void addTransformedFieldSerializer(MethodSpec.Builder builder, FieldInfo fieldInfo) {
         TypeName transformer = fieldInfo.getTransformerName();
         builder.addStatement("$T originalValue = json.$N($S)", fieldInfo.getJsonFieldTypeName(), fieldInfo.getJsonGetterMethodName(), fieldInfo.getSerializedName());
-        builder.addStatement("$T transformer = $T.getTransformer($S, $T.class)", transformer, TransformersCache.class, transformer, transformer);
+        builder.addStatement("$T transformer = $T.getTransformer($T.class)", transformer, TransformersCache.class, transformer);
         builder.addStatement("object.$N = transformer.transform(originalValue)", fieldInfo.getName());
     }
 
@@ -313,7 +313,7 @@ public class ClassJsonSerializerGenerator extends AbstractFileGenerator {
                 .addModifiers(Modifier.PROTECTED)
                 .addParameter(JSONObject.class, "object")
                 .returns(JSONObject.class)
-                .addStatement("return $T.getTransformer($S, $T.class).transform(object)", TransformersCache.class, transformer, transformer);
+                .addStatement("return $T.getTransformer($T.class).transform(object)", TransformersCache.class, transformer);
 
         return builder.build();
     }
@@ -355,7 +355,7 @@ public class ClassJsonSerializerGenerator extends AbstractFileGenerator {
                 String transformerName = fieldInfo.getName() + "Transformer";
                 String transformedValueName = fieldInfo.getName() + "TransformedValue";
                 TypeName transformer = fieldInfo.getTransformerName();
-                builder.addStatement("$T $N = $T.getTransformer($S, $T.class)", transformer, transformerName, TransformersCache.class, transformer, transformer);
+                builder.addStatement("$T $N = $T.getTransformer($T.class)", transformer, transformerName, TransformersCache.class, transformer);
                 builder.addStatement("$T $N = $N.inverseTransform(object.$N)", fieldInfo.getJsonFieldTypeName(), transformedValueName, transformerName, fieldInfo.getName());
 
                 builder.beginControlFlow("if ($N != null)", transformedValueName);
@@ -414,7 +414,7 @@ public class ClassJsonSerializerGenerator extends AbstractFileGenerator {
 
         if (classInfo.getTransformer() != null) {
             TypeName transformer = classInfo.getTransformer();
-            builder.addStatement("$T transformer = $T.getTransformer($S, $T.class)", transformer, TransformersCache.class, transformer, transformer);
+            builder.addStatement("$T transformer = $T.getTransformer($T.class)", transformer, TransformersCache.class, transformer);
             builder.addStatement("json = transformer.inverseTransform(json)");
         }
 
