@@ -32,12 +32,12 @@ public abstract class AbstractSerializer<Entity, Id> {
         else if ((jsonObject = json.getJSONObject(key)) != null) {
             return fromJson(jsonObject, boxStore);
         } else if ((id = getId(json, key)) != null) {
-            return serialize(id, boxStore);
+            return fromId(id, boxStore);
         }
         return null;
     }
 
-    private Entity serialize(Id id, BoxStore boxStore) {
+    private Entity fromId(Id id, BoxStore boxStore) {
         JSONObject jsonObject = getJSONObject(id);
         return fromJson(jsonObject, boxStore);
     }

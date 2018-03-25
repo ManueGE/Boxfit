@@ -30,12 +30,13 @@
     <orderEntry type="module" module-name="boxfit" exported="" />
     <orderEntry type="module" module-name="boxfit" exported="" />
     <orderEntry type="library" exported="" scope="PROVIDED" name="javapoet-1.10.0" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="objectbox-java-1.4.1" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="objectbox-java-1.4.4" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="objectbox-macos-1.4.4" level="project" />
     <orderEntry type="library" exported="" scope="PROVIDED" name="json-20171018" level="project" />
     <orderEntry type="library" exported="" scope="PROVIDED" name="retrofit-2.3.0" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="objectbox-java-api-1.4.1" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="objectbox-java-api-1.4.4" level="project" />
     <orderEntry type="library" exported="" scope="PROVIDED" name="essentials-3.0.0-RC1" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="flatbuffers-java-1.7.2" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="flatbuffers-java-1.8.0" level="project" />
     <orderEntry type="library" exported="" scope="PROVIDED" name="jsr305-3.0.2" level="project" />
     <orderEntry type="library" exported="" scope="PROVIDED" name="okhttp-3.8.0" level="project" />
     <orderEntry type="library" exported="" scope="PROVIDED" name="okio-1.13.0" level="project" />
