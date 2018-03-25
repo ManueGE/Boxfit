@@ -7,7 +7,3 @@
 ## Pending tests
 - Test objects without primary key (or not-assignable PK)
 
-
-### To Json
-- add test for `ToJsonIgnore`
-- add tests for `ToJsonIgnoreNull` taking in account all type of fields kind (to many, normal...), primitives...

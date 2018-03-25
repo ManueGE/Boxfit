@@ -23,7 +23,7 @@ public class EnumToIntTransformer implements PropertyConverter<Parent.Enum, Inte
     @Override
     public Integer inverseTransform(Parent.Enum object) {
         if (object == null) {
-            return Parent.Enum.NONE.getValue();
+            return null;
         }
         return object.getValue();
     }
