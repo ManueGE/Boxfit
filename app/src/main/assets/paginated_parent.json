@@ -1,0 +1,49 @@
+{
+  "count": 10,
+  "previous": 0,
+  "next": 2,
+  "results": [
+    {
+      "id": 1,
+      "integer": 1,
+      "string": "hello",
+      "toOne": {
+        "id": 1,
+        "value": "one"
+      },
+      "toMany": [
+        {
+          "id": 2,
+          "value": "two"
+        }
+      ],
+      "list": [
+        {
+          "id": 3,
+          "value": "three"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "integer": 2,
+      "string": "bye",
+      "toOne": {
+        "id": 4,
+        "value": "four"
+      },
+      "toMany": [
+        {
+          "id": 5,
+          "value": "five"
+        }
+      ],
+      "list": [
+        {
+          "id": 6,
+          "value": "six"
+        }
+      ]
+    }
+  ]
+}

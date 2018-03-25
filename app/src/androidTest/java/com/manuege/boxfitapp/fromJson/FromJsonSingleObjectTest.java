@@ -14,7 +14,7 @@ import org.junit.Test;
  * Created by Manu on 24/3/18.
  */
 
-public class fromJsonSingleObjectTest extends AbstractObjectBoxTest {
+public class FromJsonSingleObjectTest extends AbstractObjectBoxTest {
     @Test
     public void fromJson_importNewObject() throws Exception {
         JSONObject object = JsonProvider.getJSONObject("parent.json");
