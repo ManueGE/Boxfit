@@ -1,6 +1,4 @@
-package com.manuege.boxfitapp.transformers;
-
-import com.manuege.boxfit.transformers.Transformer;
+package com.manuege.boxfit.transformers;
 
 import java.text.DateFormat;
 import java.text.ParseException;
