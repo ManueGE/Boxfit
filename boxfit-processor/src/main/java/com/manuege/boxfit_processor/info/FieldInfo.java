@@ -15,11 +15,7 @@ import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeVariableName;
 
-import java.util.ArrayList;
-
 import javax.lang.model.element.Element;
-import javax.lang.model.element.ElementKind;
-import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.MirroredTypeException;
@@ -101,11 +97,19 @@ public class FieldInfo {
         fieldInfo.classInfo = classInfo;
 
         TypeMirror typeMirror = element.asType();
+
+        // If generic, extract the concrete type
+        TypeName typeName = TypeName.get(typeMirror);
+        if (typeName instanceof TypeVariableName) {
+            TypeName concreteTypeName = classInfo.getGenericParamsMap().get(typeName);
+            typeMirror = Utils.getTypeMirrorFromTypeName(concreteTypeName);
+        }
+
         fieldInfo.isPrimitive = typeMirror.getKind().isPrimitive();
         if (fieldInfo.isPrimitive) {
-            fieldInfo.typeName = TypeName.get(typeMirror).box();
+            fieldInfo.typeName = typeName.box();
         } else {
-            fieldInfo.typeName = TypeName.get(typeMirror);
+            fieldInfo.typeName = typeName;
         }
 
         fieldInfo.kind = Kind.NORMAL;

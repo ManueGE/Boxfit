@@ -89,7 +89,7 @@ public class FromJsonNoEntitiesSerializationTests extends AbstractObjectBoxTest 
     public void fromJsonNoEntities_canSerializeWthGenericEntityField() throws JSONException {
         JSONObject parentJSON = JsonProvider.getJSONObject("parent.json");
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("parent", parentJSON);
+        jsonObject.put("data", parentJSON);
         MainJsonSerializer serializer = new MainJsonSerializer(boxStore);
         SingleParentResponse object = serializer.fromJson(SingleParentResponse.class, jsonObject);
 

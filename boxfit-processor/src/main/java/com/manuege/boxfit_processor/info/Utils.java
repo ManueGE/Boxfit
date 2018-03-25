@@ -121,13 +121,21 @@ public class Utils {
         return false;
     }
 
+    public static TypeElement getElementFromTypeName(TypeName typeName) {
+        return Enviroment.getEnvironment().getElementUtils().getTypeElement(typeName.toString());
+    }
+
+    public static TypeMirror getTypeMirrorFromTypeName(TypeName typeName) {
+        return getElementFromTypeName(typeName).asType();
+    }
+
     public static void ensureTypeNameHasEmptyInitializer(TypeName typeName) {
         if (typeName == null) {
             return;
         }
 
         ArrayList<ExecutableElement> constructors = new ArrayList<>();
-        TypeElement element = Enviroment.getEnvironment().getElementUtils().getTypeElement(typeName.toString());
+        TypeElement element = getElementFromTypeName(typeName);
         for (Element e: element.getEnclosedElements()) {
             if (e.getKind() == ElementKind.CONSTRUCTOR) {
                 constructors.add((ExecutableElement) e);
