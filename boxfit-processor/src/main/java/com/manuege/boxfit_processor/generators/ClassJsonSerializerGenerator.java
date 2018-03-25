@@ -184,7 +184,9 @@ public class ClassJsonSerializerGenerator extends AbstractFileGenerator {
                 .addStatement("$T object = new $T()", getEntityTypeName(), getEntityTypeName());
 
         if (classInfo.hasPrimaryKey()) {
-            builder.addStatement("object.$N = id", classInfo.getPrimaryKey().getName());
+            builder.beginControlFlow("if (id != null)")
+                    .addStatement("object.$N = id", classInfo.getPrimaryKey().getName())
+                    .endControlFlow();
         }
 
         builder.addStatement("return object");
@@ -283,7 +285,10 @@ public class ClassJsonSerializerGenerator extends AbstractFileGenerator {
                 .returns(getEntityTypeName());
 
         if (classInfo.hasPrimaryKey()) {
-            builder.addStatement("return getBox(boxStore).get(id)");
+            builder.beginControlFlow("if (id == null)")
+                    .addStatement("return null")
+                    .endControlFlow()
+                    .addStatement("return getBox(boxStore).get(id)");
         } else {
             builder.addStatement("return null");
         }
