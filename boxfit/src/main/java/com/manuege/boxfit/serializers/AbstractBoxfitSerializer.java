@@ -6,9 +6,8 @@ import org.json.JSONObject;
 import java.util.List;
 
 /**
- * Created by Manu on 11/3/18.
+ * A base class responsible of convert objects and lists from / to JSON.
  */
-
 public interface AbstractBoxfitSerializer {
     <T> T fromJson(Class<? extends T> clazz, JSONObject jsonObject);
     <T> List<T> fromJson(Class<? extends T> clazz, JSONArray jsonArray);

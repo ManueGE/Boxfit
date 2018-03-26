@@ -6,9 +6,6 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-/**
- * Created by Manu on 28/1/18.
- */
 
 public class Json {
     private JSONObject jsonObject;

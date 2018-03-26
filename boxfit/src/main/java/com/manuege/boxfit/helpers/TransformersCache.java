@@ -8,6 +8,9 @@ import java.util.HashMap;
  * Created by Manu on 20/3/18.
  */
 
+/**
+ * A class to cache the transformers used in the app to avoid creating them over and over
+ */
 public class TransformersCache {
     private static HashMap<String, Transformer> transformerHashMap = new HashMap<>();
 

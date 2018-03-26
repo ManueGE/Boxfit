@@ -20,9 +20,8 @@ import retrofit2.Converter;
 import retrofit2.Retrofit;
 
 /**
- * Created by Manu on 11/3/18.
+ * A Retrofit Converter Factory that will return the Boxfit Coverter.
  */
-
 public class BoxfitConverterFactory extends Converter.Factory {
 
     AbstractBoxfitSerializer jsonSerializer;
