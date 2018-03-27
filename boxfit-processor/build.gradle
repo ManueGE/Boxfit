@@ -2,8 +2,8 @@ apply plugin: 'java-library'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.squareup:javapoet:1.10.0'
-    compile project(':boxfit')
+    implementation 'com.squareup:javapoet:1.10.0'
+    implementation project(':boxfit')
 }
 
 sourceCompatibility = "1.7"
