@@ -1,11 +1,20 @@
 # Boxfit
 
-Puts together [**Retrofit**](http://square.github.io/retrofit/) and [**ObjectBox**](http://objectbox.io).
+Puts together [**Retrofit**](http://square.github.io/retrofit/) and [**Objectbox**](http://objectbox.io).
 
 
-Convert a JSON response received through **Retrofit** to **ObjectBox** entities and save them into your `BoxStore` automatically.
+Convert a JSON response received through **Retrofit** to **Objectbox** entities and save them into your `BoxStore` automatically.
 
 ## Install
+
+```
+dependencies {
+    annotationProcessor 'com.manuege.boxfit:boxfit-processor:0.0.1'
+    implementation 'com.manuege.boxfit:boxfit:0.0.1'
+}
+```
+
+If you are using Kotlin, replace annotationProcessor with kapt.
 
 ## Usage
 
@@ -13,7 +22,7 @@ Convert a JSON response received through **Retrofit** to **ObjectBox** entities 
 
 To plug **Boxfit** into **Retrofit** you need to provide a `Converter.Factory`. To do so, you can write:
 
-```
+```java
 Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(BoxfitSerializer.getConverterFactory(boxStore))
                 .baseUrl(API_BASE_URL)
@@ -35,7 +44,7 @@ In order to let Boxfit know how to generate these serializers, you need to annot
 
 Let's suppose you have a `User` class:
 
-````
+````java
 @Entity
 class User {
     @Id(assignable = true)
@@ -47,7 +56,7 @@ class User {
 
 To make this class able to be serialized with Boxfit you must annotate it with `@BoxfitClass`. Also, the fields whose values can be taken from a JSON must be annotated with `@BoxfitField`, like this:
 
-```
+```java
 @BoxfitClass
 @Entity
 class User {
@@ -65,7 +74,7 @@ class User {
 
 > **Note**: For simplicity, in the sample, we just show simple properties annotated with `@BoxfitField`, but you can also use it with relations (`ToOne`, `ToMany`, `List`). 
 
-`@BoxfitClass` can be added to any class, whether it is an ObjectBox entity or not. The only condition is that the class can't be generic, but it could be a concrete subclass of a generic class.
+`@BoxfitClass` can be added to any class, whether it is an Objectbox entity or not. The only condition is that the class can't be generic, but it could be a concrete subclass of a generic class.
 
 `@BoxfitField` can be added to any type of field. However, only native JSON fields (numbers, strings, booleans, lists, and objects) can be serialized directly. Other types (dates, enums...) must be transformed before being serialized. More about this in the `Transformers` section. 
 
@@ -73,14 +82,14 @@ class User {
 
 If you don't specify the name of the JSON key under one value comes, **Boxfit** will use the field name **exactly as it is declared** (that means that it won't automatically convert *camelCase* to *snake_case*). If the field name and the JSON key has different values you can indicate it by adding the key into the `BoxfitField` annotation. For instance:
 
-```
+```java
 @BoxfitField("name")
 String username;
 ```
 
 Let's suppose you have a JSON with this format:
 
-```
+```json
 {
    "id": 1,
    "name": "Manuel",
@@ -94,7 +103,7 @@ Let's suppose you have a JSON with this format:
 
 You can use dot notation to indicate the full path where the avatar is located, like this:
 
-```
+```java
 @BoxfitField("media.avatar.url")
 String avatar;
 ```
@@ -108,7 +117,7 @@ String avatar;
 
 Sometimes your field type is not compatible with JSON. Let's continue with the example of the `User` class. Now we will add a new field, `registerDate`. The date cames into a string format: `yyyy-MM-dd`. To transform a `String` into a `Date` we need to create a class that implements `Transformer`:
 
-```
+```java
 public class MyStringToDateTransformer implements Transformer<Date, String> {
     @Override
     public Date transform(String object) {
@@ -135,7 +144,7 @@ public class MyStringToDateTransformer implements Transformer<Date, String> {
 
 And now, you can modify the user class by adding the `Date`:
 
-```
+```java
 @BoxfitClass
 @Entity
 class User {
@@ -166,7 +175,7 @@ Not only fields can be transformed. If for some reason you don't like the JSON y
 #### Updating objects
 Let's suppose that at some point we get this JSON:
 
-```
+```json
 {
    "id": 1,
    "name": "Manuel",
@@ -182,7 +191,7 @@ After serializing this JSON, we will have a `User` object with its `id`, `name` 
 
 Sometime later, we get this one:
 
-```
+```json
 {
    "id": 1,
    "name": "Marco",
@@ -193,9 +202,9 @@ As you can see, the name for the user `1` has been updated and also this second 
 
 The answer is that the name will be updated, but the `avatar` won't be modified. Any missing key in the JSON will be ignored and the field will keep its current value. 
 
-However, if we have this J:
+However, if we have this JSON:
 
-```
+```json
 {
    "id": 1,
    "name": "Manuel",
@@ -214,12 +223,12 @@ the `avatar` of the user will be updated and set to `null`.
 
 Now we will define this entity:
 
-```
+```java
 @Entity
 @BoxfitClass
 class Department {
     @BoxfitField
-    Id(assignable = true)
+    @Id(assignable = true)
     long id;
     
     @BoxfitField
@@ -229,7 +238,7 @@ class Department {
 
 And we get a JSON like this when retrieving a department:
 
-```
+```json
 { 
     "id": 1,
     "members": [1, 2, 3]
@@ -238,27 +247,27 @@ And we get a JSON like this when retrieving a department:
 
 As you can see, `"members"` is not an array of `User` instances, but an array of numbers. **Boxfit** will recognize the numbers as being ids of users. If users with those ids are already in the local storage, they will be added as members of the department. If not, users with just the id property will be created an added. If later in the app a `User` with the same id is received, the members will be updated.
 
-### Out of ObjectBox
+### Out of Objectbox
 
-Not only **ObjectBox** classes can be serialized with **Boxfit**. Any Java object can be imported with Boxfit if you annotate its class is properly annotated.
+Not only **Objectbox** classes can be serialized with **Boxfit**. Any Java object can be imported with Boxfit if you annotate its class is properly annotated.
 
 ### Out of Retrofit
 
 **Boxfit** can also be used out of **Retrofit** to convert `JSONObject` or `JSONArray` into Java objects:
 
-```
+```java
 User user = BoxfitSerializer.fromJson(User.class, myJsonObject);
 List<Users> users = BoxfitSerializer(User.class, myJsonArray);
  
 ```
 
-## To J
+## To JSON
 
 **Boxfit** can be also used to convert a `BoxfitClass` into a JSON.
 
 You can convert bot a single object or a list of objects:
 
-```
+```java
 User user = ...;
 JSONObject jsonObject = BoxfitSerializer.toJson(user);
 
@@ -270,12 +279,12 @@ JSONArray jsonArray = BoxfitSerializer.toJson(users);
 #### `ToJsonIgnore`
 Add this annotation to a `BoxfitField` to ignore the field when writing a JSON. You can use this annotation to avoid infinite recursion:
 
-```
+```java
 @Entity
 @BoxfitClass
 class User {
     @BoxfitField
-    Id(assignable = true)
+    @Id(assignable = true)
     long id;
     
     @BoxfitField
@@ -290,7 +299,7 @@ class User {
 @BoxfitClass
 class Department {
     @BoxfitField
-    Id(assignable = true)
+    @Id(assignable = true)
     long id;
     
     @BoxfitField
@@ -308,12 +317,12 @@ By default, if a property is `null` when you try to get a JSON, the key for the 
 #### Lists must be initialized:
 If you annotate a `List` field with `BoxfitField`, it must be initialized when the object is created, for instance:
 
-```
+```java
 @Entity
 @BoxfitClass
 class Department {
     @BoxfitField
-    Id(assignable = true)
+    @Id(assignable = true)
     long id;
     
     @BoxfitField
@@ -327,7 +336,7 @@ This is not a problem with relationships declared as `ToMany` as they are automa
 
 JsonSerializable not allowed in generic classes, but allow it in its concrete subclasses. For instance, this will throw a compile error:
 
-```
+```java
 @BoxfitClass
 public class PaginatedResponse<T> {
     @BoxfitField
@@ -346,7 +355,7 @@ public class PaginatedResponse<T> {
 
 However, you can do this:
 
-```
+```java
 public class PaginatedResponse<T> {
     @BoxfitField
     int count;
