@@ -7,6 +7,15 @@ Convert a JSON response received through **Retrofit** to **ObjectBox** entities 
 
 ## Install
 
+```
+dependencies {
+    annotationProcessor 'com.manuege.boxfit:boxfit-processor:0.0.1'
+    implementation 'com.manuege.boxfit:boxfit:0.0.1'
+}
+```
+
+If you are using Kotlin, replace annotationProcessor with kapt.
+
 ## Usage
 
 ### Retrofit converter
