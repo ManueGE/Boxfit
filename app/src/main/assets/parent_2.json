@@ -1,0 +1,46 @@
+{
+  "id": 1,
+  "long_class": 20,
+  "integer": 30,
+  "integer_class": 40,
+  "bool": false,
+  "bool_class": true,
+  "double": 50.5,
+  "double_class": 60.6,
+  "string": "goodbye",
+  "serializerNameInferred": "inferred 2",
+  "toOne": {
+    "id": 1,
+    "value": "uno"
+  },
+  "first": {
+    "second": {
+      "third": {
+        "key": "keyPath 2"
+      }
+    }
+  },
+  "a.b.c.d": "fakeKeyPath 2",
+  "toMany": [
+    {
+      "id": 2,
+      "value": "dos"
+    },
+    {
+      "id": 3,
+      "value": "tres"
+    }
+  ],
+  "list": [
+    {
+      "id": 4,
+      "value": "cuatro"
+    },
+    {
+      "id": 5,
+      "value": "cinco"
+    }
+  ],
+  "enum": 2,
+  "date": "1983-18-11"
+}

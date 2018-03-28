@@ -1,0 +1,13 @@
+apply plugin: 'java-library'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    api 'org.json:json:20171018'
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+}
+
+apply from: 'bintray.gradle'
+apply plugin: 'io.objectbox'
+
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"
