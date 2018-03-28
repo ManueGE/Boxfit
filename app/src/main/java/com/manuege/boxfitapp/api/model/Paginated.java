@@ -1,6 +1,6 @@
 package com.manuege.boxfitapp.api.model;
 
-import com.manuege.boxfit.annotations.JsonSerializable;
+import com.manuege.boxfit.annotations.BoxfitClass;
 import com.manuege.boxfitapp.model.Parent;
 
 /**
@@ -8,9 +8,9 @@ import com.manuege.boxfitapp.model.Parent;
  */
 
 public class Paginated {
-    @JsonSerializable
+    @BoxfitClass
     public static class Parents extends PaginatedResponse<Parent> {}
 
-    @JsonSerializable
+    @BoxfitClass
     public static class ParentsSubclass extends Parents {}
 }

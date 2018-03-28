@@ -1,6 +1,6 @@
 package com.manuege.boxfitapp.tojson;
 
-import com.manuege.boxfit.MainJsonSerializer;
+import com.manuege.boxfit.BoxfitSerializer;
 import com.manuege.boxfitapp.AbstractObjectBoxTest;
 import com.manuege.boxfitapp.model.Child;
 import com.manuege.boxfitapp.model.Parent;
@@ -62,8 +62,8 @@ public class ToJsonTest extends AbstractObjectBoxTest{
         calendar.set(2017, 8, 17);
         parent.dateField = calendar.getTime();
 
-        MainJsonSerializer mainJsonSerializer = new MainJsonSerializer(boxStore);
-        JSONObject actual = mainJsonSerializer.toJson(parent);
+        BoxfitSerializer boxfitSerializer = new BoxfitSerializer(boxStore);
+        JSONObject actual = boxfitSerializer.toJson(parent);
         JSONObject expected = JsonProvider.getJSONObject("parent_for_to_json.json");
         Assert.assertEquals(expected.toString(), actual.toString());
     }
@@ -86,8 +86,8 @@ public class ToJsonTest extends AbstractObjectBoxTest{
         expected.put("toMany", new JSONArray());
         expected.put("list", new JSONArray());
 
-        MainJsonSerializer mainJsonSerializer = new MainJsonSerializer(boxStore);
-        JSONObject actual = mainJsonSerializer.toJson(parent);
+        BoxfitSerializer boxfitSerializer = new BoxfitSerializer(boxStore);
+        JSONObject actual = boxfitSerializer.toJson(parent);
         Assert.assertEquals(expected.toString(), actual.toString());
     }
 
@@ -105,8 +105,8 @@ public class ToJsonTest extends AbstractObjectBoxTest{
         expected.put("string", JSONObject.NULL);
         expected.put("toOne", JSONObject.NULL);
 
-        MainJsonSerializer mainJsonSerializer = new MainJsonSerializer(boxStore);
-        JSONObject actual = mainJsonSerializer.toJson(object);
+        BoxfitSerializer boxfitSerializer = new BoxfitSerializer(boxStore);
+        JSONObject actual = boxfitSerializer.toJson(object);
         Assert.assertEquals(expected.toString(), actual.toString());
     }
 
@@ -128,8 +128,8 @@ public class ToJsonTest extends AbstractObjectBoxTest{
         list.add(parent1);
         list.add(parent2);
 
-        MainJsonSerializer mainJsonSerializer = new MainJsonSerializer(boxStore);
-        JSONArray actual = mainJsonSerializer.toJson(list);
+        BoxfitSerializer boxfitSerializer = new BoxfitSerializer(boxStore);
+        JSONArray actual = boxfitSerializer.toJson(list);
 
         JSONObject object1 = new JSONObject();
         object1.put("id", 1);

@@ -1,6 +1,6 @@
 package com.manuege.boxfitapp;
 
-import com.manuege.boxfit.MainJsonSerializer;
+import com.manuege.boxfit.BoxfitSerializer;
 import com.manuege.boxfitapp.api.ApiService;
 import com.manuege.boxfitapp.utils.JsonProvider;
 import com.squareup.okhttp.mockwebserver.MockResponse;
@@ -33,7 +33,7 @@ public abstract class AbstractRetrofitTest extends AbstractObjectBoxTest {
 
     protected ApiService getService() {
         Retrofit retrofit = new Retrofit.Builder()
-                .addConverterFactory(MainJsonSerializer.getConverterFactory(boxStore))
+                .addConverterFactory(BoxfitSerializer.getConverterFactory(boxStore))
                 .baseUrl(server.getUrl("/").toString())
                 .build();
         return retrofit.create(ApiService.class);

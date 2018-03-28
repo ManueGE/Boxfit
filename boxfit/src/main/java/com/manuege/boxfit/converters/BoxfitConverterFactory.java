@@ -1,7 +1,7 @@
 package com.manuege.boxfit.converters;
 
-import com.manuege.boxfit.annotations.JsonSerializable;
-import com.manuege.boxfit.serializers.AbstractMainSerializer;
+import com.manuege.boxfit.annotations.BoxfitClass;
+import com.manuege.boxfit.serializers.AbstractBoxfitSerializer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,24 +20,23 @@ import retrofit2.Converter;
 import retrofit2.Retrofit;
 
 /**
- * Created by Manu on 11/3/18.
+ * A Retrofit Converter Factory that will return the Boxfit Coverter.
  */
+public class BoxfitConverterFactory extends Converter.Factory {
 
-public class JsonSerializableConverterFactory extends Converter.Factory {
-
-    AbstractMainSerializer jsonSerializer;
+    AbstractBoxfitSerializer jsonSerializer;
     private static final MediaType MEDIA_TYPE = MediaType.parse("application/json; charset=UTF-8");
 
-    public JsonSerializableConverterFactory(AbstractMainSerializer jsonSerializer) {
+    public BoxfitConverterFactory(AbstractBoxfitSerializer jsonSerializer) {
         this.jsonSerializer = jsonSerializer;
     }
 
     @Override
     public Converter<ResponseBody, ?> responseBodyConverter(Type type, Annotation[] annotations, Retrofit retrofit) {
         if (typeIsJsonSerializable(type)) {
-            return new ResponseSerializableConverter((Class<?>) type);
+            return new BoxfitResponseConverter((Class<?>) type);
         } else if (typeIsListOfJsonSerializable(type)) {
-            return new ResponseSerializableManyConverter((Class<?>) ((ParameterizedType) type).getActualTypeArguments()[0]);
+            return new BoxfitListResponseConverter((Class<?>) ((ParameterizedType) type).getActualTypeArguments()[0]);
         }
         return null;
     }
@@ -45,9 +44,9 @@ public class JsonSerializableConverterFactory extends Converter.Factory {
     @Override
     public Converter<?, RequestBody> requestBodyConverter(Type type, Annotation[] parameterAnnotations, Annotation[] methodAnnotations, Retrofit retrofit) {
         if (typeIsJsonSerializable(type)) {
-            return new RequestSerializableConverter<>();
+            return new BoxfitRequestConverter<>();
         } else if (typeIsListOfJsonSerializable(type)) {
-            return new RequestSerializableManyConverter<>();
+            return new BoxfitListRequestConverter<>();
         }
         return null;
     }
@@ -65,13 +64,13 @@ public class JsonSerializableConverterFactory extends Converter.Factory {
         }
 
         Class clazz = (Class) type;
-        return clazz.getAnnotation(JsonSerializable.class) != null;
+        return clazz.getAnnotation(BoxfitClass.class) != null;
     }
 
-    private class ResponseSerializableConverter<T> implements Converter<ResponseBody, T> {
+    private class BoxfitResponseConverter<T> implements Converter<ResponseBody, T> {
         Class<? extends T> clazz;
 
-        private ResponseSerializableConverter(Class<? extends T> clazz) {
+        private BoxfitResponseConverter(Class<? extends T> clazz) {
             this.clazz = clazz;
         }
 
@@ -87,10 +86,10 @@ public class JsonSerializableConverterFactory extends Converter.Factory {
         }
     }
 
-    private class ResponseSerializableManyConverter<T> implements Converter<ResponseBody, List<T>> {
+    private class BoxfitListResponseConverter<T> implements Converter<ResponseBody, List<T>> {
         Class<? extends T> clazz;
 
-        private ResponseSerializableManyConverter(Class<? extends T> clazz) {
+        private BoxfitListResponseConverter(Class<? extends T> clazz) {
             this.clazz = clazz;
         }
 
@@ -106,7 +105,7 @@ public class JsonSerializableConverterFactory extends Converter.Factory {
         }
     }
 
-    private class RequestSerializableConverter<T> implements Converter<T, RequestBody> {
+    private class BoxfitRequestConverter<T> implements Converter<T, RequestBody> {
         @Override
         public RequestBody convert(T value) throws IOException {
             JSONObject jsonObject = jsonSerializer.toJson(value);
@@ -115,7 +114,7 @@ public class JsonSerializableConverterFactory extends Converter.Factory {
         }
     }
 
-    private class RequestSerializableManyConverter<T> implements Converter<List<T>, RequestBody> {
+    private class BoxfitListRequestConverter<T> implements Converter<List<T>, RequestBody> {
         @Override
         public RequestBody convert(List<T> value) throws IOException {
             JSONArray jsonArray = jsonSerializer.toJson(value);

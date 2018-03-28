@@ -30,14 +30,34 @@
     <orderEntry type="module" module-name="boxfit" exported="" />
     <orderEntry type="module" module-name="boxfit" exported="" />
     <orderEntry type="library" exported="" scope="PROVIDED" name="javapoet-1.10.0" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="objectbox-java-1.4.1" level="project" />
     <orderEntry type="library" exported="" scope="PROVIDED" name="json-20171018" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="retrofit-2.3.0" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="objectbox-java-api-1.4.1" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="objectbox-java-1.4.4" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="objectbox-macos-1.4.4" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="objectbox-java-api-1.4.4" level="project" />
     <orderEntry type="library" exported="" scope="PROVIDED" name="essentials-3.0.0-RC1" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="flatbuffers-java-1.7.2" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="flatbuffers-java-1.8.0" level="project" />
     <orderEntry type="library" exported="" scope="PROVIDED" name="jsr305-3.0.2" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="okhttp-3.8.0" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="okio-1.13.0" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="javapoet-1.10.0" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="json-20171018" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="objectbox-java-1.4.4" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="objectbox-macos-1.4.4" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="retrofit-2.4.0" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="objectbox-java-api-1.4.4" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="essentials-3.0.0-RC1" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="flatbuffers-java-1.8.0" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="jsr305-3.0.2" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="okhttp-3.10.0" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="okio-1.14.0" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="javapoet-1.10.0" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="json-20171018" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="objectbox-java-1.4.4" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="objectbox-macos-1.4.4" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="objectbox-java-api-1.4.4" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="essentials-3.0.0-RC1" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="flatbuffers-java-1.8.0" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="jsr305-3.0.2" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="retrofit-2.4.0" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="okhttp-3.10.0" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="okio-1.14.0" level="project" />
   </component>
 </module>

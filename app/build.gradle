@@ -28,10 +28,10 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
     // Retrofit
-    compile 'com.squareup.retrofit2:retrofit:2.3.0'
-    compile 'com.squareup.okhttp:mockwebserver:2.3.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.okhttp:mockwebserver:2.4.0'
 
-    // Boxfit
-    compile project(':boxfit')
+    // BoxfitClass
+    implementation project(':boxfit')
     annotationProcessor project(':boxfit-processor')
 }

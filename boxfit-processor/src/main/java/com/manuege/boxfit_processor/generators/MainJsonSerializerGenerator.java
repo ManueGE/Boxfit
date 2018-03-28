@@ -1,7 +1,7 @@
 package com.manuege.boxfit_processor.generators;
 
-import com.manuege.boxfit.converters.JsonSerializableConverterFactory;
-import com.manuege.boxfit.serializers.AbstractMainSerializer;
+import com.manuege.boxfit.converters.BoxfitConverterFactory;
+import com.manuege.boxfit.serializers.AbstractBoxfitSerializer;
 import com.manuege.boxfit_processor.info.ClassInfo;
 import com.manuege.boxfit_processor.info.Utils;
 import com.squareup.javapoet.ClassName;
@@ -35,7 +35,7 @@ public class MainJsonSerializerGenerator extends AbstractFileGenerator {
     }
 
     private String getClassName() {
-        return "MainJsonSerializer";
+        return "BoxfitSerializer";
     }
 
     @Override
@@ -43,7 +43,7 @@ public class MainJsonSerializerGenerator extends AbstractFileGenerator {
         // Class definition
         TypeSpec.Builder mainSerializerClass = TypeSpec
                 .classBuilder(getClassName())
-                .addSuperinterface(AbstractMainSerializer.class)
+                .addSuperinterface(AbstractBoxfitSerializer.class)
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
 
         // Constructor
@@ -143,10 +143,10 @@ public class MainJsonSerializerGenerator extends AbstractFileGenerator {
     private MethodSpec getConverterFactoryMethod() {
         return MethodSpec.methodBuilder("getConverterFactory")
                 .addParameter(BoxStore.class, "boxStore")
-                .returns(JsonSerializableConverterFactory.class)
+                .returns(BoxfitConverterFactory.class)
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                .addStatement("$N mainSerializer = new $N(boxStore)", getClassName(), getClassName())
-                .addStatement("return new $T(mainSerializer)", JsonSerializableConverterFactory.class)
+                .addStatement("$N boxfitSerializer = new $N(boxStore)", getClassName(), getClassName())
+                .addStatement("return new $T(boxfitSerializer)", BoxfitConverterFactory.class)
                 .build();
     }
 

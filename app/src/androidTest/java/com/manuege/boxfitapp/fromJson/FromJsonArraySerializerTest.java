@@ -1,6 +1,6 @@
 package com.manuege.boxfitapp.fromJson;
 
-import com.manuege.boxfit.MainJsonSerializer;
+import com.manuege.boxfit.BoxfitSerializer;
 import com.manuege.boxfit.utils.Json;
 import com.manuege.boxfitapp.AbstractObjectBoxTest;
 import com.manuege.boxfitapp.model.Child;
@@ -24,7 +24,7 @@ public class FromJsonArraySerializerTest extends AbstractObjectBoxTest {
     public void fromJsonArray_canSerialize() {
         JSONObject object = JsonProvider.getJSONObject("paginated_parent.json");
         JSONArray array = new Json(object).getJSONArray("results");
-        MainJsonSerializer serializer = new MainJsonSerializer(boxStore);
+        BoxfitSerializer serializer = new BoxfitSerializer(boxStore);
         List<Parent> objects = serializer.fromJson(Parent.class, array);
 
         assertEquals(2, boxStore.boxFor(Parent.class).count());

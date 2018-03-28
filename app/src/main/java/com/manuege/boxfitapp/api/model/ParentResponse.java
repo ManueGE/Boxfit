@@ -1,15 +1,15 @@
 package com.manuege.boxfitapp.api.model;
 
-import com.manuege.boxfit.annotations.JsonSerializable;
-import com.manuege.boxfit.annotations.JsonSerializableField;
+import com.manuege.boxfit.annotations.BoxfitClass;
+import com.manuege.boxfit.annotations.BoxfitField;
 import com.manuege.boxfitapp.model.Parent;
 
 /**
  * Created by Manu on 25/3/18.
  */
 
-@JsonSerializable
+@BoxfitClass
 public class ParentResponse {
-    @JsonSerializableField
+    @BoxfitField
     public Parent parent;
 }

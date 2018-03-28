@@ -1,6 +1,6 @@
 package com.manuege.boxfitapp.api.model;
 
-import com.manuege.boxfit.annotations.JsonSerializableField;
+import com.manuege.boxfit.annotations.BoxfitField;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,16 +10,16 @@ import java.util.List;
  */
 
 public class PaginatedResponse<T> {
-    @JsonSerializableField
+    @BoxfitField
     int count;
 
-    @JsonSerializableField
+    @BoxfitField
     int next;
 
-    @JsonSerializableField
+    @BoxfitField
     int previous;
 
-    @JsonSerializableField
+    @BoxfitField
     List<T> results = new ArrayList<>();
 
     public int getCount() {

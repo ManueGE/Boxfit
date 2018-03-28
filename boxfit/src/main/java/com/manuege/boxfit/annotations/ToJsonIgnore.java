@@ -6,9 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Created by Manu on 19/3/18.
+ * Add this annotation to a `BoxfitField` to ignore the field when writing a JSON.
  */
-
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.FIELD)
 public @interface ToJsonIgnore {

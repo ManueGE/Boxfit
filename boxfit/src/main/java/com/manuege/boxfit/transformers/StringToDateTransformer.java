@@ -6,9 +6,9 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * Created by Manu on 31/1/18.
+ * A transformer to convert a Date to / from a String.
+ * Subclasses will need to provide a `DateFormat`
  */
-
 public abstract class StringToDateTransformer implements Transformer<Date, String> {
 
     @Override

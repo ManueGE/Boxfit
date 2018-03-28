@@ -1,8 +1,8 @@
 package com.manuege.boxfit_processor.info;
 
+import com.manuege.boxfit.annotations.BoxfitClass;
 import com.manuege.boxfit.annotations.IdentityTransformer;
-import com.manuege.boxfit.annotations.JsonSerializable;
-import com.manuege.boxfit.annotations.JsonSerializableField;
+import com.manuege.boxfit.annotations.BoxfitField;
 import com.manuege.boxfit.annotations.ToJsonIgnore;
 import com.manuege.boxfit.annotations.ToJsonIncludeNull;
 import com.manuege.boxfit.constants.Constants;
@@ -77,18 +77,18 @@ public class FieldInfo {
         Elements elementUtil = Enviroment.getEnvironment().getElementUtils();
 
         // Check if serializable
-        JsonSerializableField jsonSerializableField = element.getAnnotation(JsonSerializableField.class);
-        if (jsonSerializableField == null) {
+        BoxfitField boxfitField = element.getAnnotation(BoxfitField.class);
+        if (boxfitField == null) {
             return null;
         }
 
         // Check if valid
         if (element.getModifiers().contains(Modifier.PRIVATE)) {
-            throw new InvalidElementException("JsonSerializableField annotated fields can't be private", element);
+            throw new InvalidElementException("BoxfitField annotated fields can't be private", element);
         }
 
         if (element.getModifiers().contains(Modifier.STATIC)) {
-            throw new InvalidElementException("JsonSerializableField annotated fields can't be static", element);
+            throw new InvalidElementException("BoxfitField annotated fields can't be static", element);
         }
 
         // Basic info
@@ -123,15 +123,15 @@ public class FieldInfo {
         fieldInfo.isPrimaryKey = (id != null);
 
         // Serializable info
-        if (jsonSerializableField.value().equals(Constants.SERIALIZABLE_NULL_KEY_PATH)) {
+        if (boxfitField.value().equals(Constants.SERIALIZABLE_NULL_KEY_PATH)) {
             fieldInfo.serializedName = fieldInfo.name;
         } else {
-            fieldInfo.serializedName = jsonSerializableField.value();
+            fieldInfo.serializedName = boxfitField.value();
         }
 
         // Transformer
         try {
-            jsonSerializableField.transformer().getName(); // Never should come here, just done to call the catch
+            boxfitField.transformer().getName(); // Never should come here, just done to call the catch
         } catch (MirroredTypeException e) {
 
             TypeMirror transformerMirror = e.getTypeMirror();
@@ -162,7 +162,7 @@ public class FieldInfo {
         // Relationships
         Element fieldTypeElement = typeUtil.asElement(typeMirror);
         if (fieldTypeElement instanceof TypeElement) {
-            if (fieldTypeElement.getAnnotation(JsonSerializable.class) != null) {
+            if (fieldTypeElement.getAnnotation(BoxfitClass.class) != null) {
                 fieldInfo.kind = Kind.JSON_SERIALIZABLE;
             } else if (((TypeElement) fieldTypeElement).getQualifiedName().toString().startsWith(TypeName.get(ToOne.class).toString())) {
                 fieldInfo.kind = Kind.TO_ONE;

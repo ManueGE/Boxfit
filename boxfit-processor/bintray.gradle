@@ -1,0 +1,43 @@
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven-publish'
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+def bintrayUser = properties.getProperty('bintray.user')
+def bintrayApiKey = properties.getProperty('bintray.apikey')
+def libraryVersion = rootProject.properties['library.version']
+
+publishing {
+    publications {
+        MyPublication(MavenPublication) {
+            from components.java
+            groupId 'com.manuege.boxfit'
+            artifactId 'boxfit-processor'
+            version libraryVersion
+        }
+    }
+}
+
+bintray {
+    user = bintrayUser
+    key = bintrayApiKey
+    publications = ['MyPublication']
+    pkg {
+        repo = 'boxfit'
+        name = 'boxfit-processor'
+        userOrg = user
+        licenses = ['MIT']
+        vcsUrl = 'https://github.com/ManueGE/Boxfit.git'
+        websiteUrl = 'https://github.com/ManueGE/Boxfit'
+        issueTrackerUrl = 'https://github.com/ManueGE/Boxfit/issues'
+        desc = 'Put together Retrofit and ObjectBox.'
+        labels = ['retrofit', 'objectbox', 'android']
+        publicDownloadNumbers = true
+        publish = true
+        version {
+            name = libraryVersion
+            vcsTag = libraryVersion
+            desc = 'Initial version'
+        }
+    }
+}

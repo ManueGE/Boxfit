@@ -1,6 +1,6 @@
 package com.manuege.boxfitapp.fromJson;
 
-import com.manuege.boxfit.MainJsonSerializer;
+import com.manuege.boxfit.BoxfitSerializer;
 import com.manuege.boxfitapp.AbstractObjectBoxTest;
 import com.manuege.boxfitapp.api.model.Paginated;
 import com.manuege.boxfitapp.api.model.PaginatedResponse;
@@ -21,7 +21,7 @@ public class FromJsonArrayPaginatedResponseTest extends AbstractObjectBoxTest {
     @Test
     public void fromJsonPaginatedResponse_canSerialize() {
         JSONObject jsonObject = JsonProvider.getJSONObject("paginated_parent.json");
-        MainJsonSerializer serializer = new MainJsonSerializer(boxStore);
+        BoxfitSerializer serializer = new BoxfitSerializer(boxStore);
         PaginatedResponse<Parent> object = serializer.fromJson(Paginated.Parents.class, jsonObject);
 
         assertEquals(10, object.getCount());
@@ -38,7 +38,7 @@ public class FromJsonArrayPaginatedResponseTest extends AbstractObjectBoxTest {
     @Test
     public void fromJsonPaginatedResponse_canSerializeSubclassOfGeneric() {
         JSONObject jsonObject = JsonProvider.getJSONObject("paginated_parent.json");
-        MainJsonSerializer serializer = new MainJsonSerializer(boxStore);
+        BoxfitSerializer serializer = new BoxfitSerializer(boxStore);
         PaginatedResponse<Parent> object = serializer.fromJson(Paginated.ParentsSubclass.class, jsonObject);
 
         assertEquals(10, object.getCount());

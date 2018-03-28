@@ -19,7 +19,7 @@ final public class ErrorLogger {
     }
 
     private static void putMessage(String reason, Diagnostic.Kind kind, Element element) {
-        String message = "Boxfit: " + reason;
+        String message = "BoxfitClass: " + reason;
         Enviroment.getEnvironment().getMessager().printMessage(kind, message, element);
     }
 }
