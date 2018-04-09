@@ -249,7 +249,7 @@ As you can see, `"members"` is not an array of `User` instances, but an array of
 
 ### Out of Objectbox
 
-Not only **Objectbox** classes can be serialized with **Boxfit**. Any Java object can be imported with Boxfit if you annotate its class is properly annotated.
+Not only **Objectbox** classes can be serialized with **Boxfit**. Any Java object can be imported with Boxfit if its class is properly annotated.
 
 ### Out of Retrofit
 
@@ -257,7 +257,7 @@ Not only **Objectbox** classes can be serialized with **Boxfit**. Any Java objec
 
 ```java
 User user = BoxfitSerializer.fromJson(User.class, myJsonObject);
-List<Users> users = BoxfitSerializer(User.class, myJsonArray);
+List<Users> users = BoxfitSerializer.fromJson(User.class, myJsonArray);
  
 ```
 
