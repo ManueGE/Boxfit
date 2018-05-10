@@ -5,6 +5,7 @@ Puts together [**Retrofit**](http://square.github.io/retrofit/) and [**Objectbox
 
 Convert a JSON response received through **Retrofit** to **Objectbox** entities and save them into your `BoxStore` automatically.
 
+
 ## Install
 
 ```
@@ -171,7 +172,7 @@ class User {
 Not only fields can be transformed. If for some reason you don't like the JSON you get from your server and you want to make some transformations into it before being serialized, you can do it by creating a class that implements `JSONObjectTransformer` and setting the `transformer` value of the `@BoxfitClass` annotation.
 
 
-### Serializing features
+### Features
 #### Updating objects
 Let's suppose that at some point we get this JSON:
 
@@ -249,7 +250,7 @@ As you can see, `"members"` is not an array of `User` instances, but an array of
 
 ### Out of Objectbox
 
-Not only **Objectbox** classes can be serialized with **Boxfit**. Any Java object can be imported with Boxfit if you annotate its class is properly annotated.
+Not only **Objectbox** classes can be serialized with **Boxfit**. Any Java object can be imported with Boxfit if its class is properly annotated.
 
 ### Out of Retrofit
 
@@ -257,7 +258,7 @@ Not only **Objectbox** classes can be serialized with **Boxfit**. Any Java objec
 
 ```java
 User user = BoxfitSerializer.fromJson(User.class, myJsonObject);
-List<Users> users = BoxfitSerializer(User.class, myJsonArray);
+List<Users> users = BoxfitSerializer.fromJson(User.class, myJsonArray);
  
 ```
 
