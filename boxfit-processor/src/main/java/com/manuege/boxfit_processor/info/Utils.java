@@ -36,10 +36,22 @@ public class Utils {
     }
 
     private static String getSerializerName(TypeElement element) {
+        return getHelperClass(element, "Serializer");
+    }
+
+    public static ClassName getProxy(TypeElement element) {
+        return ClassName.get(Enviroment.getEnvironment().getElementUtils().getPackageOf(element).toString(),  getProxyName(element));
+    }
+
+    public static String getProxyName(TypeElement element) {
+        return getHelperClass(element, "Proxy");
+    }
+
+    private static String getHelperClass(TypeElement element, String suffix) {
         String fullName = element.getQualifiedName().toString();
         String pack = Enviroment.getEnvironment().getElementUtils().getPackageOf(element).toString();
         String elementName = fullName.substring(pack.length() + 1).replace(".", "$");
-        return elementName + "Serializer";
+        return elementName + suffix;
     }
 
     public static TypeMirror getGenericType(final TypeMirror type, final int index) {
@@ -154,5 +166,9 @@ public class Utils {
 
         ErrorLogger.putError(String.format("%s must have a public constructor with no arguments", element.getSimpleName()), element);
 
+    }
+
+    public static String capitalize(String string) {
+        return string.substring(0,1).toUpperCase() + string.substring(1);
     }
 }

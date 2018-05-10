@@ -19,14 +19,19 @@ public abstract class AbstractFileGenerator {
     }
 
     public void generateFile() {
-        JavaFile javaFile = JavaFile.builder(getPackageName(), getTypeSpec())
-                .build();
+        JavaFile.Builder javaFileBuilder = JavaFile.builder(getPackageName(), getTypeSpec());
+        prepareFile(javaFileBuilder);
+        JavaFile javaFile = javaFileBuilder.build();
 
         try {
             javaFile.writeTo(environment.getFiler());
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    protected void prepareFile(JavaFile.Builder javaFileBuilder) {
+
     }
 
     protected abstract TypeSpec getTypeSpec();
