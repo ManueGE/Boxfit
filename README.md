@@ -5,6 +5,7 @@ Puts together [**Retrofit**](http://square.github.io/retrofit/) and [**Objectbox
 
 Convert a JSON response received through **Retrofit** to **Objectbox** entities and save them into your `BoxStore` automatically.
 
+
 ## Install
 
 ```
@@ -171,7 +172,7 @@ class User {
 Not only fields can be transformed. If for some reason you don't like the JSON you get from your server and you want to make some transformations into it before being serialized, you can do it by creating a class that implements `JSONObjectTransformer` and setting the `transformer` value of the `@BoxfitClass` annotation.
 
 
-### Serializing features
+### Features
 #### Updating objects
 Let's suppose that at some point we get this JSON:
 
