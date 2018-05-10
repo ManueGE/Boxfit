@@ -34,6 +34,7 @@ public class ClassInfo {
     private List<FieldInfo> fields;
     private TypeName transformer;
     private HashMap<TypeVariableName, TypeName> genericParamsMap;
+    private Boolean isKotlinClass;
 
     public static ClassInfo newInstance(TypeElement element) throws InvalidElementException {
 
@@ -44,6 +45,18 @@ public class ClassInfo {
         classInfo.type = TypeName.get(typeMirror);
 
         classInfo.validate();
+
+        // Check if kotlin
+        try {
+            Class kotlinAnnotation = Class.forName("kotlin.Metadata");
+            classInfo.isKotlinClass = element.getAnnotation(kotlinAnnotation) != null;
+            /*
+            if (classInfo.isKotlinClass) {
+                ErrorLogger.putError("KT: " + element.getAnnotationMirrors().toString(), element);
+            }*/
+        } catch (ClassNotFoundException ignore) {
+            classInfo.isKotlinClass = false;
+        }
 
         // Transformer
         // http://hauchee.blogspot.com.es/2015/12/compile-time-annotation-processing-getting-class-value.html
@@ -166,6 +179,10 @@ public class ClassInfo {
 
     public HashMap<TypeVariableName, TypeName> getGenericParamsMap() {
         return genericParamsMap;
+    }
+
+    public Boolean isKotlinClass() {
+        return isKotlinClass;
     }
 
     private void validate() throws InvalidElementException{

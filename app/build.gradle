@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'io.objectbox'
 
 android {
@@ -27,11 +29,18 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
+    // Kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.okhttp:mockwebserver:2.4.0'
 
     // BoxfitClass
     implementation project(':boxfit')
-    annotationProcessor project(':boxfit-processor')
+    kapt project(':boxfit-processor')
+
+}
+repositories {
+    mavenCentral()
 }

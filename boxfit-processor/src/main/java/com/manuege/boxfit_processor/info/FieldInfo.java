@@ -83,12 +83,15 @@ public class FieldInfo {
         }
 
         // Check if valid
-        if (element.getModifiers().contains(Modifier.PRIVATE)) {
-            throw new InvalidElementException("BoxfitField annotated fields can't be private", element);
-        }
+        // TODO
+        if (!classInfo.isKotlinClass()) {
+            if (element.getModifiers().contains(Modifier.PRIVATE)) {
+                throw new InvalidElementException("BoxfitField annotated fields can't be private", element);
+            }
 
-        if (element.getModifiers().contains(Modifier.STATIC)) {
-            throw new InvalidElementException("BoxfitField annotated fields can't be static", element);
+            if (element.getModifiers().contains(Modifier.STATIC)) {
+                throw new InvalidElementException("BoxfitField annotated fields can't be static", element);
+            }
         }
 
         // Basic info
