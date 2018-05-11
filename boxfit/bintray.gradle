@@ -6,6 +6,7 @@ properties.load(project.rootProject.file('local.properties').newDataInputStream(
 def bintrayUser = properties.getProperty('bintray.user')
 def bintrayApiKey = properties.getProperty('bintray.apikey')
 def libraryVersion = rootProject.properties['library.version']
+def libraryVersionDesc = rootProject.properties['library.version.desc']
 
 task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = 'sources'
@@ -55,7 +56,7 @@ bintray {
         version {
             name = libraryVersion
             vcsTag = libraryVersion
-            desc = 'Initial version'
+            desc = libraryVersionDesc
         }
     }
 }

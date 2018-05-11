@@ -30,7 +30,7 @@ import io.objectbox.BoxStore;
  * Created by Manu on 1/2/18.
  */
 
-public class ClassJsonSerializerGenerator extends AbstractFileGenerator {
+public class ClassJsonSerializerGenerator extends AbstractJavaFileGenerator {
     ClassInfo classInfo;
 
     public ClassJsonSerializerGenerator(ProcessingEnvironment environment, ClassInfo classInfo) {
@@ -93,7 +93,7 @@ public class ClassJsonSerializerGenerator extends AbstractFileGenerator {
     private MethodSpec getMergeMethod() {
         MethodSpec.Builder builder = MethodSpec.methodBuilder("merge")
                 .addParameter(Json.class, "json")
-                .addParameter(classInfo.getType(), "object")
+                .addParameter(classInfo.getTypeName(), "object")
                 .addParameter(BoxStore.class, "boxStore")
                 .addModifiers(Modifier.PROTECTED);
 
@@ -174,7 +174,7 @@ public class ClassJsonSerializerGenerator extends AbstractFileGenerator {
                 .returns(ParameterizedTypeName.get(ClassName.get(Box.class), getEntityTypeName()));
 
         if (classInfo.isEntity()) {
-            builder.addStatement("return boxStore.boxFor($T.class)", classInfo.getType());
+            builder.addStatement("return boxStore.boxFor($T.class)", classInfo.getTypeName());
         } else {
             builder.addStatement("return null");
         }
@@ -446,7 +446,7 @@ public class ClassJsonSerializerGenerator extends AbstractFileGenerator {
     }
 
     private TypeName getEntityTypeName() {
-        return classInfo.getType();
+        return classInfo.getTypeName();
     }
 
     private TypeName getPrimaryKeyTypeName() {
@@ -459,7 +459,7 @@ public class ClassJsonSerializerGenerator extends AbstractFileGenerator {
 
     private String buildSetterString(FieldInfo fieldInfo, String value) {
         if (classInfo.isKotlinClass()) {
-            return Utils.getProxy(classInfo.getTypeElement()) + ".INSTANCE.set" + Utils.capitalize(fieldInfo.getName()) + "(object, " + value + ")";
+            return Utils.getBridgeClass(classInfo.getTypeElement()) + ".INSTANCE.set" + Utils.capitalize(fieldInfo.getName()) + "(object, " + value + ")";
         } else {
             return "object." + fieldInfo.getName() + " = " + value;
         }
@@ -467,7 +467,7 @@ public class ClassJsonSerializerGenerator extends AbstractFileGenerator {
 
     private String buildGetterString(FieldInfo fieldInfo) {
         if (classInfo.isKotlinClass()) {
-            return Utils.getProxy(classInfo.getTypeElement()) + ".INSTANCE.get" + Utils.capitalize(fieldInfo.getName()) + "(object)";
+            return Utils.getBridgeClass(classInfo.getTypeElement()) + ".INSTANCE.get" + Utils.capitalize(fieldInfo.getName()) + "(object)";
         } else {
             return "object." + fieldInfo.getName();
         }

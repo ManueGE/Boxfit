@@ -1,5 +1,6 @@
 package com.manuege.boxfitapp.kotlin
 
+import com.manuege.boxfit.annotations.BoxfitClass
 import com.manuege.boxfit.annotations.BoxfitField
 import com.manuege.boxfitapp.model.Child
 import io.objectbox.annotation.Entity
@@ -7,6 +8,7 @@ import io.objectbox.annotation.Id
 import io.objectbox.relation.ToMany
 import io.objectbox.relation.ToOne
 
+@BoxfitClass
 @Entity
 class KtParent() {
 
@@ -54,5 +56,5 @@ class KtParent() {
     var toMany: ToMany<Child>? = null
 
     @BoxfitField
-    var list: MutableList<Child>? = null
+    var list: MutableList<Child> = ArrayList()
 }

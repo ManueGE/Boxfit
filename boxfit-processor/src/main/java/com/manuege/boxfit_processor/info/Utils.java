@@ -39,12 +39,12 @@ public class Utils {
         return getHelperClass(element, "Serializer");
     }
 
-    public static ClassName getProxy(TypeElement element) {
-        return ClassName.get(Enviroment.getEnvironment().getElementUtils().getPackageOf(element).toString(),  getProxyName(element));
+    public static ClassName getBridgeClass(TypeElement element) {
+        return ClassName.get(Enviroment.getEnvironment().getElementUtils().getPackageOf(element).toString(),  getBridgeName(element));
     }
 
-    public static String getProxyName(TypeElement element) {
-        return getHelperClass(element, "Proxy");
+    public static String getBridgeName(TypeElement element) {
+        return getHelperClass(element, "KtBridge");
     }
 
     private static String getHelperClass(TypeElement element, String suffix) {
@@ -138,7 +138,11 @@ public class Utils {
     }
 
     public static TypeMirror getTypeMirrorFromTypeName(TypeName typeName) {
-        return getElementFromTypeName(typeName).asType();
+        TypeElement element = getElementFromTypeName(typeName);
+        if (element != null) {
+            return element.asType();
+        }
+        return null;
     }
 
     public static void ensureTypeNameHasEmptyInitializer(TypeName typeName) {

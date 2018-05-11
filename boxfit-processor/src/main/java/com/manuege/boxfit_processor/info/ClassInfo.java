@@ -6,6 +6,7 @@ import com.manuege.boxfit_processor.errors.InvalidElementException;
 import com.manuege.boxfit_processor.processor.Enviroment;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeVariableName;
+import com.squareup.kotlinpoet.TypeNames;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,7 +28,8 @@ import io.objectbox.annotation.Entity;
  */
 
 public class ClassInfo {
-    private TypeName type;
+    private TypeName typeName;
+    private com.squareup.kotlinpoet.TypeName ktTypeName;
     private Boolean isEntity;
     private TypeElement typeElement;
     private FieldInfo primaryKey;
@@ -41,22 +43,21 @@ public class ClassInfo {
         ClassInfo classInfo = new ClassInfo();
         classInfo.typeElement = element;
 
-        TypeMirror typeMirror = element.asType();
-        classInfo.type = TypeName.get(typeMirror);
-
-        classInfo.validate();
-
         // Check if kotlin
         try {
             Class kotlinAnnotation = Class.forName("kotlin.Metadata");
             classInfo.isKotlinClass = element.getAnnotation(kotlinAnnotation) != null;
-            /*
-            if (classInfo.isKotlinClass) {
-                ErrorLogger.putError("KT: " + element.getAnnotationMirrors().toString(), element);
-            }*/
         } catch (ClassNotFoundException ignore) {
             classInfo.isKotlinClass = false;
         }
+
+        TypeMirror typeMirror = element.asType();
+        classInfo.typeName = TypeName.get(typeMirror);
+        if (classInfo.isKotlinClass) {
+            classInfo.ktTypeName = TypeNames.get(typeMirror);
+        }
+
+        classInfo.validate();
 
         // Transformer
         // http://hauchee.blogspot.com.es/2015/12/compile-time-annotation-processing-getting-class-value.html
@@ -145,8 +146,12 @@ public class ClassInfo {
         return hashMap;
     }
 
-    public TypeName getType() {
-        return type;
+    public TypeName getTypeName() {
+        return typeName;
+    }
+
+    public com.squareup.kotlinpoet.TypeName getKtTypeName() {
+        return ktTypeName;
     }
 
     public Boolean isEntity() {
@@ -190,6 +195,6 @@ public class ClassInfo {
             throw new InvalidElementException("Classes annotated with @BoxfitClass can't be generic. Please, add a concrete subclass and annotate it", typeElement);
         }
 
-        Utils.ensureTypeNameHasEmptyInitializer(type);
+        Utils.ensureTypeNameHasEmptyInitializer(typeName);
     }
 }

@@ -26,7 +26,7 @@ import io.objectbox.BoxStore;
  * Created by Manu on 1/2/18.
  */
 
-public class MainJsonSerializerGenerator extends AbstractFileGenerator {
+public class MainJsonSerializerGenerator extends AbstractJavaFileGenerator {
     List<ClassInfo> classes;
 
     public MainJsonSerializerGenerator(ProcessingEnvironment environment, List<ClassInfo> classes) {
