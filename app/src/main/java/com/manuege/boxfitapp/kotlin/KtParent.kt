@@ -1,4 +1,4 @@
-/*package com.manuege.boxfitapp.kotlin
+package com.manuege.boxfitapp.kotlin
 
 import com.manuege.boxfit.annotations.BoxfitField
 import com.manuege.boxfitapp.model.Child
@@ -56,4 +56,3 @@ class KtParent() {
     @BoxfitField
     var list: MutableList<Child>? = null
 }
-*/
