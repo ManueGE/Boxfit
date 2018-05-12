@@ -2,8 +2,7 @@ package com.manuege.boxfitapp.fromJson
 
 import com.manuege.boxfit.BoxfitSerializer
 import com.manuege.boxfitapp.AbstractObjectBoxTest
-import com.manuege.boxfitapp.kotlin.KtParent
-import com.manuege.boxfitapp.model.Parent
+import com.manuege.boxfitapp.model.kotlin.KtParent
 import com.manuege.boxfitapp.utils.JsonProvider
 import org.junit.Assert
 import org.junit.Test
@@ -16,7 +15,7 @@ class KtFromJsonSingleObjectTest : AbstractObjectBoxTest() {
         val boxfitSerializer = BoxfitSerializer(boxStore)
         val parent = boxfitSerializer.fromJson(KtParent::class.java, obj)
 
-        Assert.assertEquals(1, boxStore.boxFor(Parent::class.java).count())
+        Assert.assertEquals(1, boxStore.boxFor(KtParent::class.java).count())
         Assert.assertNotNull(parent)
 
         Assert.assertEquals(1, parent!!.id)
@@ -40,7 +39,7 @@ class KtFromJsonSingleObjectTest : AbstractObjectBoxTest() {
         Assert.assertEquals("one", parent.toOne!!.target.value)
 
         Assert.assertEquals(2, parent.toMany!!.size.toLong())
-        Assert.assertEquals(2, parent.toMany!![0].value)
+        Assert.assertEquals(2, parent.toMany!![0].id)
         Assert.assertEquals("two", parent.toMany!![0].value)
 
         Assert.assertEquals(2, parent.list.size.toLong())

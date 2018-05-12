@@ -1,4 +1,4 @@
-package com.manuege.boxfitapp.kotlin
+package com.manuege.boxfitapp.model.kotlin
 
 import com.manuege.boxfit.annotations.BoxfitClass
 import com.manuege.boxfit.annotations.BoxfitField

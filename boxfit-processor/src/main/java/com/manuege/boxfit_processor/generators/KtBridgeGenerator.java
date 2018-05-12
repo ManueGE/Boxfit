@@ -1,6 +1,5 @@
 package com.manuege.boxfit_processor.generators;
 
-import com.manuege.boxfit_processor.errors.ErrorLogger;
 import com.manuege.boxfit_processor.info.ClassInfo;
 import com.manuege.boxfit_processor.info.FieldInfo;
 import com.manuege.boxfit_processor.info.KotlinUtils;
@@ -40,10 +39,7 @@ public class KtBridgeGenerator extends AbstractKtFileGenerator {
         if (fieldInfo.isNullable()) {
             fieldName = fieldName.asNullable();
         }
-
-        ErrorLogger.putWarning("GETF: " + fieldInfo.getName(), null);
-        ErrorLogger.putWarning("GETN: " + fieldName.getNullable(), null);
-
+        
         String methodName = "get" + Utils.capitalize(fieldInfo.getName());
         FunSpec.Builder builder = new FunSpec.Builder(methodName)
                 .addParameter("obj", className)

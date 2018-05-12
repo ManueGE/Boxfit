@@ -3,8 +3,8 @@ package com.manuege.boxfitapp.fromJson;
 import com.manuege.boxfit.BoxfitSerializer;
 import com.manuege.boxfit.utils.Json;
 import com.manuege.boxfitapp.AbstractObjectBoxTest;
-import com.manuege.boxfitapp.model.Child;
-import com.manuege.boxfitapp.model.Parent;
+import com.manuege.boxfitapp.model.java.Child;
+import com.manuege.boxfitapp.model.java.Parent;
 import com.manuege.boxfitapp.utils.JsonProvider;
 
 import org.json.JSONArray;

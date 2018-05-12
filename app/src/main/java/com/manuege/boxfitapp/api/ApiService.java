@@ -1,6 +1,6 @@
 package com.manuege.boxfitapp.api;
 
-import com.manuege.boxfitapp.model.Parent;
+import com.manuege.boxfitapp.model.java.Parent;
 
 import java.util.List;
 
