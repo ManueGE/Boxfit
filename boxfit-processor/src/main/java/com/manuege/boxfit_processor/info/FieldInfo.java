@@ -14,6 +14,12 @@ import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeVariableName;
+import com.squareup.javapoet.WildcardTypeName;
+import com.squareup.kotlinpoet.TypeNames;
+
+import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
@@ -39,8 +45,12 @@ public class FieldInfo {
         TO_MANY,
         JSON_SERIALIZABLE;
 
-        private boolean isRelationship() {
-            return this == TO_ONE || this == TO_MANY || this == JSON_SERIALIZABLE;
+        public boolean isRelationship() {
+            return this == TO_ONE || this == TO_MANY;
+        }
+
+        public boolean targetIsBoxfitObject() {
+            return isRelationship() || this == JSON_SERIALIZABLE;
         }
     }
 
@@ -57,6 +67,9 @@ public class FieldInfo {
     // Typename representing the type of the field
     private TypeName typeName;
 
+    // Typename representing the type of the field
+    private com.squareup.kotlinpoet.TypeName ktTypeName;
+
     // Typename representing the type if the transformer of the field
     private TypeName transformerName;
 
@@ -69,7 +82,11 @@ public class FieldInfo {
     // Typename representing the type of the value in a json
     private TypeName jsonFieldTypeName;
 
+    // The enclosing class of the field
     private ClassInfo classInfo;
+
+    // Tells if the field is nullable
+    private boolean nullable;
 
     public static FieldInfo newInstance(Element element, ClassInfo classInfo) throws InvalidElementException {
 
@@ -83,18 +100,22 @@ public class FieldInfo {
         }
 
         // Check if valid
-        if (element.getModifiers().contains(Modifier.PRIVATE)) {
-            throw new InvalidElementException("BoxfitField annotated fields can't be private", element);
-        }
+        // TODO: fix for kotlin
+        if (!classInfo.isKotlinClass()) {
+            if (element.getModifiers().contains(Modifier.PRIVATE)) {
+                throw new InvalidElementException("BoxfitField annotated fields can't be private", element);
+            }
 
-        if (element.getModifiers().contains(Modifier.STATIC)) {
-            throw new InvalidElementException("BoxfitField annotated fields can't be static", element);
+            if (element.getModifiers().contains(Modifier.STATIC)) {
+                throw new InvalidElementException("BoxfitField annotated fields can't be static", element);
+            }
         }
 
         // Basic info
         FieldInfo fieldInfo = new FieldInfo();
         fieldInfo.element = element;
         fieldInfo.classInfo = classInfo;
+        fieldInfo.nullable = element.getAnnotation(Nullable.class) != null;
 
         TypeMirror typeMirror = element.asType();
 
@@ -110,6 +131,10 @@ public class FieldInfo {
             fieldInfo.typeName = typeName.box();
         } else {
             fieldInfo.typeName = typeName;
+        }
+
+        if (classInfo.isKotlinClass()) {
+            fieldInfo.ktTypeName = TypeNames.get(typeMirror);
         }
 
         fieldInfo.kind = Kind.NORMAL;
@@ -170,7 +195,7 @@ public class FieldInfo {
                 fieldInfo.kind = Kind.TO_MANY;
             }
 
-            if (fieldInfo.kind.isRelationship()) {
+            if (fieldInfo.kind.targetIsBoxfitObject()) {
                 if (fieldInfo.getTypeName() instanceof ParameterizedTypeName) {
                     ParameterizedTypeName parameterizedTypeName = (ParameterizedTypeName) fieldInfo.getTypeName();
                     TypeName relationshipTypeName = parameterizedTypeName.typeArguments.get(0);
@@ -186,6 +211,21 @@ public class FieldInfo {
                         fieldInfo.relationshipName = classInfo.getGenericParamsMap().get(typeVariableName);
                         TypeElement relationshipFieldElement = elementUtil.getTypeElement(fieldInfo.relationshipName.toString());
                         fieldInfo.relationshipSerializerName = Utils.getSerializer(relationshipFieldElement);
+
+                    } else if (relationshipTypeName instanceof WildcardTypeName){
+                        WildcardTypeName wildcardTypeName = (WildcardTypeName) relationshipTypeName;
+                        ArrayList<TypeName> typeNames = new ArrayList<>(wildcardTypeName.upperBounds);
+                        typeNames.addAll(wildcardTypeName.lowerBounds);
+                        for (TypeName t : typeNames) {
+                            TypeVariableName typeVariableName = TypeVariableName.get(t.toString());
+                            TypeName concreteTypeName = classInfo.getGenericParamsMap().get(typeVariableName);
+
+                            if (concreteTypeName != null) {
+                                fieldInfo.relationshipName = concreteTypeName;
+                                TypeElement relationshipFieldElement = elementUtil.getTypeElement(fieldInfo.relationshipName.toString());
+                                fieldInfo.relationshipSerializerName = Utils.getSerializer(relationshipFieldElement);
+                            }
+                        }
                     }
 
                 } else {
@@ -227,6 +267,10 @@ public class FieldInfo {
         return typeName;
     }
 
+    public com.squareup.kotlinpoet.TypeName getKtTypeName() {
+        return ktTypeName;
+    }
+
     public TypeName getTransformerName() {
         return transformerName;
     }
@@ -249,6 +293,10 @@ public class FieldInfo {
 
     public String getJsonGetterMethodName() {
         return Utils.getJsonGetterMethodName(getJsonFieldTypeName());
+    }
+
+    public boolean isNullable() {
+        return nullable;
     }
 
     private void validate() {

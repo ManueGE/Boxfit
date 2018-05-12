@@ -1,7 +1,6 @@
-package com.manuege.boxfitapp.api.model;
+package com.manuege.boxfitapp.model.java;
 
 import com.manuege.boxfit.annotations.BoxfitClass;
-import com.manuege.boxfitapp.model.Parent;
 
 /**
  * Created by Manu on 28/1/18.

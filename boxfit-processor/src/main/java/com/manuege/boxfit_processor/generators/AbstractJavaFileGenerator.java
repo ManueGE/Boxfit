@@ -11,16 +11,16 @@ import javax.annotation.processing.ProcessingEnvironment;
  * Created by Manu on 1/2/18.
  */
 
-public abstract class AbstractFileGenerator {
+public abstract class AbstractJavaFileGenerator {
     ProcessingEnvironment environment;
 
-    public AbstractFileGenerator(ProcessingEnvironment environment) {
+    public AbstractJavaFileGenerator(ProcessingEnvironment environment) {
         this.environment = environment;
     }
 
     public void generateFile() {
-        JavaFile javaFile = JavaFile.builder(getPackageName(), getTypeSpec())
-                .build();
+        JavaFile.Builder javaFileBuilder = JavaFile.builder(getPackageName(), getTypeSpec());
+        JavaFile javaFile = javaFileBuilder.build();
 
         try {
             javaFile.writeTo(environment.getFiler());

@@ -1,10 +1,12 @@
 apply plugin: 'java-library'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'maven-publish'
+apply plugin: 'kotlin'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.squareup:javapoet:1.10.0'
+    implementation 'com.squareup:kotlinpoet:0.7.0'
     implementation project(':boxfit')
 }
 
