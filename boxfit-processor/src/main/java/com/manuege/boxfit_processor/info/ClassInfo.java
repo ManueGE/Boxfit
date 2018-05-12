@@ -6,6 +6,7 @@ import com.manuege.boxfit_processor.errors.InvalidElementException;
 import com.manuege.boxfit_processor.processor.Enviroment;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeVariableName;
+import com.squareup.kotlinpoet.TypeNames;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,21 +28,34 @@ import io.objectbox.annotation.Entity;
  */
 
 public class ClassInfo {
-    private TypeName type;
+    private TypeName typeName;
+    private com.squareup.kotlinpoet.TypeName ktTypeName;
     private Boolean isEntity;
     private TypeElement typeElement;
     private FieldInfo primaryKey;
     private List<FieldInfo> fields;
     private TypeName transformer;
     private HashMap<TypeVariableName, TypeName> genericParamsMap;
+    private Boolean isKotlinClass;
 
     public static ClassInfo newInstance(TypeElement element) throws InvalidElementException {
 
         ClassInfo classInfo = new ClassInfo();
         classInfo.typeElement = element;
 
+        // Check if kotlin
+        try {
+            Class kotlinAnnotation = Class.forName("kotlin.Metadata");
+            classInfo.isKotlinClass = element.getAnnotation(kotlinAnnotation) != null;
+        } catch (ClassNotFoundException ignore) {
+            classInfo.isKotlinClass = false;
+        }
+
         TypeMirror typeMirror = element.asType();
-        classInfo.type = TypeName.get(typeMirror);
+        classInfo.typeName = TypeName.get(typeMirror);
+        if (classInfo.isKotlinClass) {
+            classInfo.ktTypeName = TypeNames.get(typeMirror);
+        }
 
         classInfo.validate();
 
@@ -132,8 +146,12 @@ public class ClassInfo {
         return hashMap;
     }
 
-    public TypeName getType() {
-        return type;
+    public TypeName getTypeName() {
+        return typeName;
+    }
+
+    public com.squareup.kotlinpoet.TypeName getKtTypeName() {
+        return ktTypeName;
     }
 
     public Boolean isEntity() {
@@ -168,11 +186,15 @@ public class ClassInfo {
         return genericParamsMap;
     }
 
+    public Boolean isKotlinClass() {
+        return isKotlinClass;
+    }
+
     private void validate() throws InvalidElementException{
         if (typeElement.getTypeParameters().size() > 0) {
             throw new InvalidElementException("Classes annotated with @BoxfitClass can't be generic. Please, add a concrete subclass and annotate it", typeElement);
         }
 
-        Utils.ensureTypeNameHasEmptyInitializer(type);
+        Utils.ensureTypeNameHasEmptyInitializer(typeName);
     }
 }

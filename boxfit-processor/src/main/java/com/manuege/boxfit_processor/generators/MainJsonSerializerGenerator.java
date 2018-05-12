@@ -26,7 +26,7 @@ import io.objectbox.BoxStore;
  * Created by Manu on 1/2/18.
  */
 
-public class MainJsonSerializerGenerator extends AbstractFileGenerator {
+public class MainJsonSerializerGenerator extends AbstractJavaFileGenerator {
     List<ClassInfo> classes;
 
     public MainJsonSerializerGenerator(ProcessingEnvironment environment, List<ClassInfo> classes) {
@@ -106,11 +106,11 @@ public class MainJsonSerializerGenerator extends AbstractFileGenerator {
             TypeElement element = classInfo.getTypeElement();
             ClassName serializer = Utils.getSerializer(classInfo.getTypeElement());
 
-            fromJsonMethod.beginControlFlow("if ($T.class.isAssignableFrom(clazz))", element);
+            fromJsonMethod.beginControlFlow("if ($T.class.equals(clazz))", element);
             fromJsonMethod.addStatement("return (T) $T.getInstance().fromJson(jsonObject, boxStore)", serializer);
             fromJsonMethod.endControlFlow();
 
-            fromJsonArrayMethod.beginControlFlow("if ($T.class.isAssignableFrom(clazz))", element);
+            fromJsonArrayMethod.beginControlFlow("if ($T.class.equals(clazz))", element);
             fromJsonArrayMethod.addStatement("return (List<T>) $T.getInstance().fromJson(jsonArray, boxStore)", serializer);
             fromJsonArrayMethod.endControlFlow();
 

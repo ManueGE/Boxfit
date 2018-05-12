@@ -1,6 +1,7 @@
 package com.manuege.boxfitapp.api;
 
-import com.manuege.boxfitapp.model.Parent;
+import com.manuege.boxfitapp.model.java.Parent;
+import com.manuege.boxfitapp.model.kotlin.KtParent;
 
 import java.util.List;
 
@@ -17,4 +18,10 @@ public interface ApiService {
 
     @GET("model/1")
     Call<Parent> getModelDetail();
+
+    @GET("model")
+    Call<List<KtParent>> getKtModelList();
+
+    @GET("model/1")
+    Call<KtParent> getKtModelDetail();
 }

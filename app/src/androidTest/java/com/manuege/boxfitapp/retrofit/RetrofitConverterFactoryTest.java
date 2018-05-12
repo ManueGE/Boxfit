@@ -1,7 +1,7 @@
 package com.manuege.boxfitapp.retrofit;
 
 import com.manuege.boxfitapp.AbstractRetrofitTest;
-import com.manuege.boxfitapp.model.Parent;
+import com.manuege.boxfitapp.model.java.Parent;
 
 import org.junit.Assert;
 import org.junit.Test;

@@ -1,10 +1,10 @@
-package com.manuege.boxfitapp.model;
+package com.manuege.boxfitapp.model.java;
 
 import com.manuege.boxfit.annotations.BoxfitClass;
 import com.manuege.boxfit.annotations.BoxfitField;
-import com.manuege.boxfitapp.transformers.SlashIdTransformer;
 import com.manuege.boxfitapp.transformers.ApiStringToDateTransformer;
 import com.manuege.boxfitapp.transformers.EnumToIntTransformer;
+import com.manuege.boxfitapp.transformers.SlashIdTransformer;
 
 import java.util.Date;
 import java.util.List;

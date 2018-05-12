@@ -12,6 +12,27 @@
         <option name="BUILDABLE" value="true" />
       </configuration>
     </facet>
+    <facet type="kotlin-language" name="Kotlin">
+      <configuration version="3" platform="JVM 1.6" useProjectSettings="false">
+        <compilerSettings />
+        <compilerArguments>
+          <option name="destination" value="$MODULE_DIR$/build/classes/kotlin/main" />
+          <option name="noStdlib" value="true" />
+          <option name="noReflect" value="true" />
+          <option name="moduleName" value="boxfit-processor" />
+          <option name="addCompilerBuiltIns" value="true" />
+          <option name="loadBuiltInsFromDependencies" value="true" />
+          <option name="languageVersion" value="1.2" />
+          <option name="apiVersion" value="1.2" />
+          <option name="pluginOptions">
+            <array />
+          </option>
+          <option name="pluginClasspaths">
+            <array />
+          </option>
+        </compilerArguments>
+      </configuration>
+    </facet>
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_7">
     <output url="file://$MODULE_DIR$/build/classes/java/main" />
@@ -19,8 +40,10 @@
     <exclude-output />
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/kotlin" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/kotlin" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
       <excludeFolder url="file://$MODULE_DIR$/.gradle" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
@@ -30,32 +53,47 @@
     <orderEntry type="module" module-name="boxfit" exported="" />
     <orderEntry type="module" module-name="boxfit" exported="" />
     <orderEntry type="library" exported="" scope="PROVIDED" name="javapoet-1.10.0" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="kotlinpoet-0.7.0" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="kotlin-stdlib-jre7-1.2.21" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="kotlin-reflect-1.2.21" level="project" />
     <orderEntry type="library" exported="" scope="PROVIDED" name="json-20171018" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="objectbox-java-1.4.4" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="objectbox-macos-1.4.4" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="objectbox-java-api-1.4.4" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="objectbox-java-1.5.0" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="objectbox-macos-1.5.0" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="kotlin-stdlib-1.2.21" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="objectbox-java-api-1.5.0" level="project" />
     <orderEntry type="library" exported="" scope="PROVIDED" name="essentials-3.0.0-RC1" level="project" />
     <orderEntry type="library" exported="" scope="PROVIDED" name="flatbuffers-java-1.8.0" level="project" />
     <orderEntry type="library" exported="" scope="PROVIDED" name="jsr305-3.0.2" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="annotations-13.0" level="project" />
     <orderEntry type="library" exported="" scope="RUNTIME" name="javapoet-1.10.0" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="kotlinpoet-0.7.0" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="kotlin-stdlib-jre7-1.2.21" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="kotlin-reflect-1.2.21" level="project" />
     <orderEntry type="library" exported="" scope="RUNTIME" name="json-20171018" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="objectbox-java-1.4.4" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="objectbox-macos-1.4.4" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="objectbox-java-1.5.0" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="objectbox-macos-1.5.0" level="project" />
     <orderEntry type="library" exported="" scope="RUNTIME" name="retrofit-2.4.0" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="objectbox-java-api-1.4.4" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="kotlin-stdlib-1.2.21" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="objectbox-java-api-1.5.0" level="project" />
     <orderEntry type="library" exported="" scope="RUNTIME" name="essentials-3.0.0-RC1" level="project" />
     <orderEntry type="library" exported="" scope="RUNTIME" name="flatbuffers-java-1.8.0" level="project" />
     <orderEntry type="library" exported="" scope="RUNTIME" name="jsr305-3.0.2" level="project" />
     <orderEntry type="library" exported="" scope="RUNTIME" name="okhttp-3.10.0" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="annotations-13.0" level="project" />
     <orderEntry type="library" exported="" scope="RUNTIME" name="okio-1.14.0" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="javapoet-1.10.0" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="kotlinpoet-0.7.0" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="kotlin-stdlib-jre7-1.2.21" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="kotlin-reflect-1.2.21" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="json-20171018" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="objectbox-java-1.4.4" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="objectbox-macos-1.4.4" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="objectbox-java-api-1.4.4" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="objectbox-java-1.5.0" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="objectbox-macos-1.5.0" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="kotlin-stdlib-1.2.21" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="objectbox-java-api-1.5.0" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="essentials-3.0.0-RC1" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="flatbuffers-java-1.8.0" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="jsr305-3.0.2" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="annotations-13.0" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="retrofit-2.4.0" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="okhttp-3.10.0" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="okio-1.14.0" level="project" />

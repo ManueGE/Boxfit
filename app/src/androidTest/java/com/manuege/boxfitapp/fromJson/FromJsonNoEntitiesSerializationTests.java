@@ -2,9 +2,9 @@ package com.manuege.boxfitapp.fromJson;
 
 import com.manuege.boxfit.BoxfitSerializer;
 import com.manuege.boxfitapp.AbstractObjectBoxTest;
-import com.manuege.boxfitapp.api.model.NoObjectBoxObject;
-import com.manuege.boxfitapp.api.model.ParentResponse;
-import com.manuege.boxfitapp.api.model.SingleParentResponse;
+import com.manuege.boxfitapp.model.java.NoObjectBoxObject;
+import com.manuege.boxfitapp.model.java.ParentResponse;
+import com.manuege.boxfitapp.model.java.SingleParentResponse;
 import com.manuege.boxfitapp.utils.JsonProvider;
 
 import org.json.JSONArray;

@@ -1,7 +1,7 @@
 package com.manuege.boxfitapp.transformers;
 
 import com.manuege.boxfit.transformers.Transformer;
-import com.manuege.boxfitapp.model.Parent;
+import com.manuege.boxfitapp.model.java.Parent;
 
 import io.objectbox.converter.PropertyConverter;
 

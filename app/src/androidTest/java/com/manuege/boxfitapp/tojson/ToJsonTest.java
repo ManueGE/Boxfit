@@ -2,9 +2,9 @@ package com.manuege.boxfitapp.tojson;
 
 import com.manuege.boxfit.BoxfitSerializer;
 import com.manuege.boxfitapp.AbstractObjectBoxTest;
-import com.manuege.boxfitapp.model.Child;
-import com.manuege.boxfitapp.model.Parent;
-import com.manuege.boxfitapp.model.ToJsonTestObject;
+import com.manuege.boxfitapp.model.java.Child;
+import com.manuege.boxfitapp.model.java.Parent;
+import com.manuege.boxfitapp.model.java.ToJsonTestObject;
 import com.manuege.boxfitapp.utils.JsonProvider;
 
 import org.json.JSONArray;

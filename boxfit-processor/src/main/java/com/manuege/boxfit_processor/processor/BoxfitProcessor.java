@@ -4,6 +4,7 @@ import com.manuege.boxfit.annotations.BoxfitClass;
 import com.manuege.boxfit_processor.errors.ErrorLogger;
 import com.manuege.boxfit_processor.errors.InvalidElementException;
 import com.manuege.boxfit_processor.generators.ClassJsonSerializerGenerator;
+import com.manuege.boxfit_processor.generators.KtBridgeGenerator;
 import com.manuege.boxfit_processor.generators.MainJsonSerializerGenerator;
 import com.manuege.boxfit_processor.info.ClassInfo;
 
@@ -48,8 +49,13 @@ public class BoxfitProcessor extends AbstractProcessor {
         }
 
         for (ClassInfo classInfo : classesInfo) {
-            ClassJsonSerializerGenerator generator = new ClassJsonSerializerGenerator(processingEnv, classInfo);
-            generator.generateFile();
+            ClassJsonSerializerGenerator jsonSerializerGenerator = new ClassJsonSerializerGenerator(processingEnv, classInfo);
+            jsonSerializerGenerator.generateFile();
+
+            if (classInfo.isKotlinClass()) {
+                KtBridgeGenerator ktBridgeGenerator = new KtBridgeGenerator(processingEnv, classInfo);
+                ktBridgeGenerator.generateFile();
+            }
         }
 
         MainJsonSerializerGenerator generator = new MainJsonSerializerGenerator(processingEnv, classesInfo);
