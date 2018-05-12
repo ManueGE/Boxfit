@@ -162,7 +162,7 @@ class KtFromJsonSingleObjectTest : AbstractObjectBoxTest() {
         val parent = serializer.fromJson(KtParent::class.java, json)
 
         Assert.assertEquals(1, parent!!.toOne!!.target.id)
-        Assert.assertNull(parent.toOne!!.target.value)
+        Assert.assertNull(parent.toOne?.target?.value)
 
         Assert.assertEquals(2, parent.toMany!!.size.toLong())
         Assert.assertEquals(2, parent.toMany!![0].id)
@@ -247,8 +247,10 @@ class KtFromJsonSingleObjectTest : AbstractObjectBoxTest() {
         existingParent.toMany!!.add(one)
         existingParent.toMany!!.add(two)
         existingParent.toMany!!.add(three)
-        existingParent.list.add(four)
-        existingParent.list.add(five)
+        var list = ArrayList<KtChild>()
+        list.add(four)
+        list.add(five)
+        existingParent.list = list
 
         val serializer = BoxfitSerializer(boxStore)
         val json = JSONObject()

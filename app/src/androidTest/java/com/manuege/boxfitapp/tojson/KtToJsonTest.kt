@@ -13,6 +13,7 @@ import org.json.JSONObject
 import org.junit.Assert
 import org.junit.Test
 import java.util.*
+import kotlin.collections.ArrayList
 
 class KtToJsonTest: AbstractObjectBoxTest() {
     @Test
@@ -47,8 +48,10 @@ class KtToJsonTest: AbstractObjectBoxTest() {
         parent.toMany!!.add(two)
         parent.toMany!!.add(three)
 
-        parent.list.add(four)
-        parent.list.add(five)
+        var list = ArrayList<KtChild>()
+        list.add(four)
+        list.add(five)
+        parent.list = list
 
         parent.enumField = Parent.Enum.ONE
 

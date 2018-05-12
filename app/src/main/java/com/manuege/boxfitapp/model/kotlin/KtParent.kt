@@ -60,7 +60,7 @@ class KtParent() {
     var toMany: ToMany<KtChild>? = null
 
     @BoxfitField
-    var list: MutableList<KtChild> = ArrayList()
+    lateinit var list: List<KtChild>
 
     @BoxfitField(value = "enum", transformer = EnumToIntTransformer::class)
     @Convert(converter = EnumToIntTransformer::class, dbType = Int::class)

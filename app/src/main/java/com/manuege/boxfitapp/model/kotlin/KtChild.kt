@@ -15,9 +15,9 @@ class KtChild() {
     var id : Long = 0
 
     @BoxfitField
-    var value: String = ""
+    var value: String? = null
 
-    constructor(id: Long, value: String) : this() {
+    constructor(id: Long, value: String?) : this() {
         this.id = id
         this.value = value
     }

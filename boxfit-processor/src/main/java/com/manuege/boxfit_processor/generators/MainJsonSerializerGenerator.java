@@ -106,11 +106,11 @@ public class MainJsonSerializerGenerator extends AbstractJavaFileGenerator {
             TypeElement element = classInfo.getTypeElement();
             ClassName serializer = Utils.getSerializer(classInfo.getTypeElement());
 
-            fromJsonMethod.beginControlFlow("if ($T.class.isAssignableFrom(clazz))", element);
+            fromJsonMethod.beginControlFlow("if ($T.class.equals(clazz))", element);
             fromJsonMethod.addStatement("return (T) $T.getInstance().fromJson(jsonObject, boxStore)", serializer);
             fromJsonMethod.endControlFlow();
 
-            fromJsonArrayMethod.beginControlFlow("if ($T.class.isAssignableFrom(clazz))", element);
+            fromJsonArrayMethod.beginControlFlow("if ($T.class.equals(clazz))", element);
             fromJsonArrayMethod.addStatement("return (List<T>) $T.getInstance().fromJson(jsonArray, boxStore)", serializer);
             fromJsonArrayMethod.endControlFlow();
 

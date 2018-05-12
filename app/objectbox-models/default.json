@@ -211,7 +211,7 @@
           "name": "toMany"
         },
         {
-          "id": "4:3683850303851814965",
+          "id": "6:8846793173664281127",
           "name": "list"
         }
       ]
@@ -276,13 +276,16 @@
   ],
   "lastEntityId": "6:6473261252511654347",
   "lastIndexId": "4:8093741814743562676",
-  "lastRelationId": "4:3683850303851814965",
+  "lastRelationId": "6:8846793173664281127",
   "lastSequenceId": "0:0",
   "modelVersion": 4,
   "modelVersionParserMinimum": 4,
   "retiredEntityUids": [],
   "retiredIndexUids": [],
   "retiredPropertyUids": [],
-  "retiredRelationUids": [],
+  "retiredRelationUids": [
+    3683850303851814965,
+    8276906041842236807
+  ],
   "version": 1
 }
