@@ -231,51 +231,10 @@
         }
       ],
       "relations": []
-    },
-    {
-      "id": "6:6473261252511654347",
-      "lastPropertyId": "8:9169074666899437988",
-      "name": "KtToJsonTestObject",
-      "properties": [
-        {
-          "id": "1:3037300318061659012",
-          "name": "id"
-        },
-        {
-          "id": "2:5542757507575641445",
-          "name": "longClassField"
-        },
-        {
-          "id": "3:2736503902045135993",
-          "name": "integerClassField"
-        },
-        {
-          "id": "4:6789170497657375995",
-          "name": "boolClassField"
-        },
-        {
-          "id": "5:8624743222030071120",
-          "name": "doubleClassField"
-        },
-        {
-          "id": "6:7027487974383490167",
-          "name": "stringField"
-        },
-        {
-          "id": "7:6852534555634270103",
-          "name": "ignoredField"
-        },
-        {
-          "id": "8:9169074666899437988",
-          "indexId": "4:8093741814743562676",
-          "name": "toOneId"
-        }
-      ],
-      "relations": []
     }
   ],
-  "lastEntityId": "6:6473261252511654347",
-  "lastIndexId": "4:8093741814743562676",
+  "lastEntityId": "5:3677431590078681362",
+  "lastIndexId": "3:3037325064053098072",
   "lastRelationId": "4:3683850303851814965",
   "lastSequenceId": "0:0",
   "modelVersion": 4,

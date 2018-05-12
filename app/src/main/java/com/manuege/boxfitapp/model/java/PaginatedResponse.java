@@ -1,4 +1,4 @@
-package com.manuege.boxfitapp.api.model;
+package com.manuege.boxfitapp.model.java;
 
 import com.manuege.boxfit.annotations.BoxfitField;
 

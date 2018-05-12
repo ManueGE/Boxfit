@@ -2,11 +2,15 @@ package com.manuege.boxfitapp.model.kotlin
 
 import com.manuege.boxfit.annotations.BoxfitClass
 import com.manuege.boxfit.annotations.BoxfitField
-import com.manuege.boxfitapp.model.java.Child
+import com.manuege.boxfitapp.model.java.Parent
+import com.manuege.boxfitapp.transformers.ApiStringToDateTransformer
+import com.manuege.boxfitapp.transformers.EnumToIntTransformer
+import io.objectbox.annotation.Convert
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
 import io.objectbox.relation.ToMany
 import io.objectbox.relation.ToOne
+import java.util.*
 
 @BoxfitClass
 @Entity
@@ -50,11 +54,18 @@ class KtParent() {
     var fakeKeyPathField: String? = null
 
     @BoxfitField
-    var toOne: ToOne<Child>? = null
+    var toOne: ToOne<KtChild>? = null
 
     @BoxfitField
-    var toMany: ToMany<Child>? = null
+    var toMany: ToMany<KtChild>? = null
 
     @BoxfitField
-    var list: MutableList<Child> = ArrayList()
+    var list: MutableList<KtChild> = ArrayList()
+
+    @BoxfitField(value = "enum", transformer = EnumToIntTransformer::class)
+    @Convert(converter = EnumToIntTransformer::class, dbType = Int::class)
+    var enumField: Parent.Enum? = null
+
+    @BoxfitField(value = "date", transformer = ApiStringToDateTransformer::class)
+    var dateField: Date? = null
 }

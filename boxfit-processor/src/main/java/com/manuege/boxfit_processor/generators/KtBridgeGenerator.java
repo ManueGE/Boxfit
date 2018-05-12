@@ -1,5 +1,6 @@
 package com.manuege.boxfit_processor.generators;
 
+import com.manuege.boxfit_processor.errors.ErrorLogger;
 import com.manuege.boxfit_processor.info.ClassInfo;
 import com.manuege.boxfit_processor.info.FieldInfo;
 import com.manuege.boxfit_processor.info.KotlinUtils;
@@ -25,7 +26,7 @@ public class KtBridgeGenerator extends AbstractKtFileGenerator {
 
         for (FieldInfo fieldInfo : classInfo.getFields()) {
             builder.addFunction(getGetter(fieldInfo));
-            if (fieldInfo.getKind() == FieldInfo.Kind.NORMAL) {
+            if (!fieldInfo.getKind().isRelationship()) {
                 builder.addFunction(getSetter(fieldInfo));
             }
         }
@@ -35,11 +36,17 @@ public class KtBridgeGenerator extends AbstractKtFileGenerator {
 
     private FunSpec getGetter(FieldInfo fieldInfo) {
         TypeName className = KotlinUtils.javaToKotlinType(classInfo.getKtTypeName());
+        if (className == null) {
+            ErrorLogger.putWarning("GET CLASS " + classInfo.toString().toString(), null);
+        }
         TypeName fieldName = KotlinUtils.javaToKotlinType(fieldInfo.getKtTypeName());
+        if (fieldName == null) {
+            ErrorLogger.putWarning("GET CLASS " + classInfo.toString().toString() + " " + fieldInfo.toString(), null);
+        }
         if (fieldInfo.isNullable()) {
             fieldName = fieldName.asNullable();
         }
-        
+
         String methodName = "get" + Utils.capitalize(fieldInfo.getName());
         FunSpec.Builder builder = new FunSpec.Builder(methodName)
                 .addParameter("obj", className)

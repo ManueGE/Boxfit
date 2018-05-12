@@ -2,8 +2,8 @@ package com.manuege.boxfitapp.fromJson;
 
 import com.manuege.boxfit.BoxfitSerializer;
 import com.manuege.boxfitapp.AbstractObjectBoxTest;
-import com.manuege.boxfitapp.api.model.Paginated;
-import com.manuege.boxfitapp.api.model.PaginatedResponse;
+import com.manuege.boxfitapp.model.java.Paginated;
+import com.manuege.boxfitapp.model.java.PaginatedResponse;
 import com.manuege.boxfitapp.model.java.Child;
 import com.manuege.boxfitapp.model.java.Parent;
 import com.manuege.boxfitapp.utils.JsonProvider;

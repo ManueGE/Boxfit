@@ -42,7 +42,7 @@ public class FieldInfo {
         TO_MANY,
         JSON_SERIALIZABLE;
 
-        private boolean isRelationship() {
+        public boolean isRelationship() {
             return this == TO_ONE || this == TO_MANY || this == JSON_SERIALIZABLE;
         }
     }

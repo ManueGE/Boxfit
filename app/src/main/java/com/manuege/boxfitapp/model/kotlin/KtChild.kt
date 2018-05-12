@@ -8,7 +8,7 @@ import io.objectbox.annotation.Id
 
 @BoxfitClass
 @Entity
-class KtChild {
+class KtChild() {
 
     @BoxfitField
     @Id(assignable = true)
@@ -17,5 +17,8 @@ class KtChild {
     @BoxfitField
     var value: String = ""
 
-    constructor()
+    constructor(id: Long, value: String) : this() {
+        this.id = id
+        this.value = value
+    }
 }
