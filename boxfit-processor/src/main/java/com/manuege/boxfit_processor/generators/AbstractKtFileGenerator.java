@@ -3,10 +3,12 @@ package com.manuege.boxfit_processor.generators;
 import com.squareup.kotlinpoet.FileSpec;
 import com.squareup.kotlinpoet.TypeSpec;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.Writer;
 
 import javax.annotation.processing.ProcessingEnvironment;
+import javax.tools.FileObject;
+import javax.tools.StandardLocation;
 
 /**
  * Created by Manu on 1/2/18.
@@ -27,8 +29,12 @@ public abstract class AbstractKtFileGenerator {
                 .build();
 
         try {
-            String kaptKotlinGeneratedDir = environment.getOptions().get(KAPT_KOTLIN_GENERATED_OPTION_NAME);
-            file.writeTo(new File(kaptKotlinGeneratedDir, getFilename() + ".kt"));
+
+            FileObject kotlinFileObject = environment.getFiler().createResource(StandardLocation.SOURCE_OUTPUT,
+                    getPackageName(), getFilename() + ".kt");
+            Writer writer = kotlinFileObject.openWriter();
+            writer.write(file.toString());
+            writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
