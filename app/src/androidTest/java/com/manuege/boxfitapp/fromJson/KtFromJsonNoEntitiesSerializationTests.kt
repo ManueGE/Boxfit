@@ -2,7 +2,6 @@ package com.manuege.boxfitapp.fromJson
 
 import com.manuege.boxfit.BoxfitSerializer
 import com.manuege.boxfitapp.AbstractObjectBoxTest
-import com.manuege.boxfitapp.model.java.SingleParentResponse
 import com.manuege.boxfitapp.model.kotlin.KtNoObjectBoxObject
 import com.manuege.boxfitapp.model.kotlin.KtParentResponse
 import com.manuege.boxfitapp.model.kotlin.KtSingleParentResponse
@@ -93,7 +92,7 @@ class KtFromJsonNoEntitiesSerializationTests : AbstractObjectBoxTest() {
         val `object` = serializer.fromJson(KtSingleParentResponse::class.java, jsonObject)
 
         Assert.assertNotNull(`object`!!.data)
-        Assert.assertEquals(1, `object`.data.id)
-        Assert.assertEquals("hello", `object`.data.stringField)
+        Assert.assertEquals(1, `object`.data!!.id)
+        Assert.assertEquals("hello", `object`.data!!.stringField)
     }
 }

@@ -1,13 +1,18 @@
 package com.manuege.boxfit_processor.generators;
 
-import com.manuege.boxfit_processor.errors.ErrorLogger;
 import com.manuege.boxfit_processor.info.ClassInfo;
 import com.manuege.boxfit_processor.info.FieldInfo;
 import com.manuege.boxfit_processor.info.KotlinUtils;
 import com.manuege.boxfit_processor.info.Utils;
+import com.squareup.javapoet.ParameterizedTypeName;
+import com.squareup.javapoet.TypeVariableName;
+import com.squareup.javapoet.WildcardTypeName;
+import com.squareup.kotlinpoet.ClassName;
 import com.squareup.kotlinpoet.FunSpec;
 import com.squareup.kotlinpoet.TypeName;
 import com.squareup.kotlinpoet.TypeSpec;
+
+import java.util.ArrayList;
 
 import javax.annotation.processing.ProcessingEnvironment;
 
@@ -36,13 +41,8 @@ public class KtBridgeGenerator extends AbstractKtFileGenerator {
 
     private FunSpec getGetter(FieldInfo fieldInfo) {
         TypeName className = KotlinUtils.javaToKotlinType(classInfo.getKtTypeName());
-        if (className == null) {
-            ErrorLogger.putWarning("GET CLASS " + classInfo.toString().toString(), null);
-        }
-        TypeName fieldName = KotlinUtils.javaToKotlinType(fieldInfo.getKtTypeName());
-        if (fieldName == null) {
-            ErrorLogger.putWarning("GET CLASS " + classInfo.toString().toString() + " " + fieldInfo.toString(), null);
-        }
+        TypeName fieldName = getKotlinTypeName(fieldInfo);
+
         if (fieldInfo.isNullable()) {
             fieldName = fieldName.asNullable();
         }
@@ -57,7 +57,8 @@ public class KtBridgeGenerator extends AbstractKtFileGenerator {
 
     private FunSpec getSetter(FieldInfo fieldInfo) {
         TypeName className = KotlinUtils.javaToKotlinType(classInfo.getKtTypeName());
-        TypeName fieldName = KotlinUtils.javaToKotlinType(fieldInfo.getKtTypeName());
+        TypeName fieldName = getKotlinTypeName(fieldInfo);
+
         if (fieldInfo.isNullable()) {
             fieldName = fieldName.asNullable();
         }
@@ -70,6 +71,40 @@ public class KtBridgeGenerator extends AbstractKtFileGenerator {
         return builder.build();
     }
 
+    private TypeName getKotlinTypeName(FieldInfo fieldInfo) {
+
+
+        TypeName typeName = fieldInfo.getKtTypeName();
+
+        if (fieldInfo.getTypeName() instanceof ParameterizedTypeName) {
+            ParameterizedTypeName parameterizedTypeName = (ParameterizedTypeName) fieldInfo.getTypeName();
+            com.squareup.javapoet.TypeName argumentTypeName = parameterizedTypeName.typeArguments.get(0);
+            if (argumentTypeName instanceof WildcardTypeName) {
+                WildcardTypeName wildcardTypeName = (WildcardTypeName) argumentTypeName;
+                ArrayList<com.squareup.javapoet.TypeName> typeNames = new ArrayList<>(wildcardTypeName.upperBounds);
+                typeNames.addAll(wildcardTypeName.lowerBounds);
+
+                for (com.squareup.javapoet.TypeName t : typeNames) {
+                    TypeVariableName typeVariableName = TypeVariableName.get(t.toString());
+                    com.squareup.javapoet.TypeName concreteTypeName = classInfo.getGenericParamsMap().get(typeVariableName);
+
+                    if (concreteTypeName != null) {
+                        TypeName ktRawType = KotlinUtils.javaToKotlinType(Utils.getKtTypeName(parameterizedTypeName.rawType));
+                        while (ktRawType instanceof com.squareup.kotlinpoet.ParameterizedTypeName) {
+                            ktRawType = ((com.squareup.kotlinpoet.ParameterizedTypeName) ktRawType).getRawType();
+                        }
+                        ClassName rawClassName = ClassName.bestGuess(ktRawType.toString());
+
+                        TypeName ktConcreteTypeName = KotlinUtils.javaToKotlinType(Utils.getKtTypeName(concreteTypeName));
+                        typeName = com.squareup.kotlinpoet.ParameterizedTypeName.get(rawClassName, ktConcreteTypeName);
+                        break;
+                    }
+                }
+            }
+        }
+
+        return KotlinUtils.javaToKotlinType(typeName);
+    }
 
     @Override
     protected String getPackageName() {

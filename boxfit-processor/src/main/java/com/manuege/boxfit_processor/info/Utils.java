@@ -4,6 +4,7 @@ import com.manuege.boxfit_processor.errors.ErrorLogger;
 import com.manuege.boxfit_processor.processor.Enviroment;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeName;
+import com.squareup.kotlinpoet.TypeNames;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -143,6 +144,11 @@ public class Utils {
             return element.asType();
         }
         return null;
+    }
+
+    public static com.squareup.kotlinpoet.TypeName getKtTypeName(TypeName typeName) {
+        TypeMirror typeMirror = getTypeMirrorFromTypeName(typeName);
+        return TypeNames.get(typeMirror);
     }
 
     public static void ensureTypeNameHasEmptyInitializer(TypeName typeName) {

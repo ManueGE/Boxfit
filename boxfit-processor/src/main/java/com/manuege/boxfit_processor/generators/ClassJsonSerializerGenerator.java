@@ -152,9 +152,10 @@ public class ClassJsonSerializerGenerator extends AbstractJavaFileGenerator {
         builder.addStatement("$T jsonArray = json.getJSONArray($S)", JSONArray.class, fieldInfo.getSerializedName());
         builder.addStatement("$L.clear()", getter);
         builder.beginControlFlow("if (jsonArray != null)");
+        TypeName relationship = fieldInfo.getRelationshipName();
         TypeName serializer = fieldInfo.getRelationshipSerializerName();
         builder.addStatement("$T serializer = $T.getInstance()", serializer, serializer);
-        builder.addStatement("$T<$T> property = serializer.fromJson(jsonArray, boxStore)", List.class, fieldInfo.getRelationshipName());
+        builder.addStatement("$T<$T> property = serializer.fromJson(jsonArray, boxStore)", List.class, relationship);
         builder.addStatement("$L.addAll(property)", getter);
         builder.endControlFlow();
     }

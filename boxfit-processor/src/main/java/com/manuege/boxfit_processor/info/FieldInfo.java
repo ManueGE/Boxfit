@@ -14,9 +14,12 @@ import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeVariableName;
+import com.squareup.javapoet.WildcardTypeName;
 import com.squareup.kotlinpoet.TypeNames;
 
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
@@ -43,7 +46,11 @@ public class FieldInfo {
         JSON_SERIALIZABLE;
 
         public boolean isRelationship() {
-            return this == TO_ONE || this == TO_MANY || this == JSON_SERIALIZABLE;
+            return this == TO_ONE || this == TO_MANY;
+        }
+
+        public boolean targetIsBoxfitObject() {
+            return isRelationship() || this == JSON_SERIALIZABLE;
         }
     }
 
@@ -188,7 +195,7 @@ public class FieldInfo {
                 fieldInfo.kind = Kind.TO_MANY;
             }
 
-            if (fieldInfo.kind.isRelationship()) {
+            if (fieldInfo.kind.targetIsBoxfitObject()) {
                 if (fieldInfo.getTypeName() instanceof ParameterizedTypeName) {
                     ParameterizedTypeName parameterizedTypeName = (ParameterizedTypeName) fieldInfo.getTypeName();
                     TypeName relationshipTypeName = parameterizedTypeName.typeArguments.get(0);
@@ -204,6 +211,21 @@ public class FieldInfo {
                         fieldInfo.relationshipName = classInfo.getGenericParamsMap().get(typeVariableName);
                         TypeElement relationshipFieldElement = elementUtil.getTypeElement(fieldInfo.relationshipName.toString());
                         fieldInfo.relationshipSerializerName = Utils.getSerializer(relationshipFieldElement);
+
+                    } else if (relationshipTypeName instanceof WildcardTypeName){
+                        WildcardTypeName wildcardTypeName = (WildcardTypeName) relationshipTypeName;
+                        ArrayList<TypeName> typeNames = new ArrayList<>(wildcardTypeName.upperBounds);
+                        typeNames.addAll(wildcardTypeName.lowerBounds);
+                        for (TypeName t : typeNames) {
+                            TypeVariableName typeVariableName = TypeVariableName.get(t.toString());
+                            TypeName concreteTypeName = classInfo.getGenericParamsMap().get(typeVariableName);
+
+                            if (concreteTypeName != null) {
+                                fieldInfo.relationshipName = concreteTypeName;
+                                TypeElement relationshipFieldElement = elementUtil.getTypeElement(fieldInfo.relationshipName.toString());
+                                fieldInfo.relationshipSerializerName = Utils.getSerializer(relationshipFieldElement);
+                            }
+                        }
                     }
 
                 } else {

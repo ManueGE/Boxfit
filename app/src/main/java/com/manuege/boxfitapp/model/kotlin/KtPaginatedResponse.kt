@@ -1,7 +1,7 @@
 package com.manuege.boxfitapp.model.kotlin
 
+import com.manuege.boxfit.annotations.BoxfitClass
 import com.manuege.boxfit.annotations.BoxfitField
-import com.manuege.boxfitapp.model.java.Parent
 import java.util.*
 
 open class KtPaginatedResponse<T> {
@@ -22,9 +22,9 @@ open class KtPaginatedResponse<T> {
         internal set
 }
 
-//@BoxfitClass
-open class KtPaginatedParentResponse : KtPaginatedResponse<Parent>()
+@BoxfitClass
+open class KtPaginatedParentResponse : KtPaginatedResponse<KtParent>()
 
-//@BoxfitClass
+@BoxfitClass
 class KtPaginatedParentResponseSubclass : KtPaginatedParentResponse()
 
