@@ -65,7 +65,7 @@ public class Json {
         return keyPathResult.json.has(keyPathResult.key);
     }
 
-    private boolean isNull(String keyPath) {
+    public boolean isNull(String keyPath) {
         KeyPathResult keyPathResult = getKeyPath(keyPath);
         return keyPathResult.json.isNull(keyPathResult.key);
     }

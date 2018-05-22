@@ -1,6 +1,7 @@
 package com.manuege.boxfit_processor.info;
 
 import com.manuege.boxfit.annotations.BoxfitClass;
+import com.manuege.boxfit.annotations.FromJsonIgnoreNull;
 import com.manuege.boxfit.annotations.IdentityTransformer;
 import com.manuege.boxfit.annotations.BoxfitField;
 import com.manuege.boxfit.annotations.ToJsonIgnore;
@@ -59,6 +60,7 @@ public class FieldInfo {
     private String name;
     private String serializedName;
     private Kind kind;
+    private boolean fromJsonIgnoreNull;
     private boolean toJsonIncludeNull;
     private boolean toJsonIgnore;
 
@@ -142,6 +144,7 @@ public class FieldInfo {
         fieldInfo.jsonFieldTypeName = fieldInfo.getTypeName();
         fieldInfo.toJsonIgnore = (element.getAnnotation(ToJsonIgnore.class) != null);
         fieldInfo.toJsonIncludeNull = (element.getAnnotation(ToJsonIncludeNull.class) != null);
+        fieldInfo.fromJsonIgnoreNull = (element.getAnnotation(FromJsonIgnoreNull.class) != null);
 
         // Primary key
         Id id = element.getAnnotation(Id.class);
@@ -253,6 +256,10 @@ public class FieldInfo {
 
     public boolean isToJsonIgnore() {
         return toJsonIgnore;
+    }
+
+    public boolean isFromJsonIgnoreNull() {
+        return fromJsonIgnoreNull;
     }
 
     public String getSerializedName() {

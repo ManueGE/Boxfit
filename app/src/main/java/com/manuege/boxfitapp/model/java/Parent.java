@@ -2,6 +2,7 @@ package com.manuege.boxfitapp.model.java;
 
 import com.manuege.boxfit.annotations.BoxfitClass;
 import com.manuege.boxfit.annotations.BoxfitField;
+import com.manuege.boxfit.annotations.FromJsonIgnoreNull;
 import com.manuege.boxfitapp.transformers.ApiStringToDateTransformer;
 import com.manuege.boxfitapp.transformers.EnumToIntTransformer;
 import com.manuege.boxfitapp.transformers.SlashIdTransformer;
@@ -92,4 +93,8 @@ public class Parent {
 
     @BoxfitField(value="date", transformer = ApiStringToDateTransformer.class)
     public Date dateField;
+
+    @BoxfitField
+    @FromJsonIgnoreNull
+    public int fromJsonIgnoreNull;
 }

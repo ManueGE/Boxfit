@@ -105,8 +105,12 @@ public class ClassJsonSerializerGenerator extends AbstractJavaFileGenerator {
     }
 
     private void addFieldSerializationForMergeMethod(MethodSpec.Builder builder, FieldInfo fieldInfo) {
-        builder.beginControlFlow("if (json.has($S))", fieldInfo.getSerializedName());
-
+        String serializedName = fieldInfo.getSerializedName();
+        if (fieldInfo.isFromJsonIgnoreNull()) {
+            builder.beginControlFlow("if (json.has($S) && !json.isNull($S))", serializedName, serializedName);
+        } else {
+            builder.beginControlFlow("if (json.has($S))", serializedName);
+        }
         switch (fieldInfo.getKind()) {
             case NORMAL:
                 addNormalFieldSerializer(builder, fieldInfo);
