@@ -81,12 +81,15 @@ class User {
 
 ### Field names and JSON keys
 
+#### Custom field name
 If you don't specify the name of the JSON key under one value comes, **Boxfit** will use the field name **exactly as it is declared** (that means that it won't automatically convert *camelCase* to *snake_case*). If the field name and the JSON key has different values you can indicate it by adding the key into the `BoxfitField` annotation. For instance:
 
 ```java
 @BoxfitField("name")
 String username;
 ```
+
+#### Dot notation
 
 Let's suppose you have a JSON with this format:
 
@@ -219,6 +222,12 @@ However, if we have this JSON:
 
 the `avatar` of the user will be updated and set to `null`.
 
+#### Ignore null
+
+The behaviour defined before can be changed using the `FromJsonIgnoreNull` annotation. 
+
+If you add this annotation to a field the `null` values from a json will be ignored as if the key were missing in the json.
+
 
 #### Serializing from ids 
 
@@ -257,8 +266,8 @@ Not only **Objectbox** classes can be serialized with **Boxfit**. Any Java objec
 **Boxfit** can also be used out of **Retrofit** to convert `JSONObject` or `JSONArray` into Java objects:
 
 ```java
-User user = BoxfitSerializer.fromJson(User.class, myJsonObject);
-List<Users> users = BoxfitSerializer.fromJson(User.class, myJsonArray);
+User user = boxfitSerializer.fromJson(User.class, myJsonObject);
+List<Users> users = boxfitSerializer.fromJson(User.class, myJsonArray);
  
 ```
 
@@ -270,10 +279,10 @@ You can convert bot a single object or a list of objects:
 
 ```java
 User user = ...;
-JSONObject jsonObject = BoxfitSerializer.toJson(user);
+JSONObject jsonObject = boxfitSerializer.toJson(user);
 
 List<User> users = ...;
-JSONArray jsonArray = BoxfitSerializer.toJson(users);
+JSONArray jsonArray = boxfitSerializer.toJson(users);
 ``` 
 
 ### To JSON Annotations
