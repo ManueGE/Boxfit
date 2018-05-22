@@ -96,5 +96,5 @@ public class Parent {
 
     @BoxfitField
     @FromJsonIgnoreNull
-    public int ignoreNull;
+    public int fromJsonIgnoreNull;
 }

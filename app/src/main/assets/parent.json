@@ -43,5 +43,5 @@
   ],
   "enum": 1,
   "date": "2017-09-17",
-  "ignoreNull": 1
+  "fromJsonIgnoreNull": 1
 }

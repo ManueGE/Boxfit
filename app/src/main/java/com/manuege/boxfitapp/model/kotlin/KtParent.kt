@@ -72,5 +72,5 @@ class KtParent() {
 
     @BoxfitField
     @FromJsonIgnoreNull
-    var ignoreNull: Int = 0
+    var fromJsonIgnoreNull: Int = 0
 }

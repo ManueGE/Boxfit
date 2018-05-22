@@ -37,7 +37,7 @@ public class ToJsonTest extends AbstractObjectBoxTest{
         parent.doubleClassField = 6.6;
         parent.stringField = "hello";
         parent.serializerNameInferred = "inferred";
-        parent.ignoreNull = 3;
+        parent.fromJsonIgnoreNull = 3;
 
         Child one = new Child(1, "one");
         Child two = new Child(2, "two");
@@ -86,7 +86,7 @@ public class ToJsonTest extends AbstractObjectBoxTest{
         expected.put("double", 5.5);
         expected.put("toMany", new JSONArray());
         expected.put("list", new JSONArray());
-        expected.put("ignoreNull", 0);
+        expected.put("fromJsonIgnoreNull", 0);
 
         BoxfitSerializer boxfitSerializer = new BoxfitSerializer(boxStore);
         JSONObject actual = boxfitSerializer.toJson(parent);
@@ -119,14 +119,14 @@ public class ToJsonTest extends AbstractObjectBoxTest{
 
         parent1.id = 1;
         parent1.stringField = "hello";
-        parent1.ignoreNull = 1;
+        parent1.fromJsonIgnoreNull = 1;
 
         Parent parent2 = new Parent();
         boxStore.boxFor(Parent.class).put(parent2);
 
         parent2.id = 2;
         parent2.stringField = "world";
-        parent2.ignoreNull = 2;
+        parent2.fromJsonIgnoreNull = 2;
 
         ArrayList<Parent> list = new ArrayList<>();
         list.add(parent1);
@@ -143,7 +143,7 @@ public class ToJsonTest extends AbstractObjectBoxTest{
         object1.put("string", "hello");
         object1.put("toMany", new JSONArray());
         object1.put("list", new JSONArray());
-        object1.put("ignoreNull", 1);
+        object1.put("fromJsonIgnoreNull", 1);
 
         JSONObject object2 = new JSONObject();
         object2.put("id", 2);
@@ -153,7 +153,7 @@ public class ToJsonTest extends AbstractObjectBoxTest{
         object2.put("string", "world");
         object2.put("toMany", new JSONArray());
         object2.put("list", new JSONArray());
-        object2.put("ignoreNull", 2);
+        object2.put("fromJsonIgnoreNull", 2);
 
         JSONArray expected = new JSONArray();
         expected.put(object1);

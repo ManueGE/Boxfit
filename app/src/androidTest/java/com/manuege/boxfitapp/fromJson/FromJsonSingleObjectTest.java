@@ -58,7 +58,7 @@ public class FromJsonSingleObjectTest extends AbstractObjectBoxTest {
         Assert.assertEquals(8, parent.dateField.getMonth());
         Assert.assertEquals(17, parent.dateField.getDate());
 
-        Assert.assertEquals(1, parent.ignoreNull);
+        Assert.assertEquals(1, parent.fromJsonIgnoreNull);
     }
 
     @Test
@@ -110,7 +110,7 @@ public class FromJsonSingleObjectTest extends AbstractObjectBoxTest {
         Assert.assertEquals(17, parent.dateField.getDate());
 
         // Shouldn't update value, is null
-        Assert.assertEquals(1, parent.ignoreNull);
+        Assert.assertEquals(1, parent.fromJsonIgnoreNull);
     }
 
     @Test
