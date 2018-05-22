@@ -54,6 +54,8 @@ class KtFromJsonSingleObjectTest : AbstractObjectBoxTest() {
         Assert.assertEquals(117, parent.dateField!!.year.toLong())
         Assert.assertEquals(8, parent.dateField!!.month.toLong())
         Assert.assertEquals(17, parent.dateField!!.date.toLong())
+
+        Assert.assertEquals(1, parent.ignoreNull)
     }
 
     @Test
@@ -104,6 +106,9 @@ class KtFromJsonSingleObjectTest : AbstractObjectBoxTest() {
         Assert.assertEquals(117, parent.dateField!!.year.toLong())
         Assert.assertEquals(8, parent.dateField!!.month.toLong())
         Assert.assertEquals(17, parent.dateField!!.date.toLong())
+
+        // Shouldn't update value, is null
+        Assert.assertEquals(1, parent.ignoreNull)
     }
 
     @Test
