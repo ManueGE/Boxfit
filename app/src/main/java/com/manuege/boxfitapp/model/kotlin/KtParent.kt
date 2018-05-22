@@ -2,6 +2,7 @@ package com.manuege.boxfitapp.model.kotlin
 
 import com.manuege.boxfit.annotations.BoxfitClass
 import com.manuege.boxfit.annotations.BoxfitField
+import com.manuege.boxfit.annotations.FromJsonIgnoreNull
 import com.manuege.boxfitapp.model.java.Parent
 import com.manuege.boxfitapp.transformers.ApiStringToDateTransformer
 import com.manuege.boxfitapp.transformers.EnumToIntTransformer
@@ -68,4 +69,8 @@ class KtParent() {
 
     @BoxfitField(value = "date", transformer = ApiStringToDateTransformer::class)
     var dateField: Date? = null
+
+    @BoxfitField
+    @FromJsonIgnoreNull
+    var fromJsonIgnoreNull: Int = 0
 }
