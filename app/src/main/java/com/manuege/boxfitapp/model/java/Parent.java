@@ -44,7 +44,7 @@ public class Parent {
     @BoxfitField
     @Id(assignable = true)
     public long id;
-
+    
     @BoxfitField("long_class")
     public Long longClassField;
 

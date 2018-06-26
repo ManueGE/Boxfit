@@ -1,6 +1,7 @@
 package com.manuege.boxfit_processor.info;
 
 import com.manuege.boxfit.annotations.BoxfitClass;
+import com.manuege.boxfit.annotations.BoxfitId;
 import com.manuege.boxfit.annotations.FromJsonIgnoreNull;
 import com.manuege.boxfit.annotations.IdentityTransformer;
 import com.manuege.boxfit.annotations.BoxfitField;
@@ -55,7 +56,8 @@ public class FieldInfo {
         }
     }
 
-    private boolean isPrimaryKey;
+    boolean isObjectBoxPrimaryKey;
+    boolean isManualPrimaryKey;
     private boolean isPrimitive;
     private String name;
     private String serializedName;
@@ -147,8 +149,11 @@ public class FieldInfo {
         fieldInfo.fromJsonIgnoreNull = (element.getAnnotation(FromJsonIgnoreNull.class) != null);
 
         // Primary key
-        Id id = element.getAnnotation(Id.class);
-        fieldInfo.isPrimaryKey = (id != null);
+        Id objectBoxId = element.getAnnotation(Id.class);
+        fieldInfo.isObjectBoxPrimaryKey = (objectBoxId != null);
+
+        BoxfitId boxfitId = element.getAnnotation(BoxfitId.class);
+        fieldInfo.isManualPrimaryKey = (boxfitId != null);
 
         // Serializable info
         if (boxfitField.value().equals(Constants.SERIALIZABLE_NULL_KEY_PATH)) {
@@ -215,7 +220,7 @@ public class FieldInfo {
                         TypeElement relationshipFieldElement = elementUtil.getTypeElement(fieldInfo.relationshipName.toString());
                         fieldInfo.relationshipSerializerName = Utils.getSerializer(relationshipFieldElement);
 
-                    } else if (relationshipTypeName instanceof WildcardTypeName){
+                    } else if (relationshipTypeName instanceof WildcardTypeName) {
                         WildcardTypeName wildcardTypeName = (WildcardTypeName) relationshipTypeName;
                         ArrayList<TypeName> typeNames = new ArrayList<>(wildcardTypeName.upperBounds);
                         typeNames.addAll(wildcardTypeName.lowerBounds);
@@ -240,10 +245,6 @@ public class FieldInfo {
 
         fieldInfo.validate();
         return fieldInfo;
-    }
-
-    public boolean isPrimaryKey() {
-        return isPrimaryKey;
     }
 
     public boolean isPrimitive() {
