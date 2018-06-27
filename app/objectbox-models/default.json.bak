@@ -62,7 +62,7 @@
     },
     {
       "id": "3:4125819175100010997",
-      "lastPropertyId": "16:5089378462903844498",
+      "lastPropertyId": "17:6388938679646394647",
       "name": "Parent",
       "properties": [
         {
@@ -127,8 +127,8 @@
           "name": "toOneId"
         },
         {
-          "id": "16:5089378462903844498",
-          "name": "ignoreNull"
+          "id": "17:6388938679646394647",
+          "name": "fromJsonIgnoreNull"
         }
       ],
       "relations": [
@@ -144,7 +144,7 @@
     },
     {
       "id": "4:2807123175922080580",
-      "lastPropertyId": "16:1617455967900345159",
+      "lastPropertyId": "17:3822074856525634096",
       "name": "KtParent",
       "properties": [
         {
@@ -209,8 +209,8 @@
           "name": "dateField"
         },
         {
-          "id": "16:1617455967900345159",
-          "name": "ignoreNull"
+          "id": "17:3822074856525634096",
+          "name": "fromJsonIgnoreNull"
         }
       ],
       "relations": [
@@ -290,7 +290,10 @@
   "modelVersionParserMinimum": 4,
   "retiredEntityUids": [],
   "retiredIndexUids": [],
-  "retiredPropertyUids": [],
+  "retiredPropertyUids": [
+    1617455967900345159,
+    5089378462903844498
+  ],
   "retiredRelationUids": [
     3683850303851814965,
     8276906041842236807

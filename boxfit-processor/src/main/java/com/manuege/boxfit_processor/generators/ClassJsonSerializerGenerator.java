@@ -326,9 +326,14 @@ public class ClassJsonSerializerGenerator extends AbstractJavaFileGenerator {
                 builder.addStatement("return getBox(boxStore).get(ids)");
             } else {
                 builder.addStatement("if (ids == null || ids.size() == 0) return new $T<>()", ArrayList.class)
-                        .addStatement("$T<$T> queryBuilder = getBox(boxStore).query()", QueryBuilder.class, getEntityTypeName())
+                        .addStatement("$T<$T> queryBuilder = null;", QueryBuilder.class, getEntityTypeName())
                         .beginControlFlow("for ($T id: ids)", getPrimaryKeyTypeName())
+                        .beginControlFlow("if (queryBuilder == null)")
+                        .addStatement("queryBuilder = getBox(boxStore).query().equal($L.$L, id)", classInfo.getObjectboxBridgeName(), classInfo.getPrimaryKey().getName())
+                        .endControlFlow()
+                        .beginControlFlow("else")
                         .addStatement("queryBuilder.or().equal($L.$L, id)", classInfo.getObjectboxBridgeName(), classInfo.getPrimaryKey().getName())
+                        .endControlFlow()
                         .endControlFlow()
                         .addStatement("return queryBuilder.build().find()");
             }
