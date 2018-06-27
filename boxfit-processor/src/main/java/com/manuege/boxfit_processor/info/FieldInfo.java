@@ -56,7 +56,7 @@ public class FieldInfo {
         }
     }
 
-    boolean isObjectBoxPrimaryKey;
+    boolean isAutomaticPrimaryKey;
     boolean isManualPrimaryKey;
     private boolean isPrimitive;
     private String name;
@@ -150,7 +150,7 @@ public class FieldInfo {
 
         // Primary key
         Id objectBoxId = element.getAnnotation(Id.class);
-        fieldInfo.isObjectBoxPrimaryKey = (objectBoxId != null);
+        fieldInfo.isAutomaticPrimaryKey = (objectBoxId != null);
 
         BoxfitId boxfitId = element.getAnnotation(BoxfitId.class);
         fieldInfo.isManualPrimaryKey = (boxfitId != null);
@@ -305,6 +305,10 @@ public class FieldInfo {
 
     public boolean isNullable() {
         return nullable;
+    }
+
+    public boolean isAutomaticPrimaryKey() {
+        return isAutomaticPrimaryKey;
     }
 
     private void validate() {

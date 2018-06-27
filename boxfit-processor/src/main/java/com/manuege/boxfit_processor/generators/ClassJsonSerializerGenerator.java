@@ -25,6 +25,7 @@ import javax.lang.model.element.Modifier;
 
 import io.objectbox.Box;
 import io.objectbox.BoxStore;
+import io.objectbox.query.QueryBuilder;
 
 /**
  * Created by Manu on 1/2/18.
@@ -298,8 +299,14 @@ public class ClassJsonSerializerGenerator extends AbstractJavaFileGenerator {
         if (classInfo.hasPrimaryKey()) {
             builder.beginControlFlow("if (id == null)")
                     .addStatement("return null")
-                    .endControlFlow()
-                    .addStatement("return getBox(boxStore).get(id)");
+                    .endControlFlow();
+
+            if (classInfo.getPrimaryKey().isAutomaticPrimaryKey()) {
+                builder.addStatement("return getBox(boxStore).get(id)");
+            } else {
+                builder.addStatement("return getBox(boxStore).query().equal($L.$L, id).build().findFirst()", classInfo.getObjectboxBridgeName(), classInfo.getPrimaryKey().getName());
+            }
+
         } else {
             builder.addStatement("return null");
         }
@@ -315,7 +322,16 @@ public class ClassJsonSerializerGenerator extends AbstractJavaFileGenerator {
                 .returns(ParameterizedTypeName.get(ClassName.get(List.class), getEntityTypeName()));
 
         if (classInfo.hasPrimaryKey()) {
-            builder.addStatement("return getBox(boxStore).get(ids)");
+            if (classInfo.getPrimaryKey().isAutomaticPrimaryKey()) {
+                builder.addStatement("return getBox(boxStore).get(ids)");
+            } else {
+                builder.addStatement("if (ids == null || ids.size() == 0) return new $T<>()", ArrayList.class)
+                        .addStatement("$T<$T> queryBuilder = getBox(boxStore).query()", QueryBuilder.class, getEntityTypeName())
+                        .beginControlFlow("for ($T id: ids)", getPrimaryKeyTypeName())
+                        .addStatement("queryBuilder.or().equal($L.$L, id)", classInfo.getObjectboxBridgeName(), classInfo.getPrimaryKey().getName())
+                        .endControlFlow()
+                        .addStatement("return queryBuilder.build().find()");
+            }
         } else {
             builder.addStatement("return new $T<>()", ArrayList.class);
         }

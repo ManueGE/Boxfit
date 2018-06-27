@@ -82,15 +82,15 @@ public class ClassInfo {
         // Primary key
         for (FieldInfo fieldInfo: classInfo.fields) {
             FieldInfo currentPrimaryKey = classInfo.getPrimaryKey();
-            if (fieldInfo.isObjectBoxPrimaryKey && currentPrimaryKey == null) {
+            if (fieldInfo.isAutomaticPrimaryKey && currentPrimaryKey == null) {
                 classInfo.primaryKey = fieldInfo;
             }
 
             if (fieldInfo.isManualPrimaryKey) {
-                if (currentPrimaryKey == null || currentPrimaryKey.isObjectBoxPrimaryKey) {
+                if (currentPrimaryKey == null || currentPrimaryKey.isAutomaticPrimaryKey) {
                     classInfo.primaryKey = fieldInfo;
                 } else {
-                    ErrorLogger.putError("Entity just can be annotated with BoxfitId once", element);
+                    ErrorLogger.putError(element.getSimpleName() + " just can be annotated with BoxfitId once", element);
                 }
             }
         }
@@ -158,6 +158,10 @@ public class ClassInfo {
 
     public TypeName getTypeName() {
         return typeName;
+    }
+
+    public String getObjectboxBridgeName() {
+        return getTypeElement().getSimpleName() + "_";
     }
 
     public com.squareup.kotlinpoet.TypeName getKtTypeName() {
