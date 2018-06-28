@@ -10,8 +10,8 @@ Convert a JSON response received through **Retrofit** to **Objectbox** entities 
 
 ```
 dependencies {
-    annotationProcessor 'com.manuege.boxfit:boxfit-processor:0.0.3'
-    implementation 'com.manuege.boxfit:boxfit:0.0.3'
+    annotationProcessor 'com.manuege.boxfit:boxfit-processor:0.0.4'
+    implementation 'com.manuege.boxfit:boxfit:0.0.4'
 }
 ```
 
@@ -174,6 +174,26 @@ class User {
 
 Not only fields can be transformed. If for some reason you don't like the JSON you get from your server and you want to make some transformations into it before being serialized, you can do it by creating a class that implements `JSONObjectTransformer` and setting the `transformer` value of the `@BoxfitClass` annotation.
 
+
+### String Ids
+
+At this moment, Objectbox just allow `long` as the type of the id of the entities. If you need to use a `String` as id, you can do it using the `BoxfitId` annotation:
+
+```java
+@Entity
+class MyClass {
+	// This the id required by Objectbox
+	@Id
+	long _id;
+	
+	// This is the id used by Boxfit
+	@BoxfitId
+	@BoxfitField
+	String id;
+}
+```
+##### Note:
+Please, keep in mind that this id is just used by Boxfit to identify existing objects and update them. Nothing prevents you from adding two objects with the same value of this `id` in the database, so use this feature wisely. 
 
 ### Features
 #### Updating objects
