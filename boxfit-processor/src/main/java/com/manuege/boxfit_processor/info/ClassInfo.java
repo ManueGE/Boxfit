@@ -2,6 +2,7 @@ package com.manuege.boxfit_processor.info;
 
 import com.manuege.boxfit.annotations.BoxfitClass;
 import com.manuege.boxfit.annotations.JSONObjectIdentityTransformer;
+import com.manuege.boxfit_processor.errors.ErrorLogger;
 import com.manuege.boxfit_processor.errors.InvalidElementException;
 import com.manuege.boxfit_processor.processor.Enviroment;
 import com.squareup.javapoet.TypeName;
@@ -80,8 +81,17 @@ public class ClassInfo {
 
         // Primary key
         for (FieldInfo fieldInfo: classInfo.fields) {
-            if (fieldInfo.isPrimaryKey()) {
+            FieldInfo currentPrimaryKey = classInfo.getPrimaryKey();
+            if (fieldInfo.isAutomaticPrimaryKey && currentPrimaryKey == null) {
                 classInfo.primaryKey = fieldInfo;
+            }
+
+            if (fieldInfo.isManualPrimaryKey) {
+                if (currentPrimaryKey == null || currentPrimaryKey.isAutomaticPrimaryKey) {
+                    classInfo.primaryKey = fieldInfo;
+                } else {
+                    ErrorLogger.putError(element.getSimpleName() + " just can be annotated with BoxfitId once", element);
+                }
             }
         }
 
@@ -148,6 +158,10 @@ public class ClassInfo {
 
     public TypeName getTypeName() {
         return typeName;
+    }
+
+    public String getObjectboxBridgeName() {
+        return getTypeElement().getSimpleName() + "_";
     }
 
     public com.squareup.kotlinpoet.TypeName getKtTypeName() {
