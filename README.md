@@ -401,7 +401,7 @@ public class PaginatedResponse<T> {
 }
 
 @BoxfitClass
-public static class PaginatedUsersResponse extends PaginatedResponse<Parent> {
+public static class PaginatedUsersResponse extends PaginatedResponse<User> {
 }
 ```
 
