@@ -1,6 +1,6 @@
 # Boxfit
 
-### 0.0.8 (28 June 2018)
+### 0.0.4 (28 June 2018)
 - Add `BoxfitId` annotation. This allow using different types of Id instead of `long`. 
 
 ### 0.0.3 (22 May 2018)
