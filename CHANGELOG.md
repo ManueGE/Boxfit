@@ -1,8 +1,8 @@
 # Boxfit
 
 ### 0.0.5 (9 July 2018)
-- Add `ToJsonAsId` annotation. This allow using ids instead of full object when converting entities to JSON.
-- Lists of primitive values (`string`, `int`, `double`, `bool`, `long`) are supported. (They must be use the propper `ObjectBox` converter).
+- Add `ToJsonAsId` annotation. This allows using ids instead of the full object when converting entities to JSON.
+- Lists of primitive values (`string`, `int`, `double`, `bool`, `long`) are supported. (They must use the proper `ObjectBox` converter).
 
 ### 0.0.4 (28 June 2018)
 - Add `BoxfitId` annotation. This allow using different types of Id instead of `long`. 
