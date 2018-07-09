@@ -62,7 +62,7 @@
     },
     {
       "id": "3:4125819175100010997",
-      "lastPropertyId": "17:6388938679646394647",
+      "lastPropertyId": "18:9056629877875746675",
       "name": "Parent",
       "properties": [
         {
@@ -129,6 +129,10 @@
         {
           "id": "17:6388938679646394647",
           "name": "fromJsonIgnoreNull"
+        },
+        {
+          "id": "18:9056629877875746675",
+          "name": "listInt"
         }
       ],
       "relations": [

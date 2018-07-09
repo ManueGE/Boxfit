@@ -60,6 +60,10 @@ class KtToJsonTest: AbstractObjectBoxTest() {
         calendar.set(2017, 8, 17)
         parent.dateField = calendar.time
 
+        parent.listInt.add(1)
+        parent.listInt.add(2)
+        parent.listInt.add(3)
+
         val boxfitSerializer = BoxfitSerializer(boxStore)
         val actual = boxfitSerializer.toJson(parent)
         val expected = JsonProvider.getJSONObject("parent_for_to_json.json")
@@ -86,6 +90,7 @@ class KtToJsonTest: AbstractObjectBoxTest() {
         expected.put("toMany", JSONArray())
         expected.put("list", JSONArray())
         expected.put("fromJsonIgnoreNull", 3)
+        expected.put("listInt", JSONArray())
 
         val boxfitSerializer = BoxfitSerializer(boxStore)
         val actual = boxfitSerializer.toJson(parent)
@@ -121,6 +126,8 @@ class KtToJsonTest: AbstractObjectBoxTest() {
         parent1.id = 1
         parent1.stringField = "hello"
         parent1.fromJsonIgnoreNull = 1
+        parent1.listInt.add(10)
+        parent1.listInt.add(20)
 
         val parent2 = KtParent()
         boxStore.boxFor(KtParent::class.java).put(parent2)
@@ -145,6 +152,10 @@ class KtToJsonTest: AbstractObjectBoxTest() {
         object1.put("toMany", JSONArray())
         object1.put("list", JSONArray())
         object1.put("fromJsonIgnoreNull", 1)
+        val listInt1 = JSONArray()
+        listInt1.put(10)
+        listInt1.put(20)
+        object1.put("listInt", listInt1)
 
         val object2 = JSONObject()
         object2.put("id", 2)
@@ -155,6 +166,7 @@ class KtToJsonTest: AbstractObjectBoxTest() {
         object2.put("toMany", JSONArray())
         object2.put("list", JSONArray())
         object2.put("fromJsonIgnoreNull", 2)
+        object2.put("listInt", JSONArray())
 
         val expected = JSONArray()
         expected.put(object1)

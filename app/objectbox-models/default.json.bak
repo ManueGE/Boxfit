@@ -144,7 +144,7 @@
     },
     {
       "id": "4:2807123175922080580",
-      "lastPropertyId": "17:3822074856525634096",
+      "lastPropertyId": "18:856277558264762238",
       "name": "KtParent",
       "properties": [
         {
@@ -211,6 +211,10 @@
         {
           "id": "17:3822074856525634096",
           "name": "fromJsonIgnoreNull"
+        },
+        {
+          "id": "18:856277558264762238",
+          "name": "listInt"
         }
       ],
       "relations": [

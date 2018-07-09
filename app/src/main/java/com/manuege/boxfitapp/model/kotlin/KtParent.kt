@@ -77,6 +77,6 @@ class KtParent() {
     var fromJsonIgnoreNull: Int = 0
 
     @Convert(converter = ListIntToStringTransformer::class, dbType = String::class)
-    @BoxfitField(transformer = ListIntToStringTransformer::class)
+    @BoxfitField
     var listInt: ArrayList<Int> = ArrayList()
 }
