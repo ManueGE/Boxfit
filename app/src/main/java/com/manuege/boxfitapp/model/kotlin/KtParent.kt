@@ -6,12 +6,14 @@ import com.manuege.boxfit.annotations.FromJsonIgnoreNull
 import com.manuege.boxfitapp.model.java.Parent
 import com.manuege.boxfitapp.transformers.ApiStringToDateTransformer
 import com.manuege.boxfitapp.transformers.EnumToIntTransformer
+import com.manuege.boxfitapp.transformers.ListIntToStringTransformer
 import io.objectbox.annotation.Convert
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
 import io.objectbox.relation.ToMany
 import io.objectbox.relation.ToOne
 import java.util.*
+import kotlin.collections.ArrayList
 
 @BoxfitClass
 @Entity
@@ -73,4 +75,8 @@ class KtParent() {
     @BoxfitField
     @FromJsonIgnoreNull
     var fromJsonIgnoreNull: Int = 0
+
+    @Convert(converter = ListIntToStringTransformer::class, dbType = String::class)
+    @BoxfitField(transformer = ListIntToStringTransformer::class)
+    var listInt: ArrayList<Int> = ArrayList()
 }

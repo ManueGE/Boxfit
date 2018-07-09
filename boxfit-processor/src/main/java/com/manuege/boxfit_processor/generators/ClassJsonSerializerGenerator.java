@@ -125,8 +125,12 @@ public class ClassJsonSerializerGenerator extends AbstractJavaFileGenerator {
             case TO_MANY:
                 addToManyFieldSerializer(builder, fieldInfo);
                 break;
-            case JSON_SERIALIZABLE:
+            case BOXFIT_OBJECT:
                 addJsonSerializableFieldSerializer(builder, fieldInfo);
+                break;
+            case LIST_OF_PRIMITIVES:
+                addListOfPrimitivesSerializer(builder, fieldInfo);
+                break;
         }
 
         builder.endControlFlow();
@@ -171,6 +175,19 @@ public class ClassJsonSerializerGenerator extends AbstractJavaFileGenerator {
 
         String value = String.format("serializer.serializeRelationship(json, \"%s\", boxStore)", fieldInfo.getSerializedName());
         buildSetterString(fieldInfo, value, builder);
+    }
+
+    private void addListOfPrimitivesSerializer(MethodSpec.Builder builder, FieldInfo fieldInfo) {
+        String getter = getBuildGetterString(fieldInfo);
+        builder.addStatement("$T jsonArray = new $T(json.getJSONArray($S))", JsonArray.class, JsonArray.class, fieldInfo.getSerializedName());
+        builder.addStatement("$L.clear()", getter);
+        builder.beginControlFlow("if (jsonArray == null)");
+        builder.addStatement("return");
+        builder.endControlFlow();
+
+        builder.beginControlFlow("for (int i = 0; i < jsonArray.length(); i++)");
+        builder.addStatement("$L.add(jsonArray.$L(i))", getter, Utils.getJsonGetterMethodName(fieldInfo.getRelationshipName()));
+        builder.endControlFlow();
     }
 
     private MethodSpec getBoxMethod() {
@@ -408,7 +425,7 @@ public class ClassJsonSerializerGenerator extends AbstractJavaFileGenerator {
                     builder.endControlFlow();
                 }
 
-            } else if (fieldInfo.getKind() == FieldInfo.Kind.JSON_SERIALIZABLE) {
+            } else if (fieldInfo.getKind() == FieldInfo.Kind.BOXFIT_OBJECT) {
                 builder.beginControlFlow("if ($L != null)", getter);
                 builder.addStatement("$T $N = $T.getInstance()", serializer, serializerName, serializer);
                 builder.addStatement("json.put($S, $N.toJson($L))", fieldInfo.getSerializedName(), serializerName, getter);
@@ -442,6 +459,22 @@ public class ClassJsonSerializerGenerator extends AbstractJavaFileGenerator {
                 if (fieldInfo.isToJsonIncludeNull()) {
                     builder.nextControlFlow("else");
                     builder.addStatement("json.put($S, JSONObject.NULL)", fieldInfo.getSerializedName());
+                    builder.endControlFlow();
+                } else {
+                    builder.endControlFlow();
+                }
+
+            } else if (fieldInfo.getKind() == FieldInfo.Kind.LIST_OF_PRIMITIVES) {
+                builder.beginControlFlow("if ($L != null)", getter);
+                builder.addStatement("$T jsonArray = new $T()", JSONArray.class, JSONArray.class);
+                builder.beginControlFlow("for (int i = 0; i < $L.size(); i++)", getter);
+                builder.addStatement("jsonArray.put($L.get(i))", getter);
+                builder.endControlFlow();
+                builder.addStatement("json.put($S, jsonArray)", fieldInfo.getSerializedName());
+
+                if (fieldInfo.isToJsonIncludeNull()) {
+                    builder.nextControlFlow("else");
+                    builder.addStatement("json.put($S, JSONArray.NULL)", fieldInfo.getSerializedName());
                     builder.endControlFlow();
                 } else {
                     builder.endControlFlow();

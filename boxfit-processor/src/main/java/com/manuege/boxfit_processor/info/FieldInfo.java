@@ -43,16 +43,17 @@ public class FieldInfo {
     public enum Kind {
         NORMAL,
         TRANSFORMED,
+        LIST_OF_PRIMITIVES,
         TO_ONE,
         TO_MANY,
-        JSON_SERIALIZABLE;
+        BOXFIT_OBJECT;
 
         public boolean isRelationship() {
             return this == TO_ONE || this == TO_MANY;
         }
 
         public boolean targetIsBoxfitObject() {
-            return isRelationship() || this == JSON_SERIALIZABLE;
+            return isRelationship() || this == BOXFIT_OBJECT;
         }
     }
 
@@ -196,7 +197,7 @@ public class FieldInfo {
         Element fieldTypeElement = typeUtil.asElement(typeMirror);
         if (fieldTypeElement instanceof TypeElement) {
             if (fieldTypeElement.getAnnotation(BoxfitClass.class) != null) {
-                fieldInfo.kind = Kind.JSON_SERIALIZABLE;
+                fieldInfo.kind = Kind.BOXFIT_OBJECT;
             } else if (((TypeElement) fieldTypeElement).getQualifiedName().toString().startsWith(TypeName.get(ToOne.class).toString())) {
                 fieldInfo.kind = Kind.TO_ONE;
             } else if (Utils.isList(typeMirror)) {
@@ -233,6 +234,14 @@ public class FieldInfo {
                                 TypeElement relationshipFieldElement = elementUtil.getTypeElement(fieldInfo.relationshipName.toString());
                                 fieldInfo.relationshipSerializerName = Utils.getSerializer(relationshipFieldElement);
                             }
+                        }
+                    }
+
+                    // If list, check if is list of primitives
+                    if (Utils.isList(typeMirror)) {
+                        if (Utils.isNativeJsonFieldType(fieldInfo.relationshipName)) {
+                            fieldInfo.kind = Kind.LIST_OF_PRIMITIVES;
+                            fieldInfo.relationshipSerializerName = null;
                         }
                     }
 
