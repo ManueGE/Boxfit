@@ -10,8 +10,8 @@ Convert a JSON response received through **Retrofit** to **ObjectBox** entities 
 
 ```
 dependencies {
-    annotationProcessor 'com.manuege.boxfit:boxfit-processor:0.0.4'
-    implementation 'com.manuege.boxfit:boxfit:0.0.4'
+    annotationProcessor 'com.manuege.boxfit:boxfit-processor:0.0.5'
+    implementation 'com.manuege.boxfit:boxfit:0.0.5'
 }
 ```
 
