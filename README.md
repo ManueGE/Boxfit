@@ -343,6 +343,9 @@ If you don't add the `ToJsonIgnore` annotation, if you try to convert a departme
 #### `ToJsonIncludeNull`
 By default, if a property is `null` when you try to get a JSON, the key for the field won't be included in the JSON. If you want to include the key even if the value is `null` you must annotate the field with `@ToJsonIncludeNull`.
 
+#### `ToJsonAsId`
+Add this annotation to a `BoxfitField` relationship to include its id instead of the full object when converting to json.
+
 ## Known issues
 #### Lists must be initialized:
 If you annotate a `List` field with `BoxfitField`, it must be initialized when the object is created, for instance:
