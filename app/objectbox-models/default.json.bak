@@ -21,7 +21,7 @@
     },
     {
       "id": "2:6617210691422933309",
-      "lastPropertyId": "8:1129772598113535998",
+      "lastPropertyId": "9:5195536998985728025",
       "name": "ToJsonTestObject",
       "properties": [
         {
@@ -56,13 +56,23 @@
           "id": "8:1129772598113535998",
           "indexId": "1:7449863398817620494",
           "name": "toOneId"
+        },
+        {
+          "id": "9:5195536998985728025",
+          "indexId": "5:1985718442749295540",
+          "name": "toOneAsIdId"
         }
       ],
-      "relations": []
+      "relations": [
+        {
+          "id": "7:3510375818724430446",
+          "name": "toManyAsId"
+        }
+      ]
     },
     {
       "id": "3:4125819175100010997",
-      "lastPropertyId": "17:6388938679646394647",
+      "lastPropertyId": "18:9056629877875746675",
       "name": "Parent",
       "properties": [
         {
@@ -129,6 +139,10 @@
         {
           "id": "17:6388938679646394647",
           "name": "fromJsonIgnoreNull"
+        },
+        {
+          "id": "18:9056629877875746675",
+          "name": "listInt"
         }
       ],
       "relations": [
@@ -246,7 +260,7 @@
     },
     {
       "id": "6:6473261252511654347",
-      "lastPropertyId": "8:9169074666899437988",
+      "lastPropertyId": "9:1586553773922931964",
       "name": "KtToJsonTestObject",
       "properties": [
         {
@@ -281,6 +295,11 @@
           "id": "8:9169074666899437988",
           "indexId": "4:8093741814743562676",
           "name": "toOneId"
+        },
+        {
+          "id": "9:1586553773922931964",
+          "indexId": "6:6233779976015292974",
+          "name": "toOneAsIdId"
         }
       ],
       "relations": []
@@ -327,8 +346,8 @@
     }
   ],
   "lastEntityId": "8:4738561424220094359",
-  "lastIndexId": "4:8093741814743562676",
-  "lastRelationId": "6:8846793173664281127",
+  "lastIndexId": "6:6233779976015292974",
+  "lastRelationId": "7:3510375818724430446",
   "lastSequenceId": "0:0",
   "modelVersion": 4,
   "modelVersionParserMinimum": 4,

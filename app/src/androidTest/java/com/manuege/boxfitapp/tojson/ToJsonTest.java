@@ -111,6 +111,43 @@ public class ToJsonTest extends AbstractObjectBoxTest{
         expected.put("double_class", JSONObject.NULL);
         expected.put("string", JSONObject.NULL);
         expected.put("toOne", JSONObject.NULL);
+        expected.put("toManyAsId", new JSONArray());
+
+        BoxfitSerializer boxfitSerializer = new BoxfitSerializer(boxStore);
+        JSONObject actual = boxfitSerializer.toJson(object);
+        Assert.assertEquals(expected.toString(), actual.toString());
+    }
+
+    @Test
+    public void parentSerializer_toJsonAsId() throws JSONException {
+        ToJsonTestObject object = new ToJsonTestObject();
+        Child child1 = new Child();
+        child1.id = 1;
+        object.toOneAsId.setTarget(child1);
+
+        Child child2 = new Child();
+        child2.id = 2;
+        object.toManyAsId.add(child2);
+
+        Child child3 = new Child();
+        child3.id = 3;
+        object.toManyAsId.add(child3);
+
+        boxStore.boxFor(ToJsonTestObject.class).put(object);
+
+        JSONObject expected = new JSONObject();
+        expected.put("long_class", JSONObject.NULL);
+        expected.put("integer_class", JSONObject.NULL);
+        expected.put("bool_class", JSONObject.NULL);
+        expected.put("double_class", JSONObject.NULL);
+        expected.put("string", JSONObject.NULL);
+        expected.put("toOne", JSONObject.NULL);
+        expected.put("toOneAsId", 1);
+
+        JSONArray jsonArray = new JSONArray();
+        jsonArray.put(2);
+        jsonArray.put(3);
+        expected.put("toManyAsId", jsonArray);
 
         BoxfitSerializer boxfitSerializer = new BoxfitSerializer(boxStore);
         JSONObject actual = boxfitSerializer.toJson(object);

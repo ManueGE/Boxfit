@@ -5,6 +5,7 @@ import com.manuege.boxfit.annotations.BoxfitId;
 import com.manuege.boxfit.annotations.FromJsonIgnoreNull;
 import com.manuege.boxfit.annotations.IdentityTransformer;
 import com.manuege.boxfit.annotations.BoxfitField;
+import com.manuege.boxfit.annotations.ToJsonAsId;
 import com.manuege.boxfit.annotations.ToJsonIgnore;
 import com.manuege.boxfit.annotations.ToJsonIncludeNull;
 import com.manuege.boxfit.constants.Constants;
@@ -66,6 +67,7 @@ public class FieldInfo {
     private boolean fromJsonIgnoreNull;
     private boolean toJsonIncludeNull;
     private boolean toJsonIgnore;
+    private boolean toJsonAsId;
 
     private Element element;
 
@@ -148,6 +150,7 @@ public class FieldInfo {
         fieldInfo.toJsonIgnore = (element.getAnnotation(ToJsonIgnore.class) != null);
         fieldInfo.toJsonIncludeNull = (element.getAnnotation(ToJsonIncludeNull.class) != null);
         fieldInfo.fromJsonIgnoreNull = (element.getAnnotation(FromJsonIgnoreNull.class) != null);
+        fieldInfo.toJsonAsId = (element.getAnnotation(ToJsonAsId.class) != null);
 
         // Primary key
         Id objectBoxId = element.getAnnotation(Id.class);
@@ -256,6 +259,10 @@ public class FieldInfo {
         return fieldInfo;
     }
 
+    public Element getElement() {
+        return element;
+    }
+
     public boolean isPrimitive() {
         return isPrimitive;
     }
@@ -270,6 +277,10 @@ public class FieldInfo {
 
     public boolean isFromJsonIgnoreNull() {
         return fromJsonIgnoreNull;
+    }
+
+    public boolean isToJsonAsId() {
+        return toJsonAsId;
     }
 
     public String getSerializedName() {
