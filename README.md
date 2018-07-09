@@ -1,9 +1,9 @@
 # Boxfit
 
-Puts together [**Retrofit**](http://square.github.io/retrofit/) and [**Objectbox**](http://objectbox.io).
+Puts together [**Retrofit**](http://square.github.io/retrofit/) and [**ObjectBox**](http://ObjectBox.io).
 
 
-Convert a JSON response received through **Retrofit** to **Objectbox** entities and save them into your `BoxStore` automatically.
+Convert a JSON response received through **Retrofit** to **ObjectBox** entities and save them into your `BoxStore` automatically.
 
 
 ## Install
@@ -75,7 +75,7 @@ class User {
 
 > **Note**: For simplicity, in the sample, we just show simple properties annotated with `@BoxfitField`, but you can also use it with relations (`ToOne`, `ToMany`, `List`). 
 
-`@BoxfitClass` can be added to any class, whether it is an Objectbox entity or not. The only condition is that the class can't be generic, but it could be a concrete subclass of a generic class.
+`@BoxfitClass` can be added to any class, whether it is an ObjectBox entity or not. The only condition is that the class can't be generic, but it could be a concrete subclass of a generic class.
 
 `@BoxfitField` can be added to any type of field. However, only native JSON fields (numbers, strings, booleans, lists, and objects) can be serialized directly. Other types (dates, enums...) must be transformed before being serialized. More about this in the `Transformers` section. 
 
@@ -177,12 +177,12 @@ Not only fields can be transformed. If for some reason you don't like the JSON y
 
 ### String Ids
 
-At this moment, Objectbox just allow `long` as the type of the id of the entities. If you need to use a `String` as id, you can do it using the `BoxfitId` annotation:
+At this moment, ObjectBox just allow `long` as the type of the id of the entities. If you need to use a `String` as id, you can do it using the `BoxfitId` annotation:
 
 ```java
 @Entity
 class MyClass {
-	// This the id required by Objectbox
+	// This the id required by ObjectBox
 	@Id
 	long _id;
 	
@@ -277,9 +277,9 @@ And we get a JSON like this when retrieving a department:
 
 As you can see, `"members"` is not an array of `User` instances, but an array of numbers. **Boxfit** will recognize the numbers as being ids of users. If users with those ids are already in the local storage, they will be added as members of the department. If not, users with just the id property will be created an added. If later in the app a `User` with the same id is received, the members will be updated.
 
-### Out of Objectbox
+### Out of ObjectBox
 
-Not only **Objectbox** classes can be serialized with **Boxfit**. Any Java object can be imported with Boxfit if its class is properly annotated.
+Not only **ObjectBox** classes can be serialized with **Boxfit**. Any Java object can be imported with Boxfit if its class is properly annotated.
 
 ### Out of Retrofit
 

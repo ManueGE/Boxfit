@@ -144,7 +144,7 @@
     },
     {
       "id": "4:2807123175922080580",
-      "lastPropertyId": "17:3822074856525634096",
+      "lastPropertyId": "18:856277558264762238",
       "name": "KtParent",
       "properties": [
         {
@@ -211,6 +211,10 @@
         {
           "id": "17:3822074856525634096",
           "name": "fromJsonIgnoreNull"
+        },
+        {
+          "id": "18:856277558264762238",
+          "name": "listInt"
         }
       ],
       "relations": [
@@ -300,9 +304,29 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "8:4738561424220094359",
+      "lastPropertyId": "3:3709272151046507910",
+      "name": "KtManualId",
+      "properties": [
+        {
+          "id": "1:2101258956523989581",
+          "name": "id"
+        },
+        {
+          "id": "2:428595436342797222",
+          "name": "manualId"
+        },
+        {
+          "id": "3:3709272151046507910",
+          "name": "value"
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "7:5372084266487871586",
+  "lastEntityId": "8:4738561424220094359",
   "lastIndexId": "4:8093741814743562676",
   "lastRelationId": "6:8846793173664281127",
   "lastSequenceId": "0:0",

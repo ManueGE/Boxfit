@@ -93,7 +93,7 @@ public class Utils {
     }
 
     private static HashMap<Class, String> classesAndMethods;
-    public static String getJsonGetterMethodName(TypeName className) {
+    private static HashMap<Class, String> getClassesAndMethods() {
         if (classesAndMethods == null) {
             classesAndMethods = new HashMap<>();
             classesAndMethods.put(String.class, "getString");
@@ -104,13 +104,24 @@ public class Utils {
             classesAndMethods.put(JSONObject.class, "getJSONObject");
             classesAndMethods.put(JSONArray.class, "getJSONArray");
         }
+        return classesAndMethods;
+    }
 
-        for (Class clazz: classesAndMethods.keySet()) {
+    public static boolean isNativeJsonFieldType(TypeName className) {
+        for (Class clazz: getClassesAndMethods().keySet()) {
             if (TypeName.get(clazz).equals(className)) {
-                return classesAndMethods.get(clazz);
+                return true;
             }
         }
+        return false;
+    }
 
+    public static String getJsonGetterMethodName(TypeName className) {
+        for (Class clazz: getClassesAndMethods().keySet()) {
+            if (TypeName.get(clazz).equals(className)) {
+                return getClassesAndMethods().get(clazz);
+            }
+        }
         return "get";
     }
 
