@@ -1,5 +1,9 @@
 # Boxfit
 
+### 0.0.5 (9 July 2018)
+- Add `ToJsonAsId` annotation. This allow using ids instead of full object when converting entities to JSON.
+- Lists of primitive values (`string`, `int`, `double`, `bool`, `long`) are supported. (They must be use the propper `ObjectBox` converter).
+
 ### 0.0.4 (28 June 2018)
 - Add `BoxfitId` annotation. This allow using different types of Id instead of `long`. 
 
@@ -8,7 +12,7 @@
 
 ### 0.0.2 (12 May 2018)
 - Fix Kotlin compatibility ([issue #2](https://github.com/ManueGE/Boxfit/issues/2))
-- Support **Objectbox 1.5**.
+- Support **ObjectNox 1.5**.
 
 
 ### 0.0.1 (28 March 2018)
