@@ -1,9 +1,11 @@
 package com.manuege.boxfit_processor.generators;
 
+import com.manuege.boxfit.annotations.ToJsonAsId;
 import com.manuege.boxfit.helpers.TransformersCache;
 import com.manuege.boxfit.serializers.AbstractSerializer;
 import com.manuege.boxfit.utils.Json;
 import com.manuege.boxfit.utils.JsonArray;
+import com.manuege.boxfit_processor.errors.ErrorLogger;
 import com.manuege.boxfit_processor.info.ClassInfo;
 import com.manuege.boxfit_processor.info.FieldInfo;
 import com.manuege.boxfit_processor.info.Utils;
@@ -274,7 +276,7 @@ public class ClassJsonSerializerGenerator extends AbstractJavaFileGenerator {
 
     private MethodSpec getIdFromObjectMethod() {
         MethodSpec.Builder builder = MethodSpec.methodBuilder("getId")
-                .addModifiers(Modifier.PROTECTED)
+                .addModifiers(Modifier.PUBLIC)
                 .addParameter(getEntityTypeName(), "object")
                 .returns(getPrimaryKeyTypeName());
 
@@ -386,6 +388,10 @@ public class ClassJsonSerializerGenerator extends AbstractJavaFileGenerator {
                 continue;
             }
 
+            if (fieldInfo.isToJsonAsId() && fieldInfo.getRelationshipSerializerName() == null) {
+                ErrorLogger.putError(ToJsonAsId.class.toString() + " can not be applied to " + fieldInfo.getName(), fieldInfo.getElement());
+            }
+
             String getter = getBuildGetterString(fieldInfo);
 
             TypeName serializer = fieldInfo.getRelationshipSerializerName();
@@ -428,8 +434,11 @@ public class ClassJsonSerializerGenerator extends AbstractJavaFileGenerator {
             } else if (fieldInfo.getKind() == FieldInfo.Kind.BOXFIT_OBJECT) {
                 builder.beginControlFlow("if ($L != null)", getter);
                 builder.addStatement("$T $N = $T.getInstance()", serializer, serializerName, serializer);
-                builder.addStatement("json.put($S, $N.toJson($L))", fieldInfo.getSerializedName(), serializerName, getter);
-
+                if (fieldInfo.isToJsonAsId()) {
+                    builder.addStatement("json.put($S, $N.getId($L))", fieldInfo.getSerializedName(), serializerName, getter);
+                } else {
+                    builder.addStatement("json.put($S, $N.toJson($L))", fieldInfo.getSerializedName(), serializerName, getter);
+                }
                 if (fieldInfo.isToJsonIncludeNull()) {
                     builder.nextControlFlow("else");
                     builder.addStatement("json.put($S, JSONObject.NULL)", fieldInfo.getSerializedName());
@@ -441,7 +450,11 @@ public class ClassJsonSerializerGenerator extends AbstractJavaFileGenerator {
             } else if (fieldInfo.getKind() == FieldInfo.Kind.TO_ONE) {
                 builder.beginControlFlow("if ($L.getTarget() != null)", getter);
                 builder.addStatement("$T $N = $T.getInstance()", serializer, serializerName, serializer);
-                builder.addStatement("json.put($S, $N.toJson($L.getTarget()))", fieldInfo.getSerializedName(), serializerName, getter);
+                if (fieldInfo.isToJsonAsId()) {
+                    builder.addStatement("json.put($S, $N.getId($L))", fieldInfo.getSerializedName(), serializerName, getter);
+                } else {
+                    builder.addStatement("json.put($S, $N.toJson($L.getTarget()))", fieldInfo.getSerializedName(), serializerName, getter);
+                }
 
                 if (fieldInfo.isToJsonIncludeNull()) {
                     builder.nextControlFlow("else");
@@ -454,11 +467,15 @@ public class ClassJsonSerializerGenerator extends AbstractJavaFileGenerator {
             } else if (fieldInfo.getKind() == FieldInfo.Kind.TO_MANY) {
                 builder.beginControlFlow("if ($L != null)", getter);
                 builder.addStatement("$T $N = $T.getInstance()", serializer, serializerName, serializer);
-                builder.addStatement("json.put($S, $N.toJson($L))", fieldInfo.getSerializedName(), serializerName, getter);
+                if (fieldInfo.isToJsonAsId()) {
+                    builder.addStatement("json.put($S, $N.getId($L))", fieldInfo.getSerializedName(), serializerName, getter);
+                } else {
+                    builder.addStatement("json.put($S, $N.toJson($L))", fieldInfo.getSerializedName(), serializerName, getter);
+                }
 
                 if (fieldInfo.isToJsonIncludeNull()) {
                     builder.nextControlFlow("else");
-                    builder.addStatement("json.put($S, JSONObject.NULL)", fieldInfo.getSerializedName());
+                    builder.addStatement("json.put($S, JSONArray.NULL)", fieldInfo.getSerializedName());
                     builder.endControlFlow();
                 } else {
                     builder.endControlFlow();

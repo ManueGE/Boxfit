@@ -137,12 +137,22 @@ public abstract class AbstractSerializer<Entity, Id> {
     abstract protected Id getId(Json json);
     abstract protected Id getId(Json json, String key);
     abstract protected Id getId(JsonArray array, int index);
-    abstract protected Id getId(Entity object);
+    abstract public Id getId(Entity object);
     abstract protected JSONObject getJSONObject(Id id);
     abstract protected Entity getExistingObject(Id id, BoxStore boxStore);
     abstract protected List<Entity> getExistingObjects(List<Id> ids, BoxStore boxStore);
     protected JSONObject getTransformedJSONObject(JSONObject object) {
         return object;
+    }
+    public  List<Id> getId(List<Entity> objects) {
+        if (objects == null) {
+            return null;
+        }
+        ArrayList<Id> ids = new ArrayList<>();
+        for (Entity object: objects) {
+            ids.add(getId(object));
+        }
+        return ids;
     }
 
     abstract public JSONObject toJson(Entity object);
