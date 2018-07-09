@@ -144,16 +144,6 @@ public abstract class AbstractSerializer<Entity, Id> {
     protected JSONObject getTransformedJSONObject(JSONObject object) {
         return object;
     }
-    public  List<Id> getId(List<Entity> objects) {
-        if (objects == null) {
-            return null;
-        }
-        ArrayList<Id> ids = new ArrayList<>();
-        for (Entity object: objects) {
-            ids.add(getId(object));
-        }
-        return ids;
-    }
 
     abstract public JSONObject toJson(Entity object);
     public JSONArray toJson(List<Entity> objects) {

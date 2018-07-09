@@ -2,11 +2,13 @@ package com.manuege.boxfitapp.model.java;
 
 import com.manuege.boxfit.annotations.BoxfitClass;
 import com.manuege.boxfit.annotations.BoxfitField;
+import com.manuege.boxfit.annotations.ToJsonAsId;
 import com.manuege.boxfit.annotations.ToJsonIgnore;
 import com.manuege.boxfit.annotations.ToJsonIncludeNull;
 
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
+import io.objectbox.relation.ToMany;
 import io.objectbox.relation.ToOne;
 
 /**
@@ -47,4 +49,12 @@ public class ToJsonTestObject {
     @BoxfitField("ignored")
     @ToJsonIgnore
     public String ignoredField;
+
+    @BoxfitField
+    @ToJsonAsId
+    public ToOne<Child> toOneAsId;
+
+    @BoxfitField
+    @ToJsonAsId
+    public ToMany<Child> toManyAsId;
 }

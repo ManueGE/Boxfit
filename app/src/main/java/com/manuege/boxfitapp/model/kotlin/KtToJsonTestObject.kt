@@ -1,11 +1,10 @@
 package com.manuege.boxfitapp.model.kotlin
 
-import com.manuege.boxfit.annotations.BoxfitClass
-import com.manuege.boxfit.annotations.BoxfitField
-import com.manuege.boxfit.annotations.ToJsonIgnore
-import com.manuege.boxfit.annotations.ToJsonIncludeNull
+import com.manuege.boxfit.annotations.*
+import com.manuege.boxfitapp.model.java.Child
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
+import io.objectbox.relation.ToMany
 import io.objectbox.relation.ToOne
 
 @Entity
@@ -42,4 +41,12 @@ class KtToJsonTestObject {
     @BoxfitField("ignored")
     @ToJsonIgnore
     var ignoredField: String? = null
+
+    @BoxfitField
+    @ToJsonAsId
+    var toOneAsId: ToOne<Child>? = null
+
+    @ToJsonAsId
+    @BoxfitField
+    var toManyAsId: ToMany<KtChild>? = null
 }
