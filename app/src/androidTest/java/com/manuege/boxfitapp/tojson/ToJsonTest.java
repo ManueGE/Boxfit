@@ -63,6 +63,10 @@ public class ToJsonTest extends AbstractObjectBoxTest{
         calendar.set(2017, 8, 17);
         parent.dateField = calendar.getTime();
 
+        parent.listInt.add(1);
+        parent.listInt.add(2);
+        parent.listInt.add(3);
+
         BoxfitSerializer boxfitSerializer = new BoxfitSerializer(boxStore);
         JSONObject actual = boxfitSerializer.toJson(parent);
         JSONObject expected = JsonProvider.getJSONObject("parent_for_to_json.json");
@@ -87,6 +91,7 @@ public class ToJsonTest extends AbstractObjectBoxTest{
         expected.put("toMany", new JSONArray());
         expected.put("list", new JSONArray());
         expected.put("fromJsonIgnoreNull", 0);
+        expected.put("listInt", new JSONArray());
 
         BoxfitSerializer boxfitSerializer = new BoxfitSerializer(boxStore);
         JSONObject actual = boxfitSerializer.toJson(parent);
@@ -106,6 +111,43 @@ public class ToJsonTest extends AbstractObjectBoxTest{
         expected.put("double_class", JSONObject.NULL);
         expected.put("string", JSONObject.NULL);
         expected.put("toOne", JSONObject.NULL);
+        expected.put("toManyAsId", new JSONArray());
+
+        BoxfitSerializer boxfitSerializer = new BoxfitSerializer(boxStore);
+        JSONObject actual = boxfitSerializer.toJson(object);
+        Assert.assertEquals(expected.toString(), actual.toString());
+    }
+
+    @Test
+    public void parentSerializer_toJsonAsId() throws JSONException {
+        ToJsonTestObject object = new ToJsonTestObject();
+        Child child1 = new Child();
+        child1.id = 1;
+        object.toOneAsId.setTarget(child1);
+
+        Child child2 = new Child();
+        child2.id = 2;
+        object.toManyAsId.add(child2);
+
+        Child child3 = new Child();
+        child3.id = 3;
+        object.toManyAsId.add(child3);
+
+        boxStore.boxFor(ToJsonTestObject.class).put(object);
+
+        JSONObject expected = new JSONObject();
+        expected.put("long_class", JSONObject.NULL);
+        expected.put("integer_class", JSONObject.NULL);
+        expected.put("bool_class", JSONObject.NULL);
+        expected.put("double_class", JSONObject.NULL);
+        expected.put("string", JSONObject.NULL);
+        expected.put("toOne", JSONObject.NULL);
+        expected.put("toOneAsId", 1);
+
+        JSONArray jsonArray = new JSONArray();
+        jsonArray.put(2);
+        jsonArray.put(3);
+        expected.put("toManyAsId", jsonArray);
 
         BoxfitSerializer boxfitSerializer = new BoxfitSerializer(boxStore);
         JSONObject actual = boxfitSerializer.toJson(object);
@@ -120,6 +162,8 @@ public class ToJsonTest extends AbstractObjectBoxTest{
         parent1.id = 1;
         parent1.stringField = "hello";
         parent1.fromJsonIgnoreNull = 1;
+        parent1.listInt.add(10);
+        parent1.listInt.add(20);
 
         Parent parent2 = new Parent();
         boxStore.boxFor(Parent.class).put(parent2);
@@ -144,6 +188,10 @@ public class ToJsonTest extends AbstractObjectBoxTest{
         object1.put("toMany", new JSONArray());
         object1.put("list", new JSONArray());
         object1.put("fromJsonIgnoreNull", 1);
+        JSONArray listInt1 = new JSONArray();
+        listInt1.put(10);
+        listInt1.put(20);
+        object1.put("listInt", listInt1);
 
         JSONObject object2 = new JSONObject();
         object2.put("id", 2);
@@ -154,6 +202,7 @@ public class ToJsonTest extends AbstractObjectBoxTest{
         object2.put("toMany", new JSONArray());
         object2.put("list", new JSONArray());
         object2.put("fromJsonIgnoreNull", 2);
+        object2.put("listInt", new JSONArray());
 
         JSONArray expected = new JSONArray();
         expected.put(object1);

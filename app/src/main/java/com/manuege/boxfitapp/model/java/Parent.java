@@ -5,8 +5,10 @@ import com.manuege.boxfit.annotations.BoxfitField;
 import com.manuege.boxfit.annotations.FromJsonIgnoreNull;
 import com.manuege.boxfitapp.transformers.ApiStringToDateTransformer;
 import com.manuege.boxfitapp.transformers.EnumToIntTransformer;
+import com.manuege.boxfitapp.transformers.ListIntToStringTransformer;
 import com.manuege.boxfitapp.transformers.SlashIdTransformer;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -97,4 +99,8 @@ public class Parent {
     @BoxfitField
     @FromJsonIgnoreNull
     public int fromJsonIgnoreNull;
+
+    @Convert(converter = ListIntToStringTransformer.class, dbType = String.class)
+    @BoxfitField
+    public List<Integer> listInt = new ArrayList();
 }

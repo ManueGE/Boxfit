@@ -43,5 +43,6 @@
   ],
   "enum": 2,
   "date": "1983-18-11",
-  "fromJsonIgnoreNull": null
+  "fromJsonIgnoreNull": null,
+  "listInt": [10, 20, 30, 40, 50]
 }

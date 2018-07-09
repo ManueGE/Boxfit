@@ -137,7 +137,7 @@ public abstract class AbstractSerializer<Entity, Id> {
     abstract protected Id getId(Json json);
     abstract protected Id getId(Json json, String key);
     abstract protected Id getId(JsonArray array, int index);
-    abstract protected Id getId(Entity object);
+    abstract public Id getId(Entity object);
     abstract protected JSONObject getJSONObject(Id id);
     abstract protected Entity getExistingObject(Id id, BoxStore boxStore);
     abstract protected List<Entity> getExistingObjects(List<Id> ids, BoxStore boxStore);

@@ -5,6 +5,7 @@ import com.manuege.boxfit.annotations.BoxfitId;
 import com.manuege.boxfit.annotations.FromJsonIgnoreNull;
 import com.manuege.boxfit.annotations.IdentityTransformer;
 import com.manuege.boxfit.annotations.BoxfitField;
+import com.manuege.boxfit.annotations.ToJsonAsId;
 import com.manuege.boxfit.annotations.ToJsonIgnore;
 import com.manuege.boxfit.annotations.ToJsonIncludeNull;
 import com.manuege.boxfit.constants.Constants;
@@ -43,16 +44,17 @@ public class FieldInfo {
     public enum Kind {
         NORMAL,
         TRANSFORMED,
+        LIST_OF_PRIMITIVES,
         TO_ONE,
         TO_MANY,
-        JSON_SERIALIZABLE;
+        BOXFIT_OBJECT;
 
         public boolean isRelationship() {
             return this == TO_ONE || this == TO_MANY;
         }
 
         public boolean targetIsBoxfitObject() {
-            return isRelationship() || this == JSON_SERIALIZABLE;
+            return isRelationship() || this == BOXFIT_OBJECT;
         }
     }
 
@@ -65,6 +67,7 @@ public class FieldInfo {
     private boolean fromJsonIgnoreNull;
     private boolean toJsonIncludeNull;
     private boolean toJsonIgnore;
+    private boolean toJsonAsId;
 
     private Element element;
 
@@ -147,6 +150,7 @@ public class FieldInfo {
         fieldInfo.toJsonIgnore = (element.getAnnotation(ToJsonIgnore.class) != null);
         fieldInfo.toJsonIncludeNull = (element.getAnnotation(ToJsonIncludeNull.class) != null);
         fieldInfo.fromJsonIgnoreNull = (element.getAnnotation(FromJsonIgnoreNull.class) != null);
+        fieldInfo.toJsonAsId = (element.getAnnotation(ToJsonAsId.class) != null);
 
         // Primary key
         Id objectBoxId = element.getAnnotation(Id.class);
@@ -196,7 +200,7 @@ public class FieldInfo {
         Element fieldTypeElement = typeUtil.asElement(typeMirror);
         if (fieldTypeElement instanceof TypeElement) {
             if (fieldTypeElement.getAnnotation(BoxfitClass.class) != null) {
-                fieldInfo.kind = Kind.JSON_SERIALIZABLE;
+                fieldInfo.kind = Kind.BOXFIT_OBJECT;
             } else if (((TypeElement) fieldTypeElement).getQualifiedName().toString().startsWith(TypeName.get(ToOne.class).toString())) {
                 fieldInfo.kind = Kind.TO_ONE;
             } else if (Utils.isList(typeMirror)) {
@@ -236,6 +240,14 @@ public class FieldInfo {
                         }
                     }
 
+                    // If list, check if is list of primitives
+                    if (Utils.isList(typeMirror)) {
+                        if (Utils.isNativeJsonFieldType(fieldInfo.relationshipName)) {
+                            fieldInfo.kind = Kind.LIST_OF_PRIMITIVES;
+                            fieldInfo.relationshipSerializerName = null;
+                        }
+                    }
+
                 } else {
                     fieldInfo.relationshipName = fieldInfo.typeName;
                     fieldInfo.relationshipSerializerName = Utils.getSerializer((TypeElement) fieldTypeElement);
@@ -245,6 +257,10 @@ public class FieldInfo {
 
         fieldInfo.validate();
         return fieldInfo;
+    }
+
+    public Element getElement() {
+        return element;
     }
 
     public boolean isPrimitive() {
@@ -261,6 +277,10 @@ public class FieldInfo {
 
     public boolean isFromJsonIgnoreNull() {
         return fromJsonIgnoreNull;
+    }
+
+    public boolean isToJsonAsId() {
+        return toJsonAsId;
     }
 
     public String getSerializedName() {
